@@ -26,6 +26,7 @@ public class BoardTest {
         Player player = new Player(3, 2);
         Board board = new Board(player, 5, 5);
 
-        assertTrue(board.);
+        assertTrue(board.getTiles()[3][2]);
     }
+
 }
