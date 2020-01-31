@@ -8,36 +8,33 @@ public class Board {
     private final int width;
 
 
-    private Boolean[][] board;
+    private Boolean[][] tiles;
     private Player player;
 
     public Board(int height, int width) {
         this.height = height;
         this.width = width;
 
-        board = initializeBoard(height, width);
+        tiles = initializeBoard(height, width);
     }
 
-    public Boolean[][] getBoard() {
-        return board;
+    public Boolean[][] getTiles() {
+        return tiles;
     }
 
     public Boolean[][] initializeBoard(int height, int width) {
         Boolean[][] board = new Boolean[height][width];
-        for (Boolean[] b : board) {
-            Arrays.fill(b, false);
+        for (Boolean[] tile : tiles) {
+            Arrays.fill(tile, false);
         }
         return board;
     }
 
-    public Boolean[][] setPlayer(int x, int y){
-        if (x > 0 || y >0 || x < this.width || y < this.height){
-            this.board[x][y] = true;
-        } else {
-            //throw new Exception("Player out of bounds!");
+    public Boolean[][] setPlayer(int row, int col){
+        if (row > 0 || col > 0 || row < width || col < height){
+            this.tiles[row][col] = true;
         }
-
-        return board;
+        return tiles;
     }
 
 }
