@@ -8,40 +8,61 @@ public class Board {
     private final int width;
 
 
-    private Boolean[][] tiles;
+    private Tile[][] board;
     private Player player;
 
+    public Board (int height, int width){
+        this.height = height;
+        this.width = width;
+        this.board = initializeBoard(height, width);
+        //this.board = initializeBoard(height,width);
+    }
+
+    //TODO: Cleanup!
     public Board(Player player, int height, int width) {
         this.height = height;
         this.width = width;
 
-        this.tiles = initializeBoard(height, width);
+        this.board = initializeBoard(height, width);
         if (!playerOutOfBounds(player)) {
             this.player = player;
-            tiles[player.getRow()][player.getCol()] = true;
+            this.board = update(player.getRow(),player.getCol(),1);
         }
         else {
             this.player = null;
         }
     }
 
-    public Boolean[][] initializeBoard(int height, int width) {
-        Boolean[][] tiles = new Boolean[height][width];
-        for (Boolean[] tile : tiles) {
-            Arrays.fill(tile, false);
+    public Tile[][] initializeBoard(int height, int width) {
+        Tile[][] init = new Tile[height][width];
+        Tile blank = new Tile(0,0);
+        for (Tile[] a : init) {
+            Arrays.fill(a, blank);
         }
-        return tiles;
+        return init;
     }
 
-    public Boolean[][] setPlayer(int row, int col){
+    public Tile[][] setPlayer(int row, int col){
         if (row > 0 || col > 0 || row < width || col < height){
-            this.tiles[row][col] = true;
+            Tile playerTile = new Tile(1,board[row][col].getType());
+            this.board[row][col] = playerTile;
         }
-        return tiles;
+        return board;
     }
 
-    public Boolean[][] getTiles() {
-        return tiles;
+    public Tile[][] update (int row, int col, int status){
+        Tile prevTile = board[row][col];
+        Tile newTile = new Tile(status,prevTile.getType());
+        board[row][col] = newTile;
+        return this.board;
+    }
+
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    public Tile getTile(int row, int col){
+        return board[row][col];
     }
 
     public Player getPlayer() {
@@ -49,15 +70,7 @@ public class Board {
     }
 
     private Boolean playerOutOfBounds(Player player) {
-        if (player.getRow() < 0 || player.getCol() < 0) {
-            return true;
-        }
-        else if (player.getRow() > height || player.getCol() > width) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return player.getRow() < 0 || player.getCol() < 0 || player.getRow() > height || player.getCol() > width;
     }
 
 }
