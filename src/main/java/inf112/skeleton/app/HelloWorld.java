@@ -5,12 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
 public class HelloWorld implements ApplicationListener {
     private SpriteBatch batch;
@@ -27,6 +31,16 @@ public class HelloWorld implements ApplicationListener {
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
         TiledMapTileLayer boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
+        //Cell playerCell = boardLayer.getCell(5, 5);
+        Cell playerCell = new Cell();
+
+        Texture playerTexture = new Texture("./assets/player.png");
+        TextureRegion playerTextureRegion = new TextureRegion(playerTexture);
+        TextureRegion standardPlayerTextureRegion = playerTextureRegion.split(300, 300)[0][1];
+
+        StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
+        playerCell.setTile(playerTile);
+        boardLayer.setCell(9, 9, playerCell);
         camera.setToOrtho(false, 3600, 3600);
         camera.zoom = 6;
         renderer = new OrthogonalTiledMapRenderer(map);
