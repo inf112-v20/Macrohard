@@ -29,4 +29,14 @@ public class BoardTest {
         assertTrue(board.getTile(3,2).isOccupied());
     }
 
+    @Test
+    public void updatedBoardHasCorrectValues() {
+        Player player = new Player(3, 2);
+        Board board = new Board(player,10, 10);
+        board.update(3,2,0);
+        board.update(3,3,1);
+        assertEquals(board.getTile(3,2).isOccupied(),false);
+        assertEquals(board.getTile(3,3).isOccupied() , true);
+    }
+
 }

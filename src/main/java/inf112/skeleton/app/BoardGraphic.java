@@ -2,6 +2,7 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -28,9 +29,10 @@ public class BoardGraphic implements ApplicationListener {
       /*  batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(Color.RED);*/
-        map = new TmxMapLoader().load("assets/robomap.tmx");
+        map = new TmxMapLoader().load("assets/coolMap.tmx");
         camera = new OrthographicCamera();
-        TiledMapTileLayer boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
+        TiledMapTileLayer boardLayer = (TiledMapTileLayer) map.getLayers().get("board");
+        TiledMapTileLayer playerLayer = (TiledMapTileLayer) map.getLayers().get("player");
         //Cell playerCell = boardLayer.getCell(5, 5);
         Cell playerCell = new Cell();
 
@@ -40,10 +42,13 @@ public class BoardGraphic implements ApplicationListener {
 
         StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
         playerCell.setTile(playerTile);
-        boardLayer.setCell(9, 9, playerCell);
+        playerLayer.setCell(0, 0, playerCell);
         camera.setToOrtho(false, 3600, 3600);
         camera.zoom = 6;
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        //TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
+        //Gdx.input.setInputProcessor((InputProcessor) this);
     }
 
 
