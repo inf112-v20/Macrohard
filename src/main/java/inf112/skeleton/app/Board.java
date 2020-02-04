@@ -15,7 +15,6 @@ public class Board {
         this.height = height;
         this.width = width;
         this.board = initializeBoard(height, width);
-        //this.board = initializeBoard(height,width);
     }
 
     //TODO: Cleanup!
