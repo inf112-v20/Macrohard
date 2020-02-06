@@ -22,23 +22,28 @@ public class BoardGraphic implements ApplicationListener {
     @Override
     public void create() {
 
-        map = new TmxMapLoader().load("assets/coolMap.tmx");
+        map = new TmxMapLoader().load("assets/newMap.tmx");
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 3600, 3600);
-        camera.zoom = 6;
+        camera.setToOrtho(false, 900, 900);
+        camera.zoom = 1;
 
+        TiledMapTileLayer boardLayer = (TiledMapTileLayer) map.getLayers().get("board");
         TiledMapTileLayer playerLayer = (TiledMapTileLayer) map.getLayers().get("player");
+        Cell playerCell = new Cell();
+
         Texture playerTexture = new Texture("./assets/player.png");
         TextureRegion playerTextureRegion = new TextureRegion(playerTexture);
-        TextureRegion standardPlayerTextureRegion = playerTextureRegion.split(300, 300)[0][1];
-        StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
+        TextureRegion standardPlayerTextureRegion = playerTextureRegion.split(75, 75)[0][1];
 
-        Cell playerCell = new Cell();
+        StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
         playerCell.setTile(playerTile);
         playerLayer.setCell(0, 0, playerCell);
 
-
+        //camera.translate(192, 0);
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        //TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
+        //Gdx.input.setInputProcessor((InputProcessor) this);
     }
 
 
@@ -46,6 +51,8 @@ public class BoardGraphic implements ApplicationListener {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+        /*batch.dispose();
+        font.dispose();*/
     }
 
     @Override
