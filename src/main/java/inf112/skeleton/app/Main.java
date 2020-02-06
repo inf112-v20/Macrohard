@@ -13,21 +13,6 @@ public class Main extends InputAdapter {
         cfg.width = 900;
         cfg.height = 900;
 
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter number of players: ");
-        int numberOfPlayers = scanner.nextInt();
-
-        Player[] players = new Player[numberOfPlayers];
-        for (int i = 0; i < numberOfPlayers; i++) {
-            int row, column;
-            System.out.println("Player " + (i + 1) + ", on which row do you want to place your piece? ");
-            row = scanner.nextInt();
-            System.out.println("On which column do you want to place your piece? ");
-            column = scanner.nextInt();
-            players[i] = new Player(row, column);
-        }
-
-
-        new LwjglApplication(new BoardGraphic(players), cfg);
+        new LwjglApplication(new BoardGraphic(), cfg);
     }
 }
