@@ -15,9 +15,14 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
 public class BoardGraphic implements ApplicationListener {
 
+    private Player[] players;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+
+    public BoardGraphic(Player... players) {
+        this.players = players;
+    }
 
     @Override
     public void create() {
@@ -35,12 +40,12 @@ public class BoardGraphic implements ApplicationListener {
 
         Cell playerCell = new Cell();
         playerCell.setTile(playerTile);
-        playerLayer.setCell(0, 0, playerCell);
-
+        for (Player player : players) {
+            playerLayer.setCell(player.getRow(), player.getCol(), playerCell);
+        }
 
         renderer = new OrthogonalTiledMapRenderer(map);
     }
-
 
     @Override
     public void dispose() {
