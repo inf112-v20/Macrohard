@@ -34,9 +34,11 @@ public class Board {
 
     public Tile[][] initializeBoard(int height, int width) {
         Tile[][] init = new Tile[height][width];
-        Tile blank = new Tile(0,0);
-        for (Tile[] a : init) {
-            Arrays.fill(a, blank);
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++){
+                Tile blank = new Tile(0,0);
+                init[i][j] = blank;
+            }
         }
         return init;
     }
@@ -52,8 +54,8 @@ public class Board {
     public Tile[][] update (int row, int col, int status){
         Tile prevTile = board[row][col];
         Tile newTile = new Tile(status,prevTile.getType());
-        board[row][col] = newTile;
-        return this.board;
+        this.board[row][col] = newTile;
+        return board;
     }
 
 

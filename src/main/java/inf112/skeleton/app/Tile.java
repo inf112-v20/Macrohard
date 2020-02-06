@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
-
+/*
+kanskje tile kan være en superclass av alle tiles, slik at vi slipper mye
+ */
 public class Tile {
     //Status tells us if a tile has a player on it, or if there is a wall blocking access
     private int status;

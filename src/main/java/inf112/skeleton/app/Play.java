@@ -14,9 +14,10 @@ public class Play {
 
         Board board1 = new Board(7,5);
         board1.setPlayer(player.getRow(), player.getCol());
-        //Tile test = new Tile(1,0);
         System.out.println(board1.getTile(3,3));
         board1.update(3,3,1);
+        board1.update(1,1,1);
+        board1.update(0,0,7);
 
         for (Tile[]a : board1.getBoard()) {
             System.out.println(Arrays.toString(a));
@@ -25,11 +26,5 @@ public class Play {
         for (Tile[]a : board.getBoard()) {
             System.out.println(Arrays.toString(a));
         }
-/*
-        for (int row = 0; row <7;row++){
-            for(int col = 0; col<5; col++){
-                System.out.print(board[row][col]);
-            }
-        }*/
     }
 }

@@ -1,12 +1,13 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
-public class Main {
+public class Main extends InputAdapter {
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "hello-world";
+        cfg.title = "robo-rally";
         cfg.width = 600;
         cfg.height = 600;
 

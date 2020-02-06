@@ -86,6 +86,7 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
     public void render() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         renderer.setView(camera);
         renderer.render();
     }
