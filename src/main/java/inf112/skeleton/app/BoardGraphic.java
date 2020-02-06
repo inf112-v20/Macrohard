@@ -38,15 +38,11 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
 
     @Override
     public void create() {
-
-
-
         Gdx.input.setInputProcessor(this);
 
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
         camera.setToOrtho(false, tileSize*gridSize, tileSize*gridSize);
-        //camera.zoom = 6;
 
         boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
 
