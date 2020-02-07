@@ -83,11 +83,11 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
         player.setCol(playerX);
         //System.out.println("Row: " + (11 - playerY) + "Col: " + playerX);
         for (int i = 0; i < 11; i++){
-            System.out.println("----------------------------------------");
             for (int j = 0; j < 11; j++){
                 if (player.getRow() == i && player.getCol() == j) System.out.print(1);
                 else System.out.print(0);
             }
+            System.out.println("----------------------------------------");
         }
 
         return true;
