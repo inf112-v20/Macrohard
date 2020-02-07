@@ -28,15 +28,21 @@ public class Board {
 
     public void setPlayer(Player player, int row, int col){
         if (!outOfBounds(player.getRow(), player.getCol())){
-            board[row][col].isOccupied(true);
+            board[row][col].setOccupied(true);
+        } else {
+            this.player = null;
         }
     }
 
     public void move(Player player, int row, int col){
+        board[player.getRow()][player.getCol()].setOccupied(false);
+
         if(!outOfBounds(row, col)){
             player.setRow(height-row);
             player.setCol(col);
+            board[row][col].setOccupied(true);
         }
+
     }
 
 
@@ -57,8 +63,7 @@ public class Board {
     }
 
     public Boolean isOccupied(Tile tile){
-
-        return (tile.getRow() == player.getRow()) && (tile.getCol() == player.getCol());
+        return tile.getOccupied();
     }
 
 }

@@ -18,11 +18,12 @@ public class Tile {
         this.col = col;
     }
 
-    public void isOccupied(boolean occupied) {
+    public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
 
-    public boolean isOccupied() {
+    public boolean getOccupied() {
+
         return occupied;
     }
 
