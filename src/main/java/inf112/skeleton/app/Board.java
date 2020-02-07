@@ -13,43 +13,29 @@ public class Board {
         this.height = height;
         this.width = width;
 
-        this.board = initializeBoard(player, height, width);
+        initializeBoard(player, height, width);
     }
 
-    public Tile[][] initializeBoard(Player player, int height, int width) {
-        Tile[][] initialBoard = new Tile[height][width];
+    public void initializeBoard(Player player, int height, int width) {
+        board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
-                initialBoard[i][j] = new Tile(0,0);
+                board[i][j] = new Tile(false, i, j);
             }
         }
-        if (!playerOutOfBounds(player)) {
+        setPlayer(player, player.getRow(), player.getCol());
+    }
 
+    public void setPlayer(Player player, int row, int col){
+        if (!outOfBounds(player)){
+            board[row][col].isOccupied(true);
         }
-        return initialBoard;
     }
 
-    public Tile[][] setPlayer(int row, int col){
-        if (row > 0 || col > 0 || row < width || col < height){
-            Tile playerTile = new Tile(1,board[row][col].getType(), row , col);
-            this.board[row][col] = playerTile;
-        }
-        return board;
-    }
-
-    public Tile[][] update (int row, int col, int status){
-        Tile prevTile = board[row][col];
-        Tile newTile = new Tile(status,prevTile.getType(), prevTile.getRow(), prevTile.getCol());
-        this.board[row][col] = newTile;
-        return board;
-    }
-
-    public void move (Player player, int row, int col){
+    public void move(Player player, int row, int col){
         player.setRow(height-row);
         player.setCol(col);
-        //board[row][col].setStatus(1);
     }
-
 
 
     public Tile[][] getBoard() {
@@ -64,7 +50,7 @@ public class Board {
         return player;
     }
 
-    private Boolean playerOutOfBounds(Player player) {
+    private Boolean outOfBounds(Player player) {
         return player.getRow() < 0 || player.getCol() < 0 || player.getRow() > height || player.getCol() > width;
     }
 
