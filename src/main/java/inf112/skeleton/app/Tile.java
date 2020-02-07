@@ -20,8 +20,6 @@ public class Tile {
         this.col = col;
     }
 
-
-
     //TODO: Find correct implementation, currently updates all tiles' status to 1
     public void setStatus(int status) {
         this.status = status;
