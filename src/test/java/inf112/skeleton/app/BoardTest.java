@@ -20,7 +20,6 @@ public class BoardTest {
     public void playerMustBePlacedOnBoard() {
         Player player = new Player(11, 11);
         Board board = new Board(player,10, 10);
-
         Assert.assertNull(board.getPlayer());
     }
 
