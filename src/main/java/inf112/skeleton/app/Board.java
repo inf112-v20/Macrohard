@@ -36,7 +36,7 @@ public class Board {
         Tile[][] init = new Tile[height][width];
         for (int i = 0; i < height; i++){
             for (int j = 0; j < width; j++){
-                Tile blank = new Tile(0,0);
+                Tile blank = new Tile(0,0, i, j);
                 init[i][j] = blank;
             }
         }
@@ -45,7 +45,7 @@ public class Board {
 
     public Tile[][] setPlayer(int row, int col){
         if (row > 0 || col > 0 || row < width || col < height){
-            Tile playerTile = new Tile(1,board[row][col].getType());
+            Tile playerTile = new Tile(1,board[row][col].getType(), row , col);
             this.board[row][col] = playerTile;
         }
         return board;
@@ -53,9 +53,14 @@ public class Board {
 
     public Tile[][] update (int row, int col, int status){
         Tile prevTile = board[row][col];
-        Tile newTile = new Tile(status,prevTile.getType());
+        Tile newTile = new Tile(status,prevTile.getType(), prevTile.getRow(), prevTile.getCol());
         this.board[row][col] = newTile;
         return board;
+    }
+
+    public void move (Player player, int row, int col){
+        player.setRow(row);
+        player.setCol(col);
     }
 
 
@@ -74,6 +79,11 @@ public class Board {
 
     private Boolean playerOutOfBounds(Player player) {
         return player.getRow() < 0 || player.getCol() < 0 || player.getRow() > height || player.getCol() > width;
+    }
+
+    public Boolean isOccupied(Tile tile){
+
+        return (tile.getRow() == player.getRow()) && (tile.getCol() == player.getCol());
     }
 
 }

@@ -75,7 +75,9 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
 
         //Add the player onto the new coordinate
         playerLayer.setCell(playerX, playerY, playerCell);
-        player.moveTo(playerX, playerY);
+        //player.moveTo(playerX, playerY);
+        player.setCol(playerX);
+        player.setRow(playerY);
 
         return true;
     }

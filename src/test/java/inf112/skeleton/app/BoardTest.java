@@ -20,22 +20,20 @@ public class BoardTest {
     public void playerMustBePlacedOnBoard() {
         Player player = new Player(11, 11);
         Board board = new Board(player,10, 10);
+
         Assert.assertNull(board.getPlayer());
     }
 
     @Test
     public void playerTileIsOccupied() {
-        assertTrue(board.getTile(3,2).isOccupied());
-        assertFalse(board.getTile(4,2).isOccupied());
+        assertTrue(board.isOccupied(board.getTile(3,2)));
     }
 
     @Test
     public void updatedBoardHasCorrectValues() {
-        board.update(3,2,0);
-        assertEquals(board.getTile(3,2).isOccupied(),false);
-        board.update(3,3,1);
-        assertEquals(board.getTile(3,3).isOccupied() , true);
+        board.move(player,3,3);
+        //assertEquals(board.isOccupied(board.getTile(3,2)),false);
+        assertEquals(board.isOccupied(board.getTile(3,3)) , true);
     }
-
 
 }
