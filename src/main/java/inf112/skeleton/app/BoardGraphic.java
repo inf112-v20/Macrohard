@@ -26,9 +26,15 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
+    private Player player;
     private Cell playerCell;
-    private int playerX = 9;
-    private int playerY = 9;
+    private int playerX, playerY;
+
+    public BoardGraphic(Player player) {
+        this.player = player;
+        playerX = player.getCol();
+        playerY = player.getRow();
+    }
 
     @Override
     public void create() {
@@ -61,14 +67,16 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
 
         //Change the players new coordinates according to the keycode
         switch(keycode){
-            case Input.Keys.UP: playerY+=1; break;
-            case Input.Keys.DOWN: playerY-=1; break;
-            case Input.Keys.LEFT: playerX-=1; break;
-            case Input.Keys.RIGHT: playerX+=1; break;
+            case Input.Keys.UP: playerY += 1; break;
+            case Input.Keys.DOWN: playerY -= 1; break;
+            case Input.Keys.LEFT: playerX -= 1; break;
+            case Input.Keys.RIGHT: playerX += 1; break;
         }
 
         //Add the player onto the new coordinate
         playerLayer.setCell(playerX, playerY, playerCell);
+        player.moveTo(playerX, playerY);
+
         return true;
     }
 

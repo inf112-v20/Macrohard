@@ -17,4 +17,9 @@ public class Player {
     public int getCol() {
         return col;
     }
+
+    public void moveTo(int col, int row) {
+        this.col = col;
+        this.row = row;
+    }
 }

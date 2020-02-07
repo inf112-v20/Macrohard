@@ -13,6 +13,6 @@ public class Main extends InputAdapter {
         cfg.width = 900;
         cfg.height = 900;
 
-        new LwjglApplication(new BoardGraphic(), cfg);
+        new LwjglApplication(new BoardGraphic(new Player(0, 0)), cfg);
     }
 }
