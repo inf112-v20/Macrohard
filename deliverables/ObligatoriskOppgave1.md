@@ -91,33 +91,40 @@ Krav til første iterasjon
 
 Brukerhistorier til første iterasjon
  
-Som bruker trenger jeg et synlig spillbrett, slik at jeg kan orientere meg i min spillbrikkes omgivelser
 
+Brukerhistorie 1:
+Som bruker trenger jeg et synlig spillbrett, slik at jeg kan orientere meg i min spillbrikkes omgivelser
 
 Akseptansekrav:
 Gitt at man starter applikasjonen, får man opp et spillbrett 
 
 
+Brukerhistorie 2:
 Som bruker må jeg kunne se brikken min på spillebrettet, slik at jeg vet hvor brikken min befinner seg til enhver tid
-
 
 Akseptansekrav:
 Gitt at man får opp et spillbrett, dukker spillebrikken opp på en posisjon i brettet
 
 
+Brukerhistorie 3:
 Som bruker må jeg kunne se hvilken retning brikken peker, slik at jeg vet hvordan brikken vil forflytte seg 
-
 
 Akseptansekrav:
 Gitt at man har en spillebrikke på spillebrettet, har spillebrikken et synlig retningsanvisning
 
 
+Brukerhistorie 4:
 Som bruker trenger jeg å bevege på brikken, slik at jeg kan avansere i spillet
-
 
 Akseptansekrav:
 Gitt at man befaler brikken å bevege seg, endrer brikkens posisjon seg synlig i brettet
 
+
+Brukerhistorie 5:
+Som spiller med operativsystem x trenger at applikasjonen kjører på min PC
+
+Akseptansekrav:
+Kjører på de tre største operativsystemene (Windows, osx, linux)
 
 
 
@@ -166,13 +173,18 @@ Tirsdag 04.02
 * Utdeling av resterende arbeidsoppgaver
 
 
-
-
 Torsdag 06.02
 * Ble enige om å legge til Travis som hjelper oss med å sjekke at alle grener bygger på forskjellige maskiner/operativsystem.
 * Ble enige om å legge til Codacy som hjelper oss med å sjekke generell kodekvalitet og eventuelle problemer
 * Reformaterte eksisterende kode
 * Slettet kode som ikke var i bruk
+
+
+Fredag 07.02
+* Ryddet opp i filer
+* Kombinert grafikk og logikk
+* Siste innspurt mot innlevering
+* Drøftet videre utvikling
 
 
 
