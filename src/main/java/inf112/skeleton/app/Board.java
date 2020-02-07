@@ -1,69 +1,43 @@
 package inf112.skeleton.app;
 
-import java.util.Arrays;
-
 public class Board {
 
     private final int height;
     private final int width;
 
-
     private Tile[][] board;
     private Player player;
 
-    public Board (int height, int width){
-        this.height = height;
-        this.width = width;
-        this.board = initializeBoard(height, width);
-    }
-
-    //TODO: Cleanup!
     public Board(Player player, int height, int width) {
+        this.player = player;
         this.height = height;
         this.width = width;
 
-        this.board = initializeBoard(height, width);
-        if (!playerOutOfBounds(player)) {
-            this.player = player;
-            this.board = update(player.getRow(),player.getCol(),1);
-        }
-        else {
-            this.player = null;
-        }
+        initializeBoard(player, height, width);
     }
 
-    public Tile[][] initializeBoard(int height, int width) {
-        Tile[][] init = new Tile[height][width];
-        for (int i = 0; i < height; i++){
-            for (int j = 0; j < width; j++){
-                Tile blank = new Tile(0,0, i, j);
-                init[i][j] = blank;
+    public void initializeBoard(Player player, int height, int width) {
+        board = new Tile[height][width];
+        for (int i = 0; i < height; i ++){
+            for (int j = 0; j < width; j ++) {
+                board[i][j] = new Tile(false, i, j);
             }
         }
-        return init;
+        setPlayer(player, player.getRow(), player.getCol());
     }
 
-    public Tile[][] setPlayer(int row, int col){
-        if (row > 0 || col > 0 || row < width || col < height){
-            Tile playerTile = new Tile(1,board[row][col].getType(), row , col);
-            this.board[row][col] = playerTile;
+    public void setPlayer(Player player, int row, int col){
+        if (!outOfBounds(player.getRow(), player.getCol())){
+            board[row][col].isOccupied(true);
         }
-        return board;
     }
 
-    public Tile[][] update (int row, int col, int status){
-        Tile prevTile = board[row][col];
-        Tile newTile = new Tile(status,prevTile.getType(), prevTile.getRow(), prevTile.getCol());
-        this.board[row][col] = newTile;
-        return board;
+    public void move(Player player, int row, int col){
+        if(!outOfBounds(row, col)){
+            player.setRow(height-row);
+            player.setCol(col);
+        }
     }
-
-    public void move (Player player, int row, int col){
-        player.setRow(height-row);
-        player.setCol(col);
-        //board[row][col].setStatus(1);
-    }
-
 
 
     public Tile[][] getBoard() {
@@ -78,8 +52,8 @@ public class Board {
         return player;
     }
 
-    private Boolean playerOutOfBounds(Player player) {
-        return player.getRow() < 0 || player.getCol() < 0 || player.getRow() > height || player.getCol() > width;
+    private Boolean outOfBounds(int row, int col) {
+        return row < 0 || col < 0 || row > height || col > width;
     }
 
     public Boolean isOccupied(Tile tile){
