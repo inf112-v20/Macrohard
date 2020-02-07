@@ -77,19 +77,10 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
 
         //Add the player onto the new coordinate
         playerLayer.setCell(playerX, playerY, playerCell);
-        //player.moveTo(playerX, playerY);
+
         board.move(player, playerY, playerX);
         player.setRow(playerY);
         player.setCol(playerX);
-        //System.out.println("Row: " + (11 - playerY) + "Col: " + playerX);
-        for (int i = 0; i < 11; i++){
-            for (int j = 0; j < 11; j++){
-                if (player.getRow() == i && player.getCol() == j) System.out.print(1);
-                else System.out.print(0);
-            }
-            System.out.println("----------------------------------------");
-        }
-
         return true;
     }
 
