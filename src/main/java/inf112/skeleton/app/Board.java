@@ -59,8 +59,9 @@ public class Board {
     }
 
     public void move (Player player, int row, int col){
-        player.setRow(row);
+        player.setRow(height-row);
         player.setCol(col);
+        //board[row][col].setStatus(1);
     }
 
 
