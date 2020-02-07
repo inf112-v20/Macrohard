@@ -8,15 +8,19 @@ public class Tile {
     //Type has a value, where the number is interpreted as a type of tile, i.e. 0 = normal floor tile
     private int type;
 
+    private int row;
 
-    public Tile(int status, int type) {
+    private int col;
+
+
+    public Tile(int status, int type, int row, int col) {
         this.status = status;
         this.type = type;
+        this.row = row;
+        this.col = col;
     }
 
-    public Boolean isOccupied(){
-        return this.status == 1;
-    }
+
 
     //TODO: Find correct implementation, currently updates all tiles' status to 1
     public void setStatus(int status) {
@@ -25,6 +29,14 @@ public class Tile {
 
     public int getType() {
         return type;
+    }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getCol() {
+        return col;
     }
 
     @Override

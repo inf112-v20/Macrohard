@@ -7,8 +7,6 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -18,8 +16,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
 public class BoardGraphic extends InputAdapter implements ApplicationListener {
-    private SpriteBatch batch;
-    private BitmapFont font;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
@@ -30,9 +26,17 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
+    private Player player;
+    private Board board;
     private Cell playerCell;
-    private int playerX = 9;
-    private int playerY = 9;
+    private int playerX, playerY;
+
+    public BoardGraphic(Player player, Board board) {
+        this.player = player;
+        this.board = board;
+        playerX = player.getCol();
+        playerY = player.getRow();
+    }
 
     @Override
     public void create() {
@@ -54,24 +58,38 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
         StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
         playerCell.setTile(playerTile);
         playerLayer.setCell(playerX, playerY, playerCell);
+
         renderer = new OrthogonalTiledMapRenderer(map);
     }
 
     @Override
-    public boolean keyUp(int keycode) {
+    public boolean keyDown(int keycode) {
         //Removes the player from previous location on the playerLayer
         playerLayer.setCell(playerX, playerY, boardLayer.getCell(playerX, playerY));
 
         //Change the players new coordinates according to the keycode
         switch(keycode){
-            case Input.Keys.UP: playerY+=1; break;
-            case Input.Keys.DOWN: playerY-=1; break;
-            case Input.Keys.LEFT: playerX-=1; break;
-            case Input.Keys.RIGHT: playerX+=1; break;
+            case Input.Keys.UP: playerY += 1; break;
+            case Input.Keys.DOWN: playerY -= 1; break;
+            case Input.Keys.LEFT: playerX -= 1; break;
+            case Input.Keys.RIGHT: playerX += 1; break;
         }
 
         //Add the player onto the new coordinate
         playerLayer.setCell(playerX, playerY, playerCell);
+        //player.moveTo(playerX, playerY);
+        board.move(player, playerY, playerX);
+        player.setRow(playerY);
+        player.setCol(playerX);
+        //System.out.println("Row: " + (11 - playerY) + "Col: " + playerX);
+        for (int i = 0; i < 11; i++){
+            System.out.println("----------------------------------------");
+            for (int j = 0; j < 11; j++){
+                if (player.getRow() == i && player.getCol() == j) System.out.print(1);
+                else System.out.print(0);
+            }
+        }
+
         return true;
     }
 

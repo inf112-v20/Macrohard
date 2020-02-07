@@ -7,10 +7,13 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BoardTest {
+    Player player;
+    Board board;
 
     @Before
-    public void setUp() throws Exception {
-
+    public void setUp() {
+        player = new Player(3,2);
+        board = new Board(player,10, 10);
     }
 
     @Test
@@ -23,20 +26,14 @@ public class BoardTest {
 
     @Test
     public void playerTileIsOccupied() {
-        Player player = new Player(3, 2);
-        Board board = new Board(player, 5, 5);
-
-        assertTrue(board.getTile(3,2).isOccupied());
+        assertTrue(board.isOccupied(board.getTile(3,2)));
     }
 
     @Test
     public void updatedBoardHasCorrectValues() {
-        Player player = new Player(3, 2);
-        Board board = new Board(player,10, 10);
-        board.update(3,2,0);
-        board.update(3,3,1);
-        assertEquals(board.getTile(3,2).isOccupied(),false);
-        assertEquals(board.getTile(3,3).isOccupied() , true);
+        board.move(player,3,3);
+        //assertEquals(board.isOccupied(board.getTile(3,2)),false);
+        assertEquals(board.isOccupied(board.getTile(3,3)) , true);
     }
 
 }
