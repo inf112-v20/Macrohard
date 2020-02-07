@@ -1,46 +1,32 @@
 package inf112.skeleton.app;
 
-import java.util.Arrays;
-
 public class Board {
 
     private final int height;
     private final int width;
 
-
     private Tile[][] board;
     private Player player;
 
-    public Board (int height, int width){
-        this.height = height;
-        this.width = width;
-        this.board = initializeBoard(height, width);
-    }
-
-    //TODO: Cleanup!
     public Board(Player player, int height, int width) {
+        this.player = player;
         this.height = height;
         this.width = width;
 
-        this.board = initializeBoard(height, width);
-        if (!playerOutOfBounds(player)) {
-            this.player = player;
-            this.board = update(player.getRow(),player.getCol(),1);
-        }
-        else {
-            this.player = null;
-        }
+        this.board = initializeBoard(player, height, width);
     }
 
-    public Tile[][] initializeBoard(int height, int width) {
-        Tile[][] init = new Tile[height][width];
-        for (int i = 0; i < height; i++){
-            for (int j = 0; j < width; j++){
-                Tile blank = new Tile(0,0);
-                init[i][j] = blank;
+    public Tile[][] initializeBoard(Player player, int height, int width) {
+        Tile[][] initialBoard = new Tile[height][width];
+        for (int i = 0; i < height; i ++){
+            for (int j = 0; j < width; j ++) {
+                initialBoard[i][j] = new Tile(0,0);
             }
         }
-        return init;
+        if (!playerOutOfBounds(player)) {
+
+        }
+        return initialBoard;
     }
 
     public Tile[][] setPlayer(int row, int col){
