@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
@@ -14,6 +15,6 @@ public class Main extends InputAdapter {
         cfg.height = 900;
 
         Player player = new Player(6, 6);
-        new LwjglApplication(new BoardGraphic(player, new Board (player,12,12)), cfg);
+        new LwjglApplication(new Roborally());
     }
 }
