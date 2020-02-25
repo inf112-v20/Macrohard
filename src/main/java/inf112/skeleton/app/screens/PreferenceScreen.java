@@ -92,26 +92,27 @@ public class PreferenceScreen implements Screen {
         });
 
         titleLabel = new Label("Preferences", skin);
+        titleLabel.setFontScale(2f);
         volumeMusicLabel = new Label("Music Volume", skin);
         musicOnOffLabel = new Label("Music", skin);
         volumeSoundLabel = new Label("Sound Volume", skin);
         soundOnOffLabel = new Label("Sound", skin);
 
-        table.add(titleLabel);
-        table.row().pad(10, 10, 10, 10);
-        table.add(volumeMusicLabel);
+        table.add(titleLabel).colspan(2);
+        table.row().pad(50, 10, 10, 10);
+        table.add(volumeMusicLabel).left();
         table.add(volumeMusicSlider);
         table.row().pad(10, 10, 10, 10);
-        table.add(musicOnOffLabel);
+        table.add(musicOnOffLabel).left();
         table.add(musicCheckbox);
         table.row().pad(10, 10, 10, 10);
-        table.add(volumeSoundLabel);
+        table.add(volumeSoundLabel).left();
         table.add(volumeSoundSlider);
         table.row().pad(10, 10, 10, 10);
-        table.add(soundOnOffLabel);
+        table.add(soundOnOffLabel).left();
         table.add(soundCheckbox);
-        table.row().pad(10, 10, 10, 10);
-        table.add(backButton);
+        table.row().pad(25, 10, 10, 10);
+        table.add(backButton).colspan(2);
 
         stage.addActor(table);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
