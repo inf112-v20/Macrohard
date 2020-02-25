@@ -16,7 +16,7 @@ public class Main extends InputAdapter {
         cfg.height = 900;
 
         //Player player = new Player(6, 6);
-        new LwjglApplication(new Roborally(), cfg);
+        new LwjglApplication(new RoboRally(), cfg);
 
         /*
         Deck deck = new Deck();

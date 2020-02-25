@@ -1,15 +1,20 @@
 package inf112.skeleton.app;
 
 
+import inf112.skeleton.app.preferences.AppPreferences;
 import inf112.skeleton.app.screens.LoadingScreen;
 import inf112.skeleton.app.screens.MainScreen;
 import inf112.skeleton.app.screens.MenuScreen;
+import inf112.skeleton.app.screens.PreferenceScreen;
 
-public class Roborally extends com.badlogic.gdx.Game {
+public class RoboRally extends com.badlogic.gdx.Game {
 
     private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;
     private MainScreen mainScreen;
+    private PreferenceScreen preferenceScreen;
+
+    private AppPreferences appPreferences;
 
     public final static int MENU = 0;
     public final static int PREFERENCES = 1;
@@ -19,6 +24,11 @@ public class Roborally extends com.badlogic.gdx.Game {
     public void create() {
         loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
+        appPreferences = new AppPreferences();
+    }
+
+    public AppPreferences getPreferences(){
+        return appPreferences;
     }
 
     public void changeScreen(int screen){
@@ -30,7 +40,13 @@ public class Roborally extends com.badlogic.gdx.Game {
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
                 break;
-            case PREFERENCES: break;
+            case PREFERENCES:
+                if(preferenceScreen == null) {
+                    preferenceScreen = new PreferenceScreen(this);
+                }
+                this.setScreen(preferenceScreen);
+                preferenceScreen.setAsInputProcessor();
+                break;
             case APPLICATION:
                 if(mainScreen == null){
                     mainScreen = new MainScreen(this);

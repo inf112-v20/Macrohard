@@ -11,15 +11,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.skeleton.app.Roborally;
+import inf112.skeleton.app.RoboRally;
 
 import java.io.File;
 
 public class MenuScreen implements Screen {
-    private Roborally parent;
+    private RoboRally parent;
     private Stage stage;
 
-    public MenuScreen(Roborally roborally){
+    public MenuScreen(RoboRally roborally){
         parent = roborally;
         stage = new Stage(new ScreenViewport());
     }
@@ -40,14 +40,14 @@ public class MenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(Roborally.APPLICATION);
+                parent.changeScreen(RoboRally.APPLICATION);
             }
         });
         TextButton preferences = new TextButton("Preferences", skin);
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(Roborally.PREFERENCES);
+                parent.changeScreen(RoboRally.PREFERENCES);
             }
         });
         TextButton exit = new TextButton("Exit", skin);

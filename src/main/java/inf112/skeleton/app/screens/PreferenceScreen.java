@@ -1,7 +1,6 @@
 package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -11,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.skeleton.app.Roborally;
+import inf112.skeleton.app.RoboRally;
 
 public class PreferenceScreen implements Screen {
 
-    private Roborally parent;
+    private RoboRally parent;
     private Stage stage;
 
     private Label titleLabel;
@@ -24,7 +23,7 @@ public class PreferenceScreen implements Screen {
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
 
-    public PreferenceScreen(Roborally parent){
+    public PreferenceScreen(RoboRally parent){
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
     }
@@ -87,7 +86,7 @@ public class PreferenceScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(Roborally.MENU);
+                parent.changeScreen(RoboRally.MENU);
             }
         });
 
