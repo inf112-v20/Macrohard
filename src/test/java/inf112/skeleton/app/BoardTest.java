@@ -17,9 +17,10 @@ public class BoardTest {
     }
 
     @Test
-    public void playerMustBePlacedOnBoard() {
-        Player player = new Player(11, 11);
-        Assert.assertNull(this.board.getPlayer());
+    public void outOfBoundsTest() {
+        board.move(player,11, 10);
+        assertTrue(player.getRow() == 3);
+        assertTrue(player.getCol() == 2);
     }
 
     @Test
@@ -32,6 +33,15 @@ public class BoardTest {
         board.move(player,3,3);
         //assertEquals(board.isOccupied(board.getTile(3,2)),false);
         assertEquals(board.isOccupied(board.getTile(3,3)) , true);
+    }
+
+    @Test
+    public void moveTest() {
+        board.move(player, 5, 5);
+        Assert.assertTrue(board.getTile(3,2).getOccupied() == false);
+        Assert.assertTrue(player.getRow() == 5);
+        Assert.assertTrue(player.getRow() == 5);
+
     }
 
 }

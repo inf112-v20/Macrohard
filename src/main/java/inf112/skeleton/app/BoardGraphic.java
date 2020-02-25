@@ -95,6 +95,11 @@ public class BoardGraphic extends InputAdapter implements ApplicationListener {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        if (Gdx.input.isTouched()) {
+            camera.translate(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY());
+            camera.update();
+        }
+
         renderer.setView(camera);
         renderer.render();
     }
