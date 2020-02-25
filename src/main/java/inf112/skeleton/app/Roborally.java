@@ -8,8 +8,11 @@ public class Roborally extends com.badlogic.gdx.Game {
 
     private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;
+    private MainScreen mainScreen;
 
     public final static int MENU = 0;
+    public final static int PREFERENCES = 1;
+    public final static int APPLICATION = 2;
 
     @Override
     public void create() {
@@ -23,6 +26,13 @@ public class Roborally extends com.badlogic.gdx.Game {
                 if(menuScreen == null){
                     menuScreen = new MenuScreen(this);
                     this.setScreen(menuScreen);
+                }
+                break;
+            case PREFERENCES: break;
+            case APPLICATION:
+                if(mainScreen == null){
+                    mainScreen = new MainScreen(this);
+                    this.setScreen(mainScreen);
                 }
                 break;
         }
