@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
+
 public class Tile {
+
     private boolean occupied;
     private int row;
     private int col;
@@ -17,10 +19,11 @@ public class Tile {
     public boolean getOccupied() {
         return occupied;
     }
+
     public int getRow() {
         return row;
     }
-    public int getCol() {
-        return col;
-    }
+
+    public int getCol() { return col; }
+
 }
