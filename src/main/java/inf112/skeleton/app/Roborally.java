@@ -2,6 +2,7 @@ package inf112.skeleton.app;
 
 
 import inf112.skeleton.app.screens.LoadingScreen;
+import inf112.skeleton.app.screens.MainScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 
 public class Roborally extends com.badlogic.gdx.Game {

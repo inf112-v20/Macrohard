@@ -1,9 +1,15 @@
 package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Screen;
+import inf112.skeleton.app.Roborally;
 
 public class MainScreen implements Screen {
 
+    private Roborally parent;
+
+    public MainScreen(Roborally parent){
+        this.parent = parent;
+    }
 
     @Override
     public void show() {

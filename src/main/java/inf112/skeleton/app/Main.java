@@ -16,10 +16,13 @@ public class Main extends InputAdapter {
         //cfg.height = 900;
 
         //Player player = new Player(6, 6);
-        //new LwjglApplication(new Roborally());
+        new LwjglApplication(new Roborally());
+
+        /*
         Deck deck = new Deck();
         System.out.println(deck.toString());
         deck.shuffle();
         System.out.println(deck.toString());
+         */
     }
 }
