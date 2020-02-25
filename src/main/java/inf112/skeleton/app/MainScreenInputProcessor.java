@@ -6,14 +6,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class MainScreenInputProcessor extends InputAdapter {
 
-    private Roborally parent;
+    private RoboRally parent;
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
     private TiledMapTileLayer.Cell playerCell;
     private int playerX, playerY;
 
-    public MainScreenInputProcessor(Roborally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, int playerX, int playerY) {
+    public MainScreenInputProcessor(RoboRally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, int playerX, int playerY) {
         this.parent = parent;
         this.boardLayer = boardLayer;
         this.playerLayer = playerLayer;
@@ -32,7 +32,7 @@ public class MainScreenInputProcessor extends InputAdapter {
             case Input.Keys.DOWN: playerY -= 1; break;
             case Input.Keys.LEFT: playerX -= 1; break;
             case Input.Keys.RIGHT: playerX += 1; break;
-            case Input.Keys.ESCAPE: parent.changeScreen(Roborally.MENU); break;
+            case Input.Keys.ESCAPE: parent.changeScreen(RoboRally.MENU); break;
         }
 
         //Add the player onto the new coordinate

@@ -1,13 +1,13 @@
 package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Screen;
-import inf112.skeleton.app.Roborally;
+import inf112.skeleton.app.RoboRally;
 
 public class LoadingScreen implements Screen {
 
-    private Roborally parent;
+    private RoboRally parent;
 
-    public LoadingScreen(Roborally roborally){
+    public LoadingScreen(RoboRally roborally){
         parent = roborally;
     }
 
@@ -18,7 +18,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float v) {
-        parent.changeScreen(Roborally.MENU);
+        parent.changeScreen(RoboRally.MENU);
     }
 
     @Override

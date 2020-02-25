@@ -15,11 +15,11 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.skeleton.app.Board;
 import inf112.skeleton.app.MainScreenInputProcessor;
 import inf112.skeleton.app.Player;
-import inf112.skeleton.app.Roborally;
+import inf112.skeleton.app.RoboRally;
 
 public class MainScreen extends InputAdapter implements Screen {
 
-    private Roborally parent;
+    private RoboRally parent;
 
     private TiledMap map;
     private OrthographicCamera camera;
@@ -38,7 +38,7 @@ public class MainScreen extends InputAdapter implements Screen {
     private TiledMapTileLayer.Cell playerCell;
     private int playerX, playerY;
 
-    public MainScreen(Roborally parent){
+    public MainScreen(RoboRally parent){
         this.parent = parent;
 
         map = new TmxMapLoader().load("assets/robomap.tmx");
