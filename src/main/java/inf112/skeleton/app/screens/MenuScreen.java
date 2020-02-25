@@ -22,6 +22,9 @@ public class MenuScreen implements Screen {
     public MenuScreen(Roborally roborally){
         parent = roborally;
         stage = new Stage(new ScreenViewport());
+    }
+
+    public void setAsInputProcessor() {
         Gdx.input.setInputProcessor(stage);
     }
 

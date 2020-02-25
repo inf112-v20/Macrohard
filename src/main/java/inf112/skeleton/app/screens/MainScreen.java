@@ -13,6 +13,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import inf112.skeleton.app.Board;
+import inf112.skeleton.app.MainScreenInputProcessor;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.Roborally;
 
@@ -23,6 +24,8 @@ public class MainScreen extends InputAdapter implements Screen {
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+
+    private MainScreenInputProcessor ip;
 
     private int tileSize = 75;
     private int gridSize = 12;
@@ -37,7 +40,6 @@ public class MainScreen extends InputAdapter implements Screen {
 
     public MainScreen(Roborally parent){
         this.parent = parent;
-        Gdx.input.setInputProcessor(this);
 
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
@@ -57,6 +59,12 @@ public class MainScreen extends InputAdapter implements Screen {
         playerLayer.setCell(playerX, playerY, playerCell);
 
         renderer = new OrthogonalTiledMapRenderer(map);
+
+        ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, playerX, playerY);
+    }
+
+    public void setAsInputProcessor() {
+        Gdx.input.setInputProcessor(ip);
     }
 
     @Override

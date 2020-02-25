@@ -1,6 +1,6 @@
 package inf112.skeleton.app;
+
 import java.util.Random;
-import java.util.Arrays;
 
 public class Deck {
     private Card[] deck;

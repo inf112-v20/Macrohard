@@ -26,15 +26,17 @@ public class Roborally extends com.badlogic.gdx.Game {
             case MENU:
                 if(menuScreen == null){
                     menuScreen = new MenuScreen(this);
-                    this.setScreen(menuScreen);
                 }
+                this.setScreen(menuScreen);
+                menuScreen.setAsInputProcessor();
                 break;
             case PREFERENCES: break;
             case APPLICATION:
                 if(mainScreen == null){
                     mainScreen = new MainScreen(this);
-                    this.setScreen(mainScreen);
                 }
+                this.setScreen(mainScreen);
+                mainScreen.setAsInputProcessor();
                 break;
         }
     }
