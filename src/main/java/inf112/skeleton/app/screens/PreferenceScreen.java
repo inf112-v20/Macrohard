@@ -34,6 +34,7 @@ public class PreferenceScreen implements Screen {
 
     @Override
     public void show() {
+        stage.clear();
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(false);
