@@ -27,7 +27,7 @@ public class Board {
     }
 
     public void setPlayer(Player player, int row, int col){
-        if (!outOfBounds(player.getRow(), player.getCol())){
+        if (!outOfBounds(row, col)){
             board[row][col].setOccupied(true);
         } else {
             this.player = null;
