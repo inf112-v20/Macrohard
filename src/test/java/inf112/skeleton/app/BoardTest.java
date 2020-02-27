@@ -1,6 +1,5 @@
 package inf112.skeleton.app;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -17,7 +16,8 @@ public class BoardTest {
     }
 
     @Test
-    public void outOfBoundsTest() {
+    // player position should remain unchanged when attempting to move out of bounds
+    public void MoveOutOfBoundsTest() {
         board.move(player,11, 10);
         assertTrue(player.getRow() == 3);
         assertTrue(player.getCol() == 2);
@@ -26,22 +26,36 @@ public class BoardTest {
     @Test
     public void playerTileIsOccupied() {
         assertTrue(board.isOccupied(board.getTile(3,2)));
+        assertFalse(board.isOccupied(board.getTile(2,3)));
     }
 
     @Test
     public void updatedBoardHasCorrectValues() {
         board.move(player,3,3);
-        //assertEquals(board.isOccupied(board.getTile(3,2)),false);
-        assertEquals(board.isOccupied(board.getTile(3,3)) , true);
+        assertTrue(board.isOccupied(board.getTile(3,3)) == true);
     }
 
     @Test
     public void moveTest() {
         board.move(player, 5, 5);
-        Assert.assertTrue(board.getTile(3,2).getOccupied() == false);
-        Assert.assertTrue(player.getRow() == 5);
-        Assert.assertTrue(player.getRow() == 5);
+        assertTrue(board.getTile(3,2).getOccupied() == false);
+        assertTrue(board.getTile(5,5).getOccupied() == true);
+        assertTrue(player.getRow() == 5);
+        assertTrue(player.getRow() == 5);
 
+    }
+
+    @Test
+    public void setPlayerTest() {
+        board.setPlayer(player, 0,1);
+        assertTrue(board.getTile(0,1).getOccupied() == true);
+    }
+
+    @Test
+    // Should set board.player to null when out of bounds
+    public void setPlayerOutOfBoundsTest() {
+        board.setPlayer(player,13,13);
+        assertEquals(board.getPlayer(),null);
     }
 
 }
