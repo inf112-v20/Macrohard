@@ -9,4 +9,11 @@ public class RotationCard extends Card {
         this.direction = direction;
     }
 
+    @Override
+    public String toString() {
+        return "RotationCard{" +
+                "direction=" + direction +
+                ", priority=" + priority +
+                '}';
+    }
 }

@@ -14,11 +14,9 @@ public class Main extends InputAdapter {
         //Player player = new Player(6, 6);
         new LwjglApplication(new RoboRally(), cfg);
 
-        /*
         Deck deck = new Deck();
         System.out.println(deck.toString());
         deck.shuffle();
         System.out.println(deck.toString());
-         */
     }
 }

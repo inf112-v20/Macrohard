@@ -13,4 +13,11 @@ public class MovementCardTest {
         Assert.assertEquals(1, card.getNumberOfMoves());
     }
 
+    @Test
+    public void numberOfMovesCannotExceedThree() {
+        MovementCard card = new MovementCard(1, 4);
+
+        Assert.assertEquals(0, card.getNumberOfMoves());
+    }
+
 }
