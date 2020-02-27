@@ -10,19 +10,19 @@ public class Deck {
         Card[] temp = new Card[84];
         for (int numCards = 0; numCards < 84; numCards++){
             if (numCards < 18) {
-                temp[numCards] = new MovementCard(numCards,Type.MOVE1);
+                temp[numCards] = new MovementCard(numCards,1);
             } else if (numCards < 30) {
-                temp[numCards] = new MovementCard(numCards,Type.MOVE2);
+                temp[numCards] = new MovementCard(numCards,2);
             } else if (numCards < 36) {
-                temp[numCards] = new MovementCard(numCards,Type.MOVE3);
+                temp[numCards] = new MovementCard(numCards,3);
             } else if (numCards < 42) {
-                temp[numCards] = new MovementCard(numCards,Type.MOVE_BACKWARDS);
+                temp[numCards] = new MovementCard(numCards,-1);
             } else if (numCards < 60){
-                temp[numCards] = new MovementCard(numCards,Type.ROTATE_CLOCKWISE);
+                temp[numCards] = new RotationCard(numCards,Type.ROTATE_CLOCKWISE);
             } else if (numCards < 78){
-                temp[numCards] = new MovementCard(numCards,Type.ROTATE_COUNTER_CLOCKWISE);
+                temp[numCards] = new RotationCard(numCards,Type.ROTATE_COUNTER_CLOCKWISE);
             } else {
-                temp[numCards] = new MovementCard(numCards,Type.ROTATE_U);
+                temp[numCards] = new RotationCard(numCards,Type.ROTATE_U);
             }
         }
         this.deck = temp;
