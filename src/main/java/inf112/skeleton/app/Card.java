@@ -1,7 +1,11 @@
 package inf112.skeleton.app;
 
-public interface Card {
+public abstract class Card {
 
-    public Type getType(Card card);
+    private final int priority;
+
+    public Card(int priority) {
+        this.priority = priority;
+    }
 
 }
