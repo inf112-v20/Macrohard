@@ -4,6 +4,7 @@ public class Player {
 
     private int row;
     private int col;
+    private Direction direction;
 
     public Player(int row, int col) {
         this.row = row;
@@ -24,5 +25,13 @@ public class Player {
 
     public void setCol(int col) {
         this.col = col;
+    }
+
+    public void setDirection(Direction dir) {
+        this.direction = dir;
+    }
+
+    public Direction getDirection () {
+        return this.direction;
     }
 }
