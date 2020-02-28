@@ -32,14 +32,14 @@ public class BoardTest {
     @Test
     public void updatedBoardHasCorrectValues() {
         board.move(player,3,3);
-        assertTrue(board.isOccupied(board.getTile(3,3)) == true);
+        assertTrue(board.isOccupied(board.getTile(3, 3)));
     }
 
     @Test
     public void moveTest() {
         board.move(player, 5, 5);
-        assertTrue(board.getTile(3,2).getOccupied() == false);
-        assertTrue(board.getTile(5,5).getOccupied() == true);
+        assertFalse(board.getTile(3,2).getOccupied());
+        assertTrue(board.getTile(5,5).getOccupied());
         assertTrue(player.getRow() == 5);
         assertTrue(player.getRow() == 5);
 
@@ -48,7 +48,7 @@ public class BoardTest {
     @Test
     public void setPlayerTest() {
         board.setPlayer(player, 0,1);
-        assertTrue(board.getTile(0,1).getOccupied() == true);
+        assertTrue(board.getTile(0,1).getOccupied());
     }
 
     @Test
