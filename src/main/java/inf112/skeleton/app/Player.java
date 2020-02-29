@@ -6,9 +6,10 @@ public class Player {
     private int col;
     private Direction direction;
 
-    public Player(int row, int col) {
+    public Player(int row, int col, Direction direction) {
         this.row = row;
         this.col = col;
+        this.direction = direction;
     }
 
     public int getRow() {

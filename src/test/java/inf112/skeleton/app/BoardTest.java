@@ -11,16 +11,17 @@ public class BoardTest {
 
     @Before
     public void setUp() {
-        player = new Player(3,2);
+        player = new Player(3,2, Direction.NORTH);
         board = new Board(player,10, 10);
     }
 
     @Test
-    // player position should remain unchanged when attempting to move out of bounds
+    // player position should remain unchanged when attempting to move out of bounds. However, direction should change.
     public void MoveOutOfBoundsTest() {
-        board.move(player,11, 10);
+        board.move(player,11, 9, Direction.EAST);
         assertTrue(player.getRow() == 3);
         assertTrue(player.getCol() == 2);
+        assertTrue(player.getDirection() == Direction.EAST);
     }
 
     @Test
@@ -31,13 +32,13 @@ public class BoardTest {
 
     @Test
     public void updatedBoardHasCorrectValues() {
-        board.move(player,3,3);
+        board.move(player,3,3, Direction.NORTH);
         assertTrue(board.isOccupied(board.getTile(3, 3)));
     }
 
     @Test
     public void moveTest() {
-        board.move(player, 5, 5);
+        board.move(player, 5, 5,Direction.WEST);
         assertFalse(board.getTile(3,2).getOccupied());
         assertTrue(board.getTile(5,5).getOccupied());
         assertTrue(player.getRow() == 5);
