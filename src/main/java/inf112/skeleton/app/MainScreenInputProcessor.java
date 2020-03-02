@@ -1,7 +1,9 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class MainScreenInputProcessor extends InputAdapter {
@@ -13,13 +15,16 @@ public class MainScreenInputProcessor extends InputAdapter {
     private TiledMapTileLayer.Cell playerCell;
     private int playerX, playerY;
 
-    public MainScreenInputProcessor(RoboRally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, int playerX, int playerY) {
+    private OrthographicCamera camera;
+
+    public MainScreenInputProcessor(RoboRally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, int playerX, int playerY, OrthographicCamera camera) {
         this.parent = parent;
         this.boardLayer = boardLayer;
         this.playerLayer = playerLayer;
         this.playerCell = playerCell;
         this.playerX = playerX;
         this.playerY = playerY;
+        this.camera = camera;
     }
 
     public boolean keyDown(int keycode) {
@@ -40,5 +45,30 @@ public class MainScreenInputProcessor extends InputAdapter {
 
         return true;
     }
+
+    // WIP
+    /*
+    public boolean touchDragged(int x, int y, int pointer){
+        x /= 50;
+        y /= 50;
+        camera.translate(-x, y);
+        camera.update();
+        if (Gdx.input.isTouched()) {
+            camera.translate(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY());
+            camera.update();
+        }
+        return true;
+    }
+     */
+
+    public boolean scrolled(int amount){
+        amount *= 10;
+        camera.viewportWidth += amount;
+        camera.viewportHeight += amount;
+        camera.update();
+        return true;
+    }
+
+
 
 }

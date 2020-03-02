@@ -60,7 +60,7 @@ public class MainScreen extends InputAdapter implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, playerX, playerY);
+        ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, playerX, playerY, camera);
     }
 
     public void setAsInputProcessor() {
