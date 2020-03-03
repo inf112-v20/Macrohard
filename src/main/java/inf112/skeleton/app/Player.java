@@ -41,7 +41,10 @@ public class Player {
             Direction newDir = ((RotationCard) card).getNewDirection(direction);
             this.setDirection(newDir);
         }
-        
+        else {
+            MovementCard mc = (MovementCard) card;
+
+        }
     }
 
 }
