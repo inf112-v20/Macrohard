@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
 
+import org.lwjgl.Sys;
+
 public class MovementCard extends Card {
 
     private int numberOfMoves;
@@ -17,6 +19,7 @@ public class MovementCard extends Card {
 
     @Override
     public String toString() {
+
         return "MovementCard{" + "priority=" + priority + ", numberOfMoves=" + numberOfMoves +
                 '}';
     }

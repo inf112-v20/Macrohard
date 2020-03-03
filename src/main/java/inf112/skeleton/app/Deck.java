@@ -3,12 +3,12 @@ package inf112.skeleton.app;
 import java.util.Random;
 
 public class Deck {
-
+    int deckSize = 84;
     private Card[] deck;
 
     public Deck() {
-        deck = new Card[84];
-        for (int numCards = 0; numCards < 84; numCards++) {
+        deck = new Card[deckSize];
+        for (int numCards = 0; numCards < 84; numCards++){
             if (numCards < 18) {
                 deck[numCards] = new MovementCard(numCards, 1);
             } else if (numCards < 30) {
@@ -48,5 +48,28 @@ public class Deck {
         }
         return result;
     }
+
+    public void dealHand(Player player) {
+        int choiceSize = player.getHealthPoints();
+        Card[] cardChoices = new Card[choiceSize];
+        for (int i = 0; i<choiceSize; i++) {
+            cardChoices[i] = deck[i];
+        }
+        PlayerHand p = new PlayerHand();
+        p.setPossibleHand(cardChoices);
+        player.hand = p;
+        deckSize -= choiceSize;
+        resize(deck, choiceSize);
+    }
+
+    public Card[] resize (Card[] oldDeck, int sizeDifference) {
+        Card[] newDeck = new Card[deckSize];
+        for (int i = 0; i < deckSize; i ++) {
+            newDeck[i] = oldDeck[8+i];
+        }
+        return newDeck;
+    }
+
+
 
 }
