@@ -1,10 +1,14 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.managers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import inf112.skeleton.app.*;
+import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.RotationCard;
+import inf112.skeleton.app.cards.RotationType;
 
-public class MainScreenInputProcessor extends InputAdapter {
+public class MainScreenInputManager extends InputAdapter {
 
     private Player player;
     private RoboRally parent;
@@ -13,7 +17,7 @@ public class MainScreenInputProcessor extends InputAdapter {
     private TiledMapTileLayer.Cell playerCell;
     private Board board;
 
-    public MainScreenInputProcessor(RoboRally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, Player player, Board board) {
+    public MainScreenInputManager(RoboRally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, Player player, Board board) {
         this.parent = parent;
         this.boardLayer = boardLayer;
         this.playerLayer = playerLayer;

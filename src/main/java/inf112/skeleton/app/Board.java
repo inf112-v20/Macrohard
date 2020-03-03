@@ -1,5 +1,9 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.Card;
+import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.RotationCard;
+
 public class Board {
 
     private final int height;

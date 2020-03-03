@@ -1,7 +1,7 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.MovementCard;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class MovementCardTest {

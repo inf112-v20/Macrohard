@@ -98,6 +98,7 @@ public class PreferenceScreen implements Screen {
         volumeSoundLabel = new Label("Sound Volume", skin);
         soundOnOffLabel = new Label("Sound", skin);
 
+        //Add elements to table
         table.add(titleLabel).colspan(2);
         table.row().pad(50, 10, 10, 10);
         table.add(volumeMusicLabel).left();
@@ -114,6 +115,7 @@ public class PreferenceScreen implements Screen {
         table.row().pad(25, 10, 10, 10);
         table.add(backButton).colspan(2);
 
+        //add table to stage
         stage.addActor(table);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
         stage.draw();

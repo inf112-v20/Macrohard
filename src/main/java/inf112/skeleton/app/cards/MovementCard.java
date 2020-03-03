@@ -1,6 +1,6 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.cards;
 
-import org.lwjgl.Sys;
+import inf112.skeleton.app.cards.Card;
 
 public class MovementCard extends Card {
 

@@ -20,6 +20,8 @@ public class RoboRally extends com.badlogic.gdx.Game {
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
 
+    private int currentScreen;
+
     @Override
     public void create() {
         loadingScreen = new LoadingScreen(this);
@@ -31,6 +33,10 @@ public class RoboRally extends com.badlogic.gdx.Game {
         return appPreferences;
     }
 
+    public int getScreen(int screen){
+        return currentScreen;
+    }
+
     public void changeScreen(int screen){
         switch(screen){
             case MENU:
@@ -39,6 +45,7 @@ public class RoboRally extends com.badlogic.gdx.Game {
                 }
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
+                currentScreen = MENU;
                 break;
             case PREFERENCES:
                 if(preferenceScreen == null) {
@@ -46,6 +53,7 @@ public class RoboRally extends com.badlogic.gdx.Game {
                 }
                 this.setScreen(preferenceScreen);
                 preferenceScreen.setAsInputProcessor();
+                currentScreen = PREFERENCES;
                 break;
             case APPLICATION:
                 if(mainScreen == null){
@@ -53,6 +61,7 @@ public class RoboRally extends com.badlogic.gdx.Game {
                 }
                 this.setScreen(mainScreen);
                 mainScreen.setAsInputProcessor();
+                currentScreen = APPLICATION;
                 break;
         }
     }

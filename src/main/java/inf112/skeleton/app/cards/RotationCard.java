@@ -1,4 +1,6 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.cards;
+
+import inf112.skeleton.app.Direction;
 
 public class RotationCard extends Card {
 

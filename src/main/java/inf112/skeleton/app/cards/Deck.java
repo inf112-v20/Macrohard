@@ -1,9 +1,12 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.cards;
+
+import inf112.skeleton.app.Player;
+import inf112.skeleton.app.cards.*;
 
 import java.util.Random;
 
 public class Deck {
-    int deckSize = 84;
+    private int deckSize = 84;
     private Card[] deck;
 
     public Deck() {
@@ -25,6 +28,10 @@ public class Deck {
                 deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_U);
             }
         }
+    }
+
+    public int getDeckSize (){
+        return deckSize;
     }
 
     //Implementing Fisher–Yates / Knuth shuffle
@@ -69,7 +76,6 @@ public class Deck {
         }
         return newDeck;
     }
-
 
 
 }

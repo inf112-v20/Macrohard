@@ -1,11 +1,9 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.RotationCard;
+import inf112.skeleton.app.cards.RotationType;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.UTFDataFormatException;
-
-import static org.junit.Assert.*;
 
 public class RotationCardTest {
 
