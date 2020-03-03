@@ -8,11 +8,15 @@ import static org.junit.Assert.*;
 public class BoardTest {
     Player player;
     Board board;
+    Card moveCard;
+    Card rotateCard;
 
     @Before
     public void setUp() {
         player = new Player(3,2, Direction.NORTH);
         board = new Board(player,10, 10);
+        moveCard = new MovementCard(1,2);
+        rotateCard = new RotationCard(2, RotationType.ROTATE_CLOCKWISE);
     }
 
     @Test
@@ -57,6 +61,29 @@ public class BoardTest {
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
         assertEquals(board.getPlayer(),null);
+    }
+
+    @Test
+    public void moveUsingMoveCardTest() {
+        board.execute(player, moveCard);
+        assertTrue(player.getRow() == 5);
+        assertTrue(player.getDirection()==Direction.NORTH);
+    }
+
+    @Test
+    public void moveUsingRotationCardTest() {
+        board.execute(player,rotateCard);
+        assertTrue(player.getRow() == 3);
+        assertTrue(player.getCol() == 2);
+        assertTrue(player.getDirection() == Direction.EAST);
+    }
+
+    @Test
+    public void moveOutOfBoundsUsingMoveCardTest() {
+        Player player1 = new Player(9,1,Direction.NORTH);
+        board.execute(player1,moveCard);
+        assertTrue(player1.getRow() == 9);
+        assertTrue(player1.getDirection() == Direction.NORTH);
     }
 
 }
