@@ -40,6 +40,7 @@ public class MenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                System.out.println("New Game button pressed. Attempting to change screen...");
                 parent.changeScreen(RoboRally.APPLICATION);
             }
         });
@@ -47,6 +48,7 @@ public class MenuScreen implements Screen {
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                System.out.println("Preferences button pressed. Attempting to change screen...");
                 parent.changeScreen(RoboRally.PREFERENCES);
             }
         });
@@ -54,6 +56,7 @@ public class MenuScreen implements Screen {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                System.out.println("Exit button pressed. Attempting to change screen...");
                 Gdx.app.exit();
             }
         });

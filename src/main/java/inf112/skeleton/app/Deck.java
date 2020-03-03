@@ -7,25 +7,24 @@ public class Deck {
     private Card[] deck;
 
     public Deck() {
-        Card[] temp = new Card[deckSize];
+        deck = new Card[deckSize];
         for (int numCards = 0; numCards < 84; numCards++){
             if (numCards < 18) {
-                temp[numCards] = new MovementCard(numCards,1);
+                deck[numCards] = new MovementCard(numCards, 1);
             } else if (numCards < 30) {
-                temp[numCards] = new MovementCard(numCards,2);
+                deck[numCards] = new MovementCard(numCards, 2);
             } else if (numCards < 36) {
-                temp[numCards] = new MovementCard(numCards,3);
+                deck[numCards] = new MovementCard(numCards, 3);
             } else if (numCards < 42) {
-                temp[numCards] = new MovementCard(numCards,-1);
-            } else if (numCards < 60){
-                temp[numCards] = new RotationCard(numCards,Type.ROTATE_CLOCKWISE);
-            } else if (numCards < 78){
-                temp[numCards] = new RotationCard(numCards,Type.ROTATE_COUNTER_CLOCKWISE);
+                deck[numCards] = new MovementCard(numCards, -1);
+            } else if (numCards < 60) {
+                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_CLOCKWISE);
+            } else if (numCards < 78) {
+                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_COUNTER_CLOCKWISE);
             } else {
-                temp[numCards] = new RotationCard(numCards,Type.ROTATE_U);
+                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_U);
             }
         }
-        this.deck = temp;
     }
 
     //Implementing Fisher–Yates / Knuth shuffle

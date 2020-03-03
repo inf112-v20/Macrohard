@@ -33,6 +33,9 @@ public class MainScreenInputProcessor extends InputAdapter {
             case Input.Keys.LEFT: board.move(player, player.getRow(), player.getCol() - 1, Direction.WEST); break;
             case Input.Keys.RIGHT: board.move(player,player.getRow(), player.getCol() + 1, Direction.EAST); break;
             case Input.Keys.ESCAPE: parent.changeScreen(RoboRally.MENU); break;
+            case Input.Keys.A: player.execute(new RotationCard(1, RotationType.ROTATE_CLOCKWISE)); break;
+            case Input.Keys.B: player.execute(new RotationCard(1, RotationType.ROTATE_COUNTER_CLOCKWISE)); break;
+            case Input.Keys.C: player.execute(new RotationCard(1, RotationType.ROTATE_U)); break;
         }
         //Prints the new position after move in console
         System.out.println("Row: " + player.getRow() + " Col: " + player.getCol() + " Direction:" + player.getDirection());
