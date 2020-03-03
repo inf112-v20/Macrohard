@@ -5,12 +5,20 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.*;
 
 public class MainScreen implements Screen {
@@ -33,13 +41,20 @@ public class MainScreen implements Screen {
     private Board board;
     private TiledMapTileLayer.Cell playerCell;
 
+    private Stage stage;
+
     public MainScreen(RoboRally parent){
+
+        stage = new Stage(new ScreenViewport());
+
         this.parent = parent;
         player = new Player(1,1, Direction.NORTH);
         board = new Board(player, 12,12);
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
         camera.setToOrtho(false, tileSize*gridSize, tileSize*gridSize);
+        camera.zoom = 1.2f;
+        camera.translate(tileSize*camera.zoom, -tileSize*camera.zoom);
 
         boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
 
@@ -60,12 +75,11 @@ public class MainScreen implements Screen {
     }
 
     public void setAsInputProcessor() {
-        Gdx.input.setInputProcessor(ip);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
-
     }
 
     @Override
@@ -73,13 +87,11 @@ public class MainScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if (Gdx.input.isTouched()) {
-            camera.translate(-Gdx.input.getDeltaX(), Gdx.input.getDeltaY());
-            camera.update();
-        }
-
         renderer.setView(camera);
         renderer.render();
+
+        stage.act();
+        stage.draw();
     }
 
     @Override
