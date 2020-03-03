@@ -48,14 +48,14 @@ public class BoardTest {
 
     @Test
     public void setPlayerTest() {
-        board.setPlayer(player, 0,1);
+        board.setPlayer(0,1);
         assertTrue(board.getTile(0,1).getOccupied());
     }
 
     @Test
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
-        board.setPlayer(player,13,13);
+        board.setPlayer(13,13);
         assertEquals(board.getPlayer(),null);
     }
 

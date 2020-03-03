@@ -28,8 +28,8 @@ public class Player {
         this.col = col;
     }
 
-    public void setDirection(Direction dir) {
-        this.direction = dir;
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 
     public Direction getDirection () {

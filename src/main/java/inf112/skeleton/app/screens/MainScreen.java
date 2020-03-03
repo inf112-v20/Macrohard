@@ -36,7 +36,7 @@ public class MainScreen extends InputAdapter implements Screen {
 
     public MainScreen(RoboRally parent){
         this.parent = parent;
-        player = new Player(0,0, Direction.NORTH);
+        player = new Player(1,1, Direction.NORTH);
         board = new Board(player, 12,12);
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
