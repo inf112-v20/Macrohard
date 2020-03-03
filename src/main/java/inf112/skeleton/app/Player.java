@@ -36,15 +36,5 @@ public class Player {
         return this.direction;
     }
 
-    public void execute(Card card) {
-        if (card instanceof RotationCard) {
-            Direction newDir = ((RotationCard) card).getNewDirection(direction);
-            this.setDirection(newDir);
-        }
-        else {
-            MovementCard mc = (MovementCard) card;
-
-        }
-    }
 
 }
