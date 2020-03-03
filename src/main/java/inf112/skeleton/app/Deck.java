@@ -3,29 +3,28 @@ package inf112.skeleton.app;
 import java.util.Random;
 
 public class Deck {
-
+    int deckSize = 84;
     private Card[] deck;
 
     public Deck() {
-        Card[] temp = new Card[84];
+        deck = new Card[deckSize];
         for (int numCards = 0; numCards < 84; numCards++){
             if (numCards < 18) {
-                temp[numCards] = new MovementCard(numCards,1);
+                deck[numCards] = new MovementCard(numCards, 1);
             } else if (numCards < 30) {
-                temp[numCards] = new MovementCard(numCards,2);
+                deck[numCards] = new MovementCard(numCards, 2);
             } else if (numCards < 36) {
-                temp[numCards] = new MovementCard(numCards,3);
+                deck[numCards] = new MovementCard(numCards, 3);
             } else if (numCards < 42) {
-                temp[numCards] = new MovementCard(numCards,-1);
-            } else if (numCards < 60){
-                temp[numCards] = new RotationCard(numCards,Type.ROTATE_CLOCKWISE);
-            } else if (numCards < 78){
-                temp[numCards] = new RotationCard(numCards,Type.ROTATE_COUNTER_CLOCKWISE);
+                deck[numCards] = new MovementCard(numCards, -1);
+            } else if (numCards < 60) {
+                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_CLOCKWISE);
+            } else if (numCards < 78) {
+                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_COUNTER_CLOCKWISE);
             } else {
-                temp[numCards] = new RotationCard(numCards,Type.ROTATE_U);
+                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_U);
             }
         }
-        this.deck = temp;
     }
 
     //Implementing Fisher–Yates / Knuth shuffle
@@ -49,5 +48,28 @@ public class Deck {
         }
         return result;
     }
+
+    public void dealHand(Player player) {
+        int choiceSize = player.getHealthPoints();
+        Card[] cardChoices = new Card[choiceSize];
+        for (int i = 0; i<choiceSize; i++) {
+            cardChoices[i] = deck[i];
+        }
+        PlayerHand p = new PlayerHand();
+        p.setPossibleHand(cardChoices);
+        player.hand = p;
+        deckSize -= choiceSize;
+        resize(deck, choiceSize);
+    }
+
+    public Card[] resize (Card[] oldDeck, int sizeDifference) {
+        Card[] newDeck = new Card[deckSize];
+        for (int i = 0; i < deckSize; i ++) {
+            newDeck[i] = oldDeck[8+i];
+        }
+        return newDeck;
+    }
+
+
 
 }

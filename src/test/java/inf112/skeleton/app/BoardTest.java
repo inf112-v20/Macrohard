@@ -42,14 +42,14 @@ public class BoardTest {
         assertFalse(board.getTile(3,2).getOccupied());
         assertTrue(board.getTile(5,5).getOccupied());
         assertTrue(player.getRow() == 5);
-        assertTrue(player.getRow() == 5);
+        assertTrue(player.getCol() == 5);
 
     }
 
     @Test
     public void setPlayerTest() {
-        board.setPlayer(0,1);
-        assertTrue(board.getTile(0,1).getOccupied());
+        board.setPlayer(1,1);
+        assertTrue(board.getTile(1,1).getOccupied());
     }
 
     @Test

@@ -18,5 +18,15 @@ public class Main extends InputAdapter {
         System.out.println(deck.toString());
         deck.shuffle();
         System.out.println(deck.toString());
+
+        Player player = new Player(0,0,Direction.NORTH);
+        deck.dealHand(player);
+        System.out.println(player.getHand());
+        System.out.println(deck.deckSize);
+
+        player.setHealthPoints(5);
+        deck.dealHand(player);
+        System.out.println(player.getHand());
+        System.out.println(deck.deckSize);
     }
 }
