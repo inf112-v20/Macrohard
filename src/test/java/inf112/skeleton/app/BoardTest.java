@@ -11,16 +11,17 @@ public class BoardTest {
 
     @Before
     public void setUp() {
-        player = new Player(3,2);
+        player = new Player(3,2, Direction.NORTH);
         board = new Board(player,10, 10);
     }
 
     @Test
-    // player position should remain unchanged when attempting to move out of bounds
+    // player position should remain unchanged when attempting to move out of bounds. However, direction should change.
     public void MoveOutOfBoundsTest() {
-        board.move(player,11, 10);
+        board.move(player,11, 9, Direction.EAST);
         assertTrue(player.getRow() == 3);
         assertTrue(player.getCol() == 2);
+        assertTrue(player.getDirection() == Direction.EAST);
     }
 
     @Test
@@ -31,15 +32,15 @@ public class BoardTest {
 
     @Test
     public void updatedBoardHasCorrectValues() {
-        board.move(player,3,3);
-        assertTrue(board.isOccupied(board.getTile(3,3)) == true);
+        board.move(player,3,3, Direction.NORTH);
+        assertTrue(board.isOccupied(board.getTile(3, 3)));
     }
 
     @Test
     public void moveTest() {
-        board.move(player, 5, 5);
-        assertTrue(board.getTile(3,2).getOccupied() == false);
-        assertTrue(board.getTile(5,5).getOccupied() == true);
+        board.move(player, 5, 5,Direction.WEST);
+        assertFalse(board.getTile(3,2).getOccupied());
+        assertTrue(board.getTile(5,5).getOccupied());
         assertTrue(player.getRow() == 5);
         assertTrue(player.getRow() == 5);
 
@@ -47,14 +48,14 @@ public class BoardTest {
 
     @Test
     public void setPlayerTest() {
-        board.setPlayer(player, 0,1);
-        assertTrue(board.getTile(0,1).getOccupied() == true);
+        board.setPlayer(0,1);
+        assertTrue(board.getTile(0,1).getOccupied());
     }
 
     @Test
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
-        board.setPlayer(player,13,13);
+        board.setPlayer(13,13);
         assertEquals(board.getPlayer(),null);
     }
 

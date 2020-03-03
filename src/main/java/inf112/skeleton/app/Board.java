@@ -23,10 +23,10 @@ public class Board {
                 board[i][j] = new Tile(false, i, j);
             }
         }
-        setPlayer(player, player.getRow(), player.getCol());
+        setPlayer(player.getRow(), player.getCol());
     }
 
-    public void setPlayer(Player player, int row, int col){
+    public void setPlayer(int row, int col){
         if (!outOfBounds(row, col)){
             board[row][col].setOccupied(true);
         } else {
@@ -34,13 +34,17 @@ public class Board {
         }
     }
 
-    public void move(Player player, int row, int col){
+    public void move(Player player, int row, int col, Direction dir){
         board[player.getRow()][player.getCol()].setOccupied(false);
 
         if(!outOfBounds(row, col)){
-            player.setRow(height-row);
+            player.setRow(row);
             player.setCol(col);
+            player.setDirection(dir);
             board[row][col].setOccupied(true);
+        } else {
+            System.out.println("Cannot move out of bounds");
+            player.setDirection(dir);
         }
 
     }
@@ -59,7 +63,7 @@ public class Board {
     }
 
     private Boolean outOfBounds(int row, int col) {
-        return row < 0 || col < 0 || row > height || col > width;
+        return row < 1 || col < 0 || row >= height || col >= width;
     }
 
     public Boolean isOccupied(Tile tile){

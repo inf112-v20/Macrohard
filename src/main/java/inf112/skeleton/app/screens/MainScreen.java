@@ -12,10 +12,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import inf112.skeleton.app.Board;
-import inf112.skeleton.app.MainScreenInputProcessor;
-import inf112.skeleton.app.Player;
-import inf112.skeleton.app.RoboRally;
+import inf112.skeleton.app.*;
 
 public class MainScreen extends InputAdapter implements Screen {
 
@@ -36,11 +33,11 @@ public class MainScreen extends InputAdapter implements Screen {
     private Player player;
     private Board board;
     private TiledMapTileLayer.Cell playerCell;
-    private int playerX, playerY;
 
     public MainScreen(RoboRally parent){
         this.parent = parent;
-
+        player = new Player(1,1, Direction.NORTH);
+        board = new Board(player, 12,12);
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
         camera.setToOrtho(false, tileSize*gridSize, tileSize*gridSize);
@@ -56,11 +53,11 @@ public class MainScreen extends InputAdapter implements Screen {
 
         StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
         playerCell.setTile(playerTile);
-        playerLayer.setCell(playerX, playerY, playerCell);
+        playerLayer.setCell(player.getRow(), player.getCol(), playerCell);
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, playerX, playerY, camera);
+        ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
     public void setAsInputProcessor() {
