@@ -35,4 +35,13 @@ public class Player {
     public Direction getDirection () {
         return this.direction;
     }
+
+    public void execute(Card card) {
+        if (card instanceof RotationCard) {
+            Direction newDir = ((RotationCard) card).getNewDirection(direction);
+            this.setDirection(newDir);
+        }
+        
+    }
+
 }
