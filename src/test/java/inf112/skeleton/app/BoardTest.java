@@ -10,18 +10,18 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BoardTest {
-
-    Player player;
-    Board board;
-    int initRow = 3;
-    int initCol = 2;
-    MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
-    MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
-    MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
-    MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
-    RotationCard clockwise = new RotationCard(1, RotationType.CLOCKWISE);
-    RotationCard countClockwise = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
-    RotationCard uTurn = new RotationCard(1, RotationType.U_TURN);
+    //Made private by request from Codacy
+    private Player player;
+    private Board board;
+    private int initRow = 3;
+    private int initCol = 2;
+    private MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
+    private MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
+    private MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
+    private MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
+    private RotationCard clockwise = new RotationCard(1, RotationType.CLOCKWISE);
+    private RotationCard countClockwise = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
+    private RotationCard uTurn = new RotationCard(1, RotationType.U_TURN);
 
     @Before
     public void setUp() {

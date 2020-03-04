@@ -9,7 +9,7 @@ import inf112.skeleton.app.screens.PreferenceScreen;
 
 public class RoboRally extends com.badlogic.gdx.Game {
 
-    private LoadingScreen loadingScreen;
+    //private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;
     private MainScreen mainScreen;
     private PreferenceScreen preferenceScreen;
@@ -24,7 +24,7 @@ public class RoboRally extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
-        loadingScreen = new LoadingScreen(this);
+        LoadingScreen loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
         appPreferences = new AppPreferences();
     }
@@ -63,6 +63,9 @@ public class RoboRally extends com.badlogic.gdx.Game {
                 mainScreen.setAsInputProcessor();
                 currentScreen = APPLICATION;
                 break;
+
+             default:
+                 break;
         }
     }
 }

@@ -13,7 +13,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void show() {
-
+        //Add info
     }
 
     @Override
@@ -23,26 +23,26 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
+        //Nothing yet
     }
 
     @Override
     public void pause() {
-
+        //Nothing yet
     }
 
     @Override
     public void resume() {
-
+        //Nothing yet
     }
 
     @Override
     public void hide() {
-
+        //Nothing yet
     }
 
     @Override
     public void dispose() {
-
+        //Nothing yet
     }
 }

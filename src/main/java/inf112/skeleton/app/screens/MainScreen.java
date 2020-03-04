@@ -30,17 +30,19 @@ public class MainScreen implements Screen {
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
-    private Player player;
     private Board board;
-    private TiledMapTileLayer.Cell playerCell;
+
+    //Removed by request from Codacy
+    //private Player player;
+    //private TiledMapTileLayer.Cell playerCell;
 
     public MainScreen(RoboRally parent){
         this.parent = parent;
-        player = new Player(1,1, Direction.NORTH);
+        Player player = new Player(1,1, Direction.NORTH);
         board = new Board(player, 12,12);
         //map = new TmxMapLoader().load("assets/robomap.tmx");
 
-        //
+        //TESTING
 
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
         TiledMapTileLayer.Cell cell = handler.getCell(7,3,"FLOOR");
@@ -75,7 +77,8 @@ public class MainScreen implements Screen {
         boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
 
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
-        playerCell = new TiledMapTileLayer.Cell();
+
+        TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
 
         Texture playerTexture = new Texture("./assets/player.png");
         TextureRegion playerTextureRegion = new TextureRegion(playerTexture);
@@ -96,7 +99,7 @@ public class MainScreen implements Screen {
 
     @Override
     public void show() {
-
+        //Nothing yet
     }
 
     @Override
@@ -122,17 +125,17 @@ public class MainScreen implements Screen {
 
     @Override
     public void pause() {
-
+        //Nothing yet
     }
 
     @Override
     public void resume() {
-
+        //Nothing yet
     }
 
     @Override
     public void hide() {
-
+        //Nothing yet
     }
 
     @Override

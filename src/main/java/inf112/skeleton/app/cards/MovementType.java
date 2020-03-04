@@ -1,7 +1,6 @@
 package inf112.skeleton.app.cards;
 
 public enum MovementType {
-
     ONE_FORWARD,
     TWO_FORWARD,
     THREE_FORWARD,
@@ -15,5 +14,4 @@ public enum MovementType {
             return this.ordinal() + 1;
         }
     }
-
 }

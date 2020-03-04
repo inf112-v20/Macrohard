@@ -18,10 +18,12 @@ public class PreferenceScreen implements Screen {
     private Stage stage;
 
     private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
+
+    //Removed by request from Codacy
+    //    private Label volumeMusicLabel;
+    //    private Label volumeSoundLabel;
 
     public PreferenceScreen(RoboRally parent){
         this.parent = parent;
@@ -93,9 +95,9 @@ public class PreferenceScreen implements Screen {
 
         titleLabel = new Label("Preferences", skin);
         titleLabel.setFontScale(2f);
-        volumeMusicLabel = new Label("Music Volume", skin);
+        Label volumeMusicLabel = new Label("Music Volume", skin);
         musicOnOffLabel = new Label("Music", skin);
-        volumeSoundLabel = new Label("Sound Volume", skin);
+        Label volumeSoundLabel = new Label("Sound Volume", skin);
         soundOnOffLabel = new Label("Sound", skin);
 
         //Add elements to table
@@ -131,26 +133,26 @@ public class PreferenceScreen implements Screen {
 
     @Override
     public void resize(int i, int i1) {
-
+        //Nothing yet
     }
 
     @Override
     public void pause() {
-
+        //Nothing yet
     }
 
     @Override
     public void resume() {
-
+        //Nothing yet
     }
 
     @Override
     public void hide() {
-
+        //Nothing yet
     }
 
     @Override
     public void dispose() {
-
+        //Nothing yet
     }
 }
