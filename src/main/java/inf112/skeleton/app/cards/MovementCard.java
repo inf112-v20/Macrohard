@@ -1,26 +1,22 @@
 package inf112.skeleton.app.cards;
 
-import inf112.skeleton.app.cards.Card;
-
 public class MovementCard extends Card {
 
-    private int numberOfMoves;
+    private MovementType movementType;
 
-    public MovementCard(int priority, int numberOfMoves){
+    public MovementCard(int priority, MovementType movementType){
         super(priority);
-        if (numberOfMoves < 4 && numberOfMoves > -2) {
-            this.numberOfMoves = numberOfMoves;
-        }
+        this.movementType = movementType;
     }
 
-    public int getNumberOfMoves() {
-        return numberOfMoves;
+    public int getMoveID() {
+        return movementType.getMoveID();
     }
 
     @Override
     public String toString() {
 
-        return "MovementCard{" + "priority=" + priority + ", numberOfMoves=" + numberOfMoves +
+        return "MovementCard{" + "priority=" + priority + ", numberOfMoves=" + getMoveID() +
                 '}';
     }
 }

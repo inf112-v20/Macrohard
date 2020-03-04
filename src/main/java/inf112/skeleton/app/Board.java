@@ -40,44 +40,54 @@ public class Board {
 
     public void execute(Player player, Card card) {
         if (card instanceof RotationCard) {
-            Direction newDir = ((RotationCard) card).getNewDirection(player.getDirection());
-            move(player, player.getRow(), player.getCol(), newDir);
+            rotate(player, (RotationCard) card);
+        }
+        else if (card instanceof MovementCard) {
+            move(player, (MovementCard) card);
+        }
+    }
+
+    private void rotate(Player player, RotationCard card) {
+        Direction newDir = card.getNewDirection(player.getDirection());
+        player.setDirection(newDir);
+    }
+
+    private void move(Player player, MovementCard card) {
+        if (card.getMoveID() == -1) {
+            moveBackwards(player);
         }
         else {
-            MovementCard mc = (MovementCard) card;
-            for (int i = 0; i < mc.getNumberOfMoves(); i++) {
-                if (player.getDirection().equals(Direction.NORTH)) {
-                    move(player, player.getRow() + 1, player.getCol(), player.getDirection());
-                }
-                else if (player.getDirection().equals(Direction.SOUTH)) {
-                    move(player, player.getRow() - 1, player.getCol(), player.getDirection());
-                }
-                else if (player.getDirection().equals(Direction.EAST)) {
-                    move(player, player.getRow(), player.getCol() + 1, player.getDirection());
-                }
-                else {
-                    move(player, player.getRow(), player.getCol() - 1, player.getDirection());
-                }
+            moveForward(player, card.getMoveID());
+        }
+    }
+
+    private void moveBackwards(Player player) {
+        int newRow = player.getRow() - player.getRowTrajectory();
+        int newCol = player.getCol() - player.getColumnTrajectory();
+        if (!outOfBounds(newRow, newCol)) {
+            board[player.getRow()][player.getCol()].setOccupied(false);
+            player.setRow(newRow);
+            player.setCol(newCol);
+            board[newRow][newCol].setOccupied(true);
+        }
+        else { System.out.println("Cannot move out of bounds"); }
+    }
+
+    private void moveForward(Player player, int numOfMoves) {
+        for (int i = 0; i < numOfMoves; i++) {
+            int newRow = player.getRow() + player.getRowTrajectory();
+            int newCol = player.getCol() + player.getColumnTrajectory();
+            if(!outOfBounds(newRow, newCol)){
+                board[player.getRow()][player.getCol()].setOccupied(false);
+                player.setRow(newRow);
+                player.setCol(newCol);
+                board[newRow][newCol].setOccupied(true);
+            } else {
+                System.out.println("Cannot move out of bounds");
+                break;
             }
-
         }
     }
-
-    public void move(Player player, int row, int col, Direction dir){
-        board[player.getRow()][player.getCol()].setOccupied(false);
-
-        if(!outOfBounds(row, col)){
-            player.setRow(row);
-            player.setCol(col);
-            player.setDirection(dir);
-            board[row][col].setOccupied(true);
-        } else {
-            System.out.println("Cannot move out of bounds");
-            player.setDirection(dir);
-        }
-
-    }
-
 
     public Tile[][] getBoard() {
         return board;

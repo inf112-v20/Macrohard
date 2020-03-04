@@ -1,7 +1,6 @@
 package inf112.skeleton.app.cards;
 
 import inf112.skeleton.app.Player;
-import inf112.skeleton.app.cards.*;
 
 import java.util.Random;
 
@@ -13,19 +12,19 @@ public class Deck {
         deck = new Card[deckSize];
         for (int numCards = 0; numCards < 84; numCards++){
             if (numCards < 18) {
-                deck[numCards] = new MovementCard(numCards, 1);
+                deck[numCards] = new MovementCard(numCards, MovementType.ONE_FORWARD);
             } else if (numCards < 30) {
-                deck[numCards] = new MovementCard(numCards, 2);
+                deck[numCards] = new MovementCard(numCards, MovementType.TWO_FORWARD);
             } else if (numCards < 36) {
-                deck[numCards] = new MovementCard(numCards, 3);
+                deck[numCards] = new MovementCard(numCards, MovementType.THREE_FORWARD);
             } else if (numCards < 42) {
-                deck[numCards] = new MovementCard(numCards, -1);
+                deck[numCards] = new MovementCard(numCards, MovementType.ONE_BACKWARD);
             } else if (numCards < 60) {
-                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_CLOCKWISE);
+                deck[numCards] = new RotationCard(numCards, RotationType.CLOCKWISE);
             } else if (numCards < 78) {
-                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_COUNTER_CLOCKWISE);
+                deck[numCards] = new RotationCard(numCards, RotationType.COUNTER_CLOCKWISE);
             } else {
-                deck[numCards] = new RotationCard(numCards, RotationType.ROTATE_U);
+                deck[numCards] = new RotationCard(numCards, RotationType.U_TURN);
             }
         }
     }
@@ -59,7 +58,7 @@ public class Deck {
     public void dealHand(Player player) {
         int choiceSize = player.getHealthPoints();
         Card[] cardChoices = new Card[choiceSize];
-        for (int i = 0; i<choiceSize; i++) {
+        for (int i = 0; i < choiceSize; i++) {
             cardChoices[i] = deck[i];
         }
         PlayerHand p = new PlayerHand();

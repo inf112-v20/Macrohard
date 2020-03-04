@@ -7,4 +7,5 @@ public abstract class Card {
     public Card(int priority) {
         this.priority = priority;
     }
+
 }

@@ -42,9 +42,19 @@ public class Player {
     public Direction getDirection () {
         return this.direction;
     }
+
+    public int getRowTrajectory() {
+        return direction.getRowTrajectory();
+    }
+
+    public int getColumnTrajectory() {
+        return direction.getColumnTrajectory();
+    }
+
     public PlayerHand getHand () {
         return this.hand;
     }
+
     public int getHealthPoints() {
         return this.healthPoints;
     }
