@@ -100,6 +100,7 @@ public class MainScreen implements Screen {
     @Override
     public void show() {
         //Nothing yet
+        RoboRally.music.play();
     }
 
     @Override
@@ -142,5 +143,6 @@ public class MainScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+        //music.dispose();
     }
 }

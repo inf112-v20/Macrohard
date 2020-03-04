@@ -102,7 +102,7 @@ public class Board {
     }
 
     private Boolean outOfBounds(int row, int col) {
-        return row < 1 || col < 0 || row >= height || col >= width;
+        return row < 0 || col < 0 || row >= height || col >= width;
     }
 
     public Boolean isOccupied(Tile tile){
