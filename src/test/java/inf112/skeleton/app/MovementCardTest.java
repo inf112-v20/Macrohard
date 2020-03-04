@@ -1,23 +1,35 @@
 package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.MovementCard;
-import org.junit.Assert;
+import inf112.skeleton.app.cards.MovementType;
+import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class MovementCardTest {
 
-    @Test
-    public void numberOfMovesIsEqualToOne() {
-        MovementCard card = new MovementCard(1, 1);
+    MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
+    MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
+    MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
+    MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
 
-        Assert.assertEquals(1, card.getNumberOfMoves());
+    @Test
+    public void numberOfMovesIsEqualToOneForOneForwardMovementCard() {
+        assertEquals(1, move1.getMoveID());
     }
 
     @Test
-    public void numberOfMovesCannotExceedThree() {
-        MovementCard card = new MovementCard(1, 4);
+    public void numberOfMovesIsEqualToTwoForTwoForwardMovementCard() {
+        assertEquals(2, move2.getMoveID());
+    }
 
-        Assert.assertEquals(0, card.getNumberOfMoves());
+    @Test
+    public void numberOfMovesIsEqualToThreeForThreeForwardMovementCard() {
+        assertEquals(3, move3.getMoveID());
+    }
+
+    @Test
+    public void numberOfMovesIsEqualToMinusOneForOneBackwardMovementCard() {
+        assertEquals(-1, moveBack.getMoveID());
     }
 
 }
