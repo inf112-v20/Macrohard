@@ -49,23 +49,15 @@ public class CardGraphic extends Image {
         super(new Texture("./assets/cards/exampleCard.png"));
         initiatedCards++;
 
-        initialXPosition = statx - CARD_WIDTH/2 + PADDING;
+        initialXPosition = statx - CARD_WIDTH / 2 + PADDING;
 
-        if(card instanceof MovementCard){
-            File png = new File("./assets/cards/movementCard.png");
-            fileHandle = new FileHandle(png);
-            pixmap = new Pixmap(fileHandle);
-            originalPixmap = new Pixmap(fileHandle);
-            texture = new Texture(pixmap);
-            setDrawable(new SpriteDrawable(new Sprite(texture)));
-        }else if (card instanceof RotationCard){
-            File png = new File("./assets/cards/rotationCard.png");
-            fileHandle = new FileHandle(png);
-            pixmap = new Pixmap(fileHandle);
-            originalPixmap = new Pixmap(fileHandle);
-            texture = new Texture(pixmap);
-            setDrawable(new SpriteDrawable(new Sprite(texture)));
-        }
+        File png = new File("./assets/cards/" + card.getName() + ".png");
+        fileHandle = new FileHandle(png);
+        pixmap = new Pixmap(fileHandle);
+        originalPixmap = new Pixmap(fileHandle);
+        texture = new Texture(pixmap);
+        setDrawable(new SpriteDrawable(new Sprite(texture)));
+
 
         setBounds(initialXPosition, PADDING, 100, 100*CARD_ASPECT);
 

@@ -3,11 +3,14 @@ package inf112.skeleton.app.managers;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.cards.RotationType;
+
+import javax.swing.*;
 
 public class MainScreenInputManager extends InputAdapter {
 

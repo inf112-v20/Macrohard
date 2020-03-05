@@ -7,7 +7,7 @@ public class RotationCard extends Card {
     private final RotationType rotationType;
 
     public RotationCard(int priority, RotationType rotationType) {
-        super(priority);
+        super(priority, rotationType);
         this.rotationType = rotationType;
     }
 
