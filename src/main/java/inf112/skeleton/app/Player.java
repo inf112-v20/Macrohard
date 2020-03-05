@@ -2,6 +2,7 @@ package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.PlayerHand;
+import inf112.skeleton.app.graphics.PlayerGraphic;
 
 public class Player {
 
@@ -10,6 +11,7 @@ public class Player {
     private Direction direction;
     public PlayerHand hand;
     private int healthPoints;
+    private PlayerGraphic playerGraphic;
 
     public Player(int row, int col, Direction direction) {
         this.row = row;
@@ -69,4 +71,11 @@ public class Player {
     }
 
 
+    public void setGraphic(PlayerGraphic playerGraphic) {
+        this.playerGraphic = playerGraphic;
+    }
+
+    public PlayerGraphic getGraphics() {
+        return this.playerGraphic;
+    }
 }
