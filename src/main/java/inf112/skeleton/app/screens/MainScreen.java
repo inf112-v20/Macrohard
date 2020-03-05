@@ -5,21 +5,18 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.math.Vector;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.*;
+import inf112.skeleton.app.cards.Card;
+import inf112.skeleton.app.cards.Deck;
+import inf112.skeleton.app.cards.PlayerHand;
+import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
 
@@ -121,6 +118,7 @@ public class MainScreen implements Screen {
     }
 
     public void setAsInputProcessor() {
+        //Gdx.input.setInputProcessor(ip);
         Gdx.input.setInputProcessor(stage);
     }
 

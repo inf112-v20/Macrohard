@@ -1,4 +1,4 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.graphics;
 
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
@@ -14,6 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import inf112.skeleton.app.cards.Card;
+import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.RotationCard;
 
 import java.io.File;
 import java.util.Arrays;
