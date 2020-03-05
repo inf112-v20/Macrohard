@@ -1,17 +1,15 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.RotationCard;
+import inf112.skeleton.app.cards.RotationType;
 import org.junit.Assert;
 import org.junit.Test;
-
-import java.io.UTFDataFormatException;
-
-import static org.junit.Assert.*;
 
 public class RotationCardTest {
 
     @Test
     public void rotateCounterClockwiseCardFromNorthYieldsWest() {
-        RotationCard card = new RotationCard(1, RotationType.ROTATE_COUNTER_CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.NORTH);
 
@@ -20,7 +18,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateClockwiseCardFromNorthYieldsEast() {
-        RotationCard card = new RotationCard(1, RotationType.ROTATE_CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.NORTH);
 
@@ -29,7 +27,7 @@ public class RotationCardTest {
 
     @Test
     public void uRotateFromNorthYieldsSouth() {
-        RotationCard card = new RotationCard(1, RotationType.ROTATE_U);
+        RotationCard card = new RotationCard(1, RotationType.U_TURN);
 
         Direction newDir = card.getNewDirection(Direction.NORTH);
 
@@ -38,7 +36,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateCounterClockwiseCardFromSouthYieldsEast() {
-        RotationCard card = new RotationCard(1, RotationType.ROTATE_COUNTER_CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.SOUTH);
 
@@ -47,7 +45,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateClockwiseCardFromSouthYieldsWest() {
-        RotationCard card = new RotationCard(1, RotationType.ROTATE_CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.SOUTH);
 
@@ -56,7 +54,7 @@ public class RotationCardTest {
 
     @Test
     public void uRotateFromSouthYieldsNorth() {
-        RotationCard card = new RotationCard(1, RotationType.ROTATE_U);
+        RotationCard card = new RotationCard(1, RotationType.U_TURN);
 
         Direction newDir = card.getNewDirection(Direction.SOUTH);
 

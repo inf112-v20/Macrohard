@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.PlayerHand;
+
 public class Player {
 
     private int row;
@@ -40,9 +42,19 @@ public class Player {
     public Direction getDirection () {
         return this.direction;
     }
+
+    public int getRowTrajectory() {
+        return direction.getRowTrajectory();
+    }
+
+    public int getColumnTrajectory() {
+        return direction.getColumnTrajectory();
+    }
+
     public PlayerHand getHand () {
         return this.hand;
     }
+
     public int getHealthPoints() {
         return this.healthPoints;
     }

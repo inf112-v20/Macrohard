@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+
 public class Tile {
 
     private boolean occupied;
@@ -25,5 +27,9 @@ public class Tile {
     }
 
     public int getCol() { return col; }
+
+    public static String getType(TiledMapTileLayer.Cell cell) {
+        return (String) cell.getTile().getProperties().get("Type");
+    }
 
 }

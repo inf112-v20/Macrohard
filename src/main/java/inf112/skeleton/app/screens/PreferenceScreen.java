@@ -18,10 +18,15 @@ public class PreferenceScreen implements Screen {
     private Stage stage;
 
     private Label titleLabel;
-    private Label volumeMusicLabel;
-    private Label volumeSoundLabel;
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
+
+    public static Boolean isCheckedMusic = true;
+    private float volume;
+
+    //Removed by request from Codacy
+    //    private Label volumeMusicLabel;
+    //    private Label volumeSoundLabel;
 
     public PreferenceScreen(RoboRally parent){
         this.parent = parent;
@@ -46,6 +51,11 @@ public class PreferenceScreen implements Screen {
         volumeMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
+                if (isCheckedMusic){
+                    volume = volumeMusicSlider.getValue();
+                } else {
+                    volume = 0;
+                }
                 parent.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
                 return false;
             }
@@ -57,6 +67,12 @@ public class PreferenceScreen implements Screen {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
+                isCheckedMusic = enabled;
+                if (!enabled){
+                    volume = 0;}
+                else {
+                    volume = volumeMusicSlider.getValue();
+                }
                 parent.getPreferences().setMusicEnabled(enabled);
                 return false;
             }
@@ -93,11 +109,12 @@ public class PreferenceScreen implements Screen {
 
         titleLabel = new Label("Preferences", skin);
         titleLabel.setFontScale(2f);
-        volumeMusicLabel = new Label("Music Volume", skin);
+        Label volumeMusicLabel = new Label("Music Volume", skin);
         musicOnOffLabel = new Label("Music", skin);
-        volumeSoundLabel = new Label("Sound Volume", skin);
+        Label volumeSoundLabel = new Label("Sound Volume", skin);
         soundOnOffLabel = new Label("Sound", skin);
 
+        //Add elements to table
         table.add(titleLabel).colspan(2);
         table.row().pad(50, 10, 10, 10);
         table.add(volumeMusicLabel).left();
@@ -114,6 +131,7 @@ public class PreferenceScreen implements Screen {
         table.row().pad(25, 10, 10, 10);
         table.add(backButton).colspan(2);
 
+        //add table to stage
         stage.addActor(table);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
         stage.draw();
@@ -121,34 +139,37 @@ public class PreferenceScreen implements Screen {
 
     @Override
     public void render(float v) {
+        RoboRally.music.setVolume(volume);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
         stage.draw();
+        //RoboRally.music.stop
+        //RoboRally.music.setVolume(volume);
     }
 
     @Override
     public void resize(int i, int i1) {
-
+        //Nothing yet
     }
 
     @Override
     public void pause() {
-
+        //Nothing yet
     }
 
     @Override
     public void resume() {
-
+        //Nothing yet
     }
 
     @Override
     public void hide() {
-
+        //Nothing yet
     }
 
     @Override
     public void dispose() {
-
+        //Nothing yet
     }
 }

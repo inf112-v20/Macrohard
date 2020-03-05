@@ -2,10 +2,10 @@ package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -13,11 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.RoboRally;
 
-import java.io.File;
-
 public class MenuScreen implements Screen {
     private RoboRally parent;
     private Stage stage;
+    //private Label titleLabel;
+
 
     public MenuScreen(RoboRally roborally){
         parent = roborally;
@@ -35,6 +35,8 @@ public class MenuScreen implements Screen {
         table.setDebug(true);
 
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
+
+        Label titleLabel = new Label("Preferences", skin);
 
         TextButton newGame = new TextButton("New Game", skin);
         newGame.addListener(new ChangeListener() {
@@ -61,10 +63,14 @@ public class MenuScreen implements Screen {
             }
         });
 
+        titleLabel = new Label("RoboRally", skin);
+        titleLabel.setFontScale(2f);
+        table.add(titleLabel).colspan(2);
+        table.row().pad(50, 15, 10, 0);
         table.add(newGame).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(10, 15, 10, 0);
         table.add(preferences).fillX().uniformX();
-        table.row();
+        table.row().pad(10, 15, 10, 0);;
         table.add(exit).fillX().uniformX();
 
         stage.addActor(table);
@@ -87,21 +93,21 @@ public class MenuScreen implements Screen {
 
     @Override
     public void pause() {
-
+        //Nothing yet
     }
 
     @Override
     public void resume() {
-
+        //Nothing yet
     }
 
     @Override
     public void hide() {
-
+        //Nothing yet
     }
 
     @Override
     public void dispose() {
-
+        //Nothing yet
     }
 }

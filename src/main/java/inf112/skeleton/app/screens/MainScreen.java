@@ -20,6 +20,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.DragListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.*;
+import inf112.skeleton.app.managers.MainScreenInputManager;
+import inf112.skeleton.app.managers.TiledMapManager;
 
 public class MainScreen implements Screen {
 
@@ -29,7 +31,7 @@ public class MainScreen implements Screen {
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
 
-    private MainScreenInputProcessor ip;
+    private MainScreenInputManager ip;
 
     private int tileSize = 75;
     private int gridSize = 12;
@@ -37,9 +39,11 @@ public class MainScreen implements Screen {
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
-    private Player player;
     private Board board;
-    private TiledMapTileLayer.Cell playerCell;
+
+    //Removed by request from Codacy
+    //private Player player;
+    //private TiledMapTileLayer.Cell playerCell;
 
     private Stage stage;
 
@@ -48,9 +52,39 @@ public class MainScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
         this.parent = parent;
-        player = new Player(1,1, Direction.NORTH);
+        Player player = new Player(1,1, Direction.NORTH);
         board = new Board(player, 12,12);
-        map = new TmxMapLoader().load("assets/robomap.tmx");
+        //map = new TmxMapLoader().load("assets/robomap.tmx");
+
+        //TESTING
+
+        TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
+        TiledMapTileLayer.Cell cell = handler.getCell(7,3,"FLOOR");
+        TiledMapTileLayer.Cell cell1 = handler.getCell(1,0,0);
+        TiledMapTileLayer.Cell cell3 = handler.getCell(2,0,0);
+        TiledMapTileLayer.Cell cell4 = handler.getCell(3,0,0);
+        TiledMapTileLayer.Cell cell5 = handler.getCell(4,0,0);
+        TiledMapTileLayer.Cell cell6 = handler.getCell(5,0,0);
+        TiledMapTileLayer.Cell cell7 = handler.getCell(6,0,0);
+
+        System.out.println(Tile.getType(cell1));
+        System.out.println(Tile.getType(cell3));
+        System.out.println(Tile.getType(cell4));
+        System.out.println(Tile.getType(cell5));
+        System.out.println(Tile.getType(cell6));
+        System.out.println(Tile.getType(cell7));
+
+
+        System.out.println(Tile.getType(cell));
+        //System.out.println(TileType.getType(cell2));
+        TiledMapTileLayer floor = (TiledMapTileLayer) handler.getMap().getLayers().get("Player");
+        System.out.println(floor.getCell(5,5) != null);
+        //System.out.println(cell.setTile());
+        System.out.println(handler.getMap().getLayers().get(0).getName());
+        //System.out.println(handler.getTile(0,0,"FLOOR").getTileType());
+        map = handler.getMap();
+
+        //
         camera = new OrthographicCamera();
         camera.setToOrtho(false, tileSize*gridSize+330, tileSize*gridSize+50);
         camera.zoom = 1.2f;
@@ -59,7 +93,8 @@ public class MainScreen implements Screen {
         boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
 
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
-        playerCell = new TiledMapTileLayer.Cell();
+
+        TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
 
         Texture playerTexture = new Texture("./assets/player.png");
         TextureRegion playerTextureRegion = new TextureRegion(playerTexture);
@@ -70,8 +105,6 @@ public class MainScreen implements Screen {
         playerLayer.setCell(player.getRow(), player.getCol(), playerCell);
 
         renderer = new OrthogonalTiledMapRenderer(map);
-
-        ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, player, board);
 
         Deck deck = new Deck();
         deck.shuffle();
@@ -84,6 +117,7 @@ public class MainScreen implements Screen {
              stage.addActor(tempCard);
         }
 
+        ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
     public void setAsInputProcessor() {
@@ -92,6 +126,8 @@ public class MainScreen implements Screen {
 
     @Override
     public void show() {
+        //Nothing yet
+        RoboRally.music.play();
     }
 
     @Override
@@ -115,22 +151,23 @@ public class MainScreen implements Screen {
 
     @Override
     public void pause() {
-
+        //Nothing yet
     }
 
     @Override
     public void resume() {
-
+        //Nothing yet
     }
 
     @Override
     public void hide() {
-
+        //Nothing yet
     }
 
     @Override
     public void dispose() {
         map.dispose();
         renderer.dispose();
+        //music.dispose();
     }
 }

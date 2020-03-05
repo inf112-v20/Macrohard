@@ -1,4 +1,6 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.cards;
+
+import inf112.skeleton.app.Direction;
 
 public class RotationCard extends Card {
 
@@ -10,10 +12,10 @@ public class RotationCard extends Card {
     }
 
     public Direction getNewDirection(Direction direction) {
-        if (this.rotationType.equals(RotationType.ROTATE_CLOCKWISE)) {
+        if (this.rotationType.equals(RotationType.CLOCKWISE)) {
             return direction.turnClockwise();
         }
-        else if (this.rotationType.equals(RotationType.ROTATE_COUNTER_CLOCKWISE)) {
+        else if (this.rotationType.equals(RotationType.COUNTER_CLOCKWISE)) {
             return direction.turnCounterClockwise();
         }
         else {

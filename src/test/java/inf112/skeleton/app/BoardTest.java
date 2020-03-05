@@ -1,49 +1,103 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.MovementType;
+import inf112.skeleton.app.cards.RotationCard;
+import inf112.skeleton.app.cards.RotationType;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
 public class BoardTest {
-    Player player;
-    Board board;
+    //Made private by request from Codacy
+    private Player player;
+    private Board board;
+    private int initRow = 3;
+    private int initCol = 2;
+    private MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
+    private MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
+    private MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
+    private MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
+    private RotationCard clockwise = new RotationCard(1, RotationType.CLOCKWISE);
+    private RotationCard countClockwise = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
+    private RotationCard uTurn = new RotationCard(1, RotationType.U_TURN);
 
     @Before
     public void setUp() {
-        player = new Player(3,2, Direction.NORTH);
+        player = new Player(initRow, initCol, Direction.NORTH);
         board = new Board(player,10, 10);
     }
 
     @Test
-    // player position should remain unchanged when attempting to move out of bounds. However, direction should change.
-    public void MoveOutOfBoundsTest() {
-        board.move(player,11, 9, Direction.EAST);
-        assertTrue(player.getRow() == 3);
-        assertTrue(player.getCol() == 2);
-        assertTrue(player.getDirection() == Direction.EAST);
+    public void move1NorthIncrementsPlayerRowWithOne() {
+        board.execute(player, move1);
+
+        assertEquals(initRow + 1, player.getRow());
+    }
+
+    @Test
+    public void movingVerticallyDoesNotAffectPlayerColumn() {
+        board.execute(player, move1);
+
+        assertEquals(initCol, player.getCol());
+    }
+
+
+    @Test
+    public void move2NorthIncrementsPlayerRowWithTwo() {
+        board.execute(player, move2);
+
+        assertEquals(initRow + 2, player.getRow());
+    }
+
+    @Test
+    public void moving1EastIncrementsPlayerColumnWithOne() {
+        player.setDirection(Direction.EAST);
+
+        board.execute(player, move1);
+
+        assertEquals(initCol + 1, player.getCol());
+    }
+
+    @Test
+    public void moving3EastIncrementsPlayerColumnWithThree() {
+        player.setDirection(Direction.EAST);
+
+        board.execute(player, move3);
+
+        assertEquals(initCol + 3, player.getCol());
+    }
+
+    @Test
+    public void movingHorizontallyDoesNotAffectPlayerRow() {
+        player.setDirection(Direction.WEST);
+
+        board.execute(player, move1);
+
+        assertEquals(initRow, player.getRow());
+    }
+
+    @Test
+    public void movingBackFacingNorthDecrementsPlayerRowWithOne() {
+        board.execute(player, moveBack);
+
+        assertEquals(initRow - 1, player.getRow());
+    }
+
+    @Test
+    public void movingBackFacingWestIncrementsPlayerColumnWithOne() {
+        player.setDirection(Direction.WEST);
+
+        board.execute(player, moveBack);
+
+        assertEquals(initCol + 1, player.getCol());
     }
 
     @Test
     public void playerTileIsOccupied() {
         assertTrue(board.isOccupied(board.getTile(3,2)));
         assertFalse(board.isOccupied(board.getTile(2,3)));
-    }
-
-    @Test
-    public void updatedBoardHasCorrectValues() {
-        board.move(player,3,3, Direction.NORTH);
-        assertTrue(board.isOccupied(board.getTile(3, 3)));
-    }
-
-    @Test
-    public void moveTest() {
-        board.move(player, 5, 5,Direction.WEST);
-        assertFalse(board.getTile(3,2).getOccupied());
-        assertTrue(board.getTile(5,5).getOccupied());
-        assertTrue(player.getRow() == 5);
-        assertTrue(player.getCol() == 5);
-
     }
 
     @Test
@@ -56,7 +110,56 @@ public class BoardTest {
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
-        assertEquals(board.getPlayer(),null);
+        assertNull(board.getPlayer());
+    }
+
+    @Test
+    public void movingForwardDoesNotAffectDirectionOfPlayer() {
+        board.execute(player, move2);
+
+        assertEquals(Direction.NORTH, player.getDirection());
+    }
+
+    @Test
+    public void rotatingClockwiseFromNorthYieldsEast() {
+        board.execute(player,clockwise);
+
+        assertEquals(Direction.EAST, player.getDirection());
+    }
+
+    @Test
+    public void rotatingCounterClockwiseAndThenMoving1ForwardDecrementPlayerColumnWithOne() {
+        board.execute(player, countClockwise);
+        board.execute(player, move1);
+
+        assertEquals( initCol - 1, player.getCol());
+    }
+
+    @Test
+    public void uTurningAndThenMoving1ForwardDecrementPlayerColumnWithOne() {
+        board.execute(player, uTurn);
+        board.execute(player, move1);
+
+        assertEquals(initRow - 1, player.getRow());
+    }
+
+    @Test
+    public void movingOutOfBoundsVerticallyDoesNotAffectPlayerRow() {
+        player.setRow(9);
+
+        board.execute(player,move1);
+
+        assertEquals(9, player.getRow());
+    }
+
+    @Test
+    public void movingOutOfBoundsHorizontallyDoesNotAffectPlayerColumn() {
+        player.setCol(9);
+        player.setDirection(Direction.EAST);
+
+        board.execute(player,move1);
+
+        assertEquals(9, player.getCol());
     }
 
 }
