@@ -14,6 +14,10 @@ public class PlayerHand  {
         finalHand = new Card[5];
     }
 
+    public Card[] getPossibleHand() {
+        return possibleHand;
+    }
+
     public String toString(){
         String result = "";
         for (Card i : possibleHand){

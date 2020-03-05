@@ -52,7 +52,7 @@ public class MainScreen implements Screen {
         board = new Board(player, 12,12);
         map = new TmxMapLoader().load("assets/robomap.tmx");
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, tileSize*gridSize, tileSize*gridSize);
+        camera.setToOrtho(false, tileSize*gridSize+330, tileSize*gridSize+50);
         camera.zoom = 1.2f;
         camera.translate(tileSize*camera.zoom, -tileSize*camera.zoom);
 
@@ -72,6 +72,18 @@ public class MainScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         ip = new MainScreenInputProcessor(parent, boardLayer, playerLayer, playerCell, player, board);
+
+        Deck deck = new Deck();
+        deck.shuffle();
+        deck.dealHand(player);
+        PlayerHand hand = player.getHand();
+        Card[] cards = hand.getPossibleHand();
+
+        for (int i = 0; i < cards.length; i++) {
+             CardGraphic tempCard = new CardGraphic(cards[i]);
+             stage.addActor(tempCard);
+        }
+
     }
 
     public void setAsInputProcessor() {
