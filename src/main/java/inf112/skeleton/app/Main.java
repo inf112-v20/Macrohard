@@ -11,23 +11,14 @@ public class Main extends InputAdapter {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "RoboRally";
         cfg.width = 1200;
-        cfg.height = 900;
+        cfg.height = 840;
 
         new LwjglApplication(new RoboRally(), cfg);
 
         Deck deck = new Deck();
-        System.out.println(deck.toString());
         deck.shuffle();
-        System.out.println(deck.toString());
 
         Player player = new Player(0,0,Direction.NORTH);
         deck.dealHand(player);
-        System.out.println(player.getHand());
-        System.out.println(deck.getDeckSize());
-
-        player.setHealthPoints(5);
-        deck.dealHand(player);
-        System.out.println(player.getHand());
-        System.out.println(deck.getDeckSize());
     }
 }

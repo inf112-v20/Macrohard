@@ -49,6 +49,8 @@ public class Board {
 
     private void rotate(Player player, RotationCard card) {
         Direction newDir = card.getNewDirection(player.getDirection());
+
+        player.getGraphics().animateRotation(player.getDirection(), newDir);
         player.setDirection(newDir);
     }
 
@@ -69,6 +71,9 @@ public class Board {
             player.setRow(newRow);
             player.setCol(newCol);
             board[newRow][newCol].setOccupied(true);
+
+            //Graphics
+            player.getGraphics().animateMove(newCol, newRow, 1);
         }
         else { System.out.println("Cannot move out of bounds"); }
     }
@@ -82,6 +87,9 @@ public class Board {
                 player.setRow(newRow);
                 player.setCol(newCol);
                 board[newRow][newCol].setOccupied(true);
+
+                //Graphics
+                player.getGraphics().animateMove(newCol, newRow, numOfMoves);
             } else {
                 System.out.println("Cannot move out of bounds");
                 break;

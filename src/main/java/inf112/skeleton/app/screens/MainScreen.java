@@ -17,6 +17,7 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.CardGraphic;
+import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
 
@@ -30,7 +31,7 @@ public class MainScreen implements Screen {
 
     private MainScreenInputManager ip;
 
-    private int tileSize = 75;
+    private int tileSize = 60;
     private int gridSize = 12;
 
     private TiledMapTileLayer boardLayer;
@@ -83,9 +84,8 @@ public class MainScreen implements Screen {
 
         //
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, tileSize*gridSize+330, tileSize*gridSize+50);
-        camera.zoom = 1.2f;
-        camera.translate(tileSize*camera.zoom, -tileSize*camera.zoom);
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        camera.translate(0, -tileSize*camera.zoom*2);
 
         boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
 
@@ -93,12 +93,6 @@ public class MainScreen implements Screen {
 
         TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
 
-        Texture playerTexture = new Texture("./assets/player.png");
-        TextureRegion playerTextureRegion = new TextureRegion(playerTexture);
-        TextureRegion standardPlayerTextureRegion = playerTextureRegion.split(75, 75)[0][2];
-
-        StaticTiledMapTile playerTile = new com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile(standardPlayerTextureRegion);
-        playerCell.setTile(playerTile);
         playerLayer.setCell(player.getRow(), player.getCol(), playerCell);
 
         renderer = new OrthogonalTiledMapRenderer(map);
@@ -114,12 +108,15 @@ public class MainScreen implements Screen {
              stage.addActor(tempCard);
         }
 
+        PlayerGraphic playerGraphic = new PlayerGraphic(player);
+        stage.addActor(playerGraphic);
+
         ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
     public void setAsInputProcessor() {
-        //Gdx.input.setInputProcessor(ip);
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(ip);
+        //Gdx.input.setInputProcessor(stage);
     }
 
     @Override
