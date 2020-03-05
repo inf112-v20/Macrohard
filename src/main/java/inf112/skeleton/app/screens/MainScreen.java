@@ -1,6 +1,7 @@
 package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.*;
@@ -113,8 +115,17 @@ public class MainScreen implements Screen {
              CardGraphic tempCard = new CardGraphic(cards[i]);
              stage.addActor(tempCard);
         }
+ /*      player.setFinalHand();
+        int cardIndex = 1;
+        for (int j = 0; j<cards.length; j++) {
+            if (cards[j].handIndex == cardIndex) {
+                player.getFinalHand()[cardIndex-1] = cards[j];
+                cardIndex++;
+            }
+        }
+        */
 
-        ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
+       ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
     public void setAsInputProcessor() {

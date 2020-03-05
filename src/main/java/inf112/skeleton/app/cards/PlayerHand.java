@@ -11,7 +11,7 @@ public class PlayerHand  {
     }
 
     public void setFinalHand() {
-        finalHand = new Card[5];
+        this.finalHand = new Card[5];
     }
 
     public Card[] getPossibleHand() {

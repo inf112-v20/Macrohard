@@ -34,14 +34,14 @@ public class MainScreenInputManager extends InputAdapter {
         //Change the players new coordinates according to the keycode
         //For manual testing purposes
         switch(keycode){
-            case Input.Keys.ESCAPE: parent.changeScreen(RoboRally.MENU); break;
+            /*case Input.Keys.ESCAPE: parent.changeScreen(RoboRally.MENU); break;
             case Input.Keys.A: board.execute(player, new RotationCard(1, RotationType.CLOCKWISE)); break;
             case Input.Keys.B: board.execute(player, new RotationCard(1, RotationType.COUNTER_CLOCKWISE)); break;
             case Input.Keys.C: board.execute(player, new RotationCard(1, RotationType.U_TURN)); break;
             case Input.Keys.NUM_1: board.execute(player, new MovementCard(1, MovementType.ONE_FORWARD)); break;
             case Input.Keys.NUM_2: board.execute(player, new MovementCard(1, MovementType.TWO_FORWARD)); break;
             case Input.Keys.NUM_3: board.execute(player, new MovementCard(1, MovementType.THREE_FORWARD)); break;
-            case Input.Keys.NUM_4: board.execute(player, new MovementCard(1, MovementType.ONE_BACKWARD)); break;
+            case Input.Keys.NUM_4: board.execute(player, new MovementCard(1, MovementType.ONE_BACKWARD)); break;*/
         }
         //Prints the new position after move in console
         System.out.println("Row: " + player.getRow() + " Col: " + player.getCol() + " Direction:" + player.getDirection());
