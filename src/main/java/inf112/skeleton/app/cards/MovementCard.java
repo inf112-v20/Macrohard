@@ -5,7 +5,7 @@ public class MovementCard extends Card {
     private MovementType movementType;
 
     public MovementCard(int priority, MovementType movementType){
-        super(priority);
+        super(priority, movementType);
         this.movementType = movementType;
     }
 

@@ -102,10 +102,12 @@ public class MainScreen implements Screen {
         deck.dealHand(player);
         PlayerHand hand = player.getHand();
         Card[] cards = hand.getPossibleHand();
+        //Print-line for testing purposes
+        System.out.println(player.getHand());
 
-        for (int i = 0; i < cards.length; i++) {
-             CardGraphic tempCard = new CardGraphic(cards[i]);
-             stage.addActor(tempCard);
+        for (Card card : cards) {
+            CardGraphic tempCard = new CardGraphic(card);
+            stage.addActor(tempCard);
         }
 
         PlayerGraphic playerGraphic = new PlayerGraphic(player);
