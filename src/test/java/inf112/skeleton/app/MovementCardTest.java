@@ -7,10 +7,10 @@ import org.junit.Test;
 
 public class MovementCardTest {
 
-    MovementCard move1 = new MovementCard(1, false, -1, MovementType.ONE_FORWARD);
-    MovementCard move2 = new MovementCard(1, false, -1, MovementType.TWO_FORWARD);
-    MovementCard move3 = new MovementCard(1, false, -1, MovementType.THREE_FORWARD);
-    MovementCard moveBack = new MovementCard(1, false, -1, MovementType.ONE_BACKWARD);
+    MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
+    MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
+    MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
+    MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
 
     @Test
     public void numberOfMovesIsEqualToOneForOneForwardMovementCard() {

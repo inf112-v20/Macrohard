@@ -15,13 +15,13 @@ public class BoardTest {
     private Board board;
     private int initRow = 3;
     private int initCol = 2;
-    private MovementCard move1 = new MovementCard(1, false, -1, MovementType.ONE_FORWARD);
-    private MovementCard move2 = new MovementCard(1, false, -1, MovementType.TWO_FORWARD);
-    private MovementCard move3 = new MovementCard(1, false, -1, MovementType.THREE_FORWARD);
-    private MovementCard moveBack = new MovementCard(1, false, -1, MovementType.ONE_BACKWARD);
-    private RotationCard clockwise = new RotationCard(1, false, -1, RotationType.CLOCKWISE);
-    private RotationCard countClockwise = new RotationCard(1, false, -1, RotationType.COUNTER_CLOCKWISE);
-    private RotationCard uTurn = new RotationCard(1, false, -1, RotationType.U_TURN);
+    private MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
+    private MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
+    private MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
+    private MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
+    private RotationCard clockwise = new RotationCard(1, RotationType.CLOCKWISE);
+    private RotationCard countClockwise = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
+    private RotationCard uTurn = new RotationCard(1, RotationType.U_TURN);
 
     @Before
     public void setUp() {

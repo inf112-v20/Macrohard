@@ -9,7 +9,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateCounterClockwiseCardFromNorthYieldsWest() {
-        RotationCard card = new RotationCard(1, false, -1, RotationType.COUNTER_CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.NORTH);
 
@@ -18,7 +18,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateClockwiseCardFromNorthYieldsEast() {
-        RotationCard card = new RotationCard(1, false, -1, RotationType.CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.NORTH);
 
@@ -27,7 +27,7 @@ public class RotationCardTest {
 
     @Test
     public void uRotateFromNorthYieldsSouth() {
-        RotationCard card = new RotationCard(1, false, -1, RotationType.U_TURN);
+        RotationCard card = new RotationCard(1, RotationType.U_TURN);
 
         Direction newDir = card.getNewDirection(Direction.NORTH);
 
@@ -36,7 +36,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateCounterClockwiseCardFromSouthYieldsEast() {
-        RotationCard card = new RotationCard(1, false,-1, RotationType.COUNTER_CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.COUNTER_CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.SOUTH);
 
@@ -45,7 +45,7 @@ public class RotationCardTest {
 
     @Test
     public void rotateClockwiseCardFromSouthYieldsWest() {
-        RotationCard card = new RotationCard(1, false, -1, RotationType.CLOCKWISE);
+        RotationCard card = new RotationCard(1, RotationType.CLOCKWISE);
 
         Direction newDir = card.getNewDirection(Direction.SOUTH);
 
@@ -54,7 +54,7 @@ public class RotationCardTest {
 
     @Test
     public void uRotateFromSouthYieldsNorth() {
-        RotationCard card = new RotationCard(1, false, -1, RotationType.U_TURN);
+        RotationCard card = new RotationCard(1, RotationType.U_TURN);
 
         Direction newDir = card.getNewDirection(Direction.SOUTH);
 

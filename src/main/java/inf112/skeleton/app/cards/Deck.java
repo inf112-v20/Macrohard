@@ -12,19 +12,19 @@ public class Deck {
         deck = new Card[deckSize];
         for (int numCards = 0; numCards < 84; numCards++){
             if (numCards < 18) {
-                deck[numCards] = new MovementCard(numCards, false, -1, MovementType.ONE_FORWARD);
+                deck[numCards] = new MovementCard(numCards, MovementType.ONE_FORWARD);
             } else if (numCards < 30) {
-                deck[numCards] = new MovementCard(numCards, false, -1, MovementType.TWO_FORWARD);
+                deck[numCards] = new MovementCard(numCards, MovementType.TWO_FORWARD);
             } else if (numCards < 36) {
-                deck[numCards] = new MovementCard(numCards, false, -1, MovementType.THREE_FORWARD);
+                deck[numCards] = new MovementCard(numCards, MovementType.THREE_FORWARD);
             } else if (numCards < 42) {
-                deck[numCards] = new MovementCard(numCards, false, -1, MovementType.ONE_BACKWARD);
+                deck[numCards] = new MovementCard(numCards, MovementType.ONE_BACKWARD);
             } else if (numCards < 60) {
-                deck[numCards] = new RotationCard(numCards, false, -1, RotationType.CLOCKWISE);
+                deck[numCards] = new RotationCard(numCards, RotationType.CLOCKWISE);
             } else if (numCards < 78) {
-                deck[numCards] = new RotationCard(numCards, false, -1, RotationType.COUNTER_CLOCKWISE);
+                deck[numCards] = new RotationCard(numCards, RotationType.COUNTER_CLOCKWISE);
             } else {
-                deck[numCards] = new RotationCard(numCards, false, -1, RotationType.U_TURN);
+                deck[numCards] = new RotationCard(numCards, RotationType.U_TURN);
             }
         }
     }
