@@ -22,7 +22,9 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
     public static Music music;
+
     private int currentScreen;
+    private boolean hasGame = false;
 
     @Override
     public void create() {
@@ -46,9 +48,7 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     public void changeScreen(int screen){
         switch(screen){
             case MENU:
-                if(menuScreen == null){
-                    menuScreen = new MenuScreen(this);
-                }
+                menuScreen = new MenuScreen(this);
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
                 currentScreen = MENU;
