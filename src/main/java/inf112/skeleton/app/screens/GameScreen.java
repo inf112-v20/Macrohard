@@ -18,7 +18,7 @@ import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
 
-public class MainScreen implements Screen {
+public class GameScreen implements Screen {
 
     private RoboRallyApplication parent;
 
@@ -36,13 +36,9 @@ public class MainScreen implements Screen {
 
     private Board board;
 
-    //Removed by request from Codacy
-    //private Player player;
-    //private TiledMapTileLayer.Cell playerCell;
-
     private Stage stage;
 
-    public MainScreen(RoboRallyApplication parent){
+    public GameScreen(RoboRallyApplication parent){
 
         stage = new Stage(new ScreenViewport());
 
