@@ -9,7 +9,7 @@ import inf112.skeleton.app.screens.MainScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 import inf112.skeleton.app.screens.PreferenceScreen;
 
-public class RoboRally extends com.badlogic.gdx.Game {
+public class RoboRallyApplication extends com.badlogic.gdx.Game {
 
     //private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;

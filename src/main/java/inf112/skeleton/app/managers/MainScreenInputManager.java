@@ -5,7 +5,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import inf112.skeleton.app.Board;
 import inf112.skeleton.app.Player;
-import inf112.skeleton.app.RoboRally;
+import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.cards.RotationCard;
@@ -14,13 +14,13 @@ import inf112.skeleton.app.cards.RotationType;
 public class MainScreenInputManager extends InputAdapter {
 
     private Player player;
-    private RoboRally parent;
+    private RoboRallyApplication parent;
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
     private TiledMapTileLayer.Cell playerCell;
     private Board board;
 
-    public MainScreenInputManager(RoboRally parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, Player player, Board board) {
+    public MainScreenInputManager(RoboRallyApplication parent, TiledMapTileLayer boardLayer, TiledMapTileLayer playerLayer, TiledMapTileLayer.Cell playerCell, Player player, Board board) {
         this.parent = parent;
         this.boardLayer = boardLayer;
         this.playerLayer = playerLayer;
@@ -36,7 +36,7 @@ public class MainScreenInputManager extends InputAdapter {
         //Change the players new coordinates according to the keycode
         //For manual testing purposes
         switch(keycode){
-            case Input.Keys.ESCAPE: parent.changeScreen(RoboRally.MENU); break;
+            case Input.Keys.ESCAPE: parent.changeScreen(RoboRallyApplication.MENU); break;
             case Input.Keys.A: board.execute(player, new RotationCard(1, RotationType.CLOCKWISE)); break;
             case Input.Keys.B: board.execute(player, new RotationCard(1, RotationType.COUNTER_CLOCKWISE)); break;
             case Input.Keys.C: board.execute(player, new RotationCard(1, RotationType.U_TURN)); break;
