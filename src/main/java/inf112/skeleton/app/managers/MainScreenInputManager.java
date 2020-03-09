@@ -38,7 +38,7 @@ public class MainScreenInputManager extends InputAdapter {
         //For manual testing purposes
         Direction oldDir = player.getDirection();
         switch(keycode){
-            case Input.Keys.ESCAPE: parent.changeScreen(RoboRallyApplication.MENU); break;
+            case Input.Keys.ESCAPE: parent.changeScreen(RoboRallyApplication.MAIN_MENU); break;
             case Input.Keys.A:
                 board.execute(player, new RotationCard(1, RotationType.CLOCKWISE));
                 player.getGraphics().updatePlayerGraphic(oldDir);

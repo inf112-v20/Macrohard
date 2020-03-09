@@ -103,7 +103,7 @@ public class PreferenceScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(RoboRallyApplication.MENU);
+                parent.changeScreen(RoboRallyApplication.MAIN_MENU);
             }
         });
 

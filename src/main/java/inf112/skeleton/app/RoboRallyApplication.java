@@ -11,14 +11,13 @@ import inf112.skeleton.app.screens.PreferenceScreen;
 
 public class RoboRallyApplication extends com.badlogic.gdx.Game {
 
-    //private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private PreferenceScreen preferenceScreen;
 
     private AppPreferences appPreferences;
 
-    public final static int MENU = 0;
+    public final static int MAIN_MENU = 0;
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
     public static Music music;
@@ -28,30 +27,29 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
 
     @Override
     public void create() {
-        music = Gdx.audio.newMusic(Gdx.files.internal("data/test1.wav"));
-        music.setLooping(true);
-        music.play();
+        initializeMusic();
         LoadingScreen loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
         appPreferences = new AppPreferences();
+    }
 
+    private void initializeMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("data/test1.wav"));
+        music.setLooping(true);
+        music.play();
     }
 
     public AppPreferences getPreferences(){
         return appPreferences;
     }
 
-    public int getScreen(int screen){
-        return currentScreen;
-    }
-
     public void changeScreen(int screen){
         switch(screen){
-            case MENU:
+            case MAIN_MENU:
                 menuScreen = new MenuScreen(this);
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
-                currentScreen = MENU;
+                currentScreen = MAIN_MENU;
                 break;
             case PREFERENCES:
                 if(preferenceScreen == null) {
