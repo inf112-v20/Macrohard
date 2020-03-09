@@ -10,7 +10,7 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 
 public class BoardTest {
-    //Made private by request from Codacy
+
     private Player player;
     private Board board;
     private int initRow = 3;

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import inf112.skeleton.app.Board;
+import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.cards.MovementCard;
@@ -35,15 +36,41 @@ public class MainScreenInputManager extends InputAdapter {
 
         //Change the players new coordinates according to the keycode
         //For manual testing purposes
+        Direction oldDir = player.getDirection();
         switch(keycode){
             case Input.Keys.ESCAPE: parent.changeScreen(RoboRallyApplication.MENU); break;
-            case Input.Keys.A: board.execute(player, new RotationCard(1, RotationType.CLOCKWISE)); break;
-            case Input.Keys.B: board.execute(player, new RotationCard(1, RotationType.COUNTER_CLOCKWISE)); break;
-            case Input.Keys.C: board.execute(player, new RotationCard(1, RotationType.U_TURN)); break;
-            case Input.Keys.NUM_1: board.execute(player, new MovementCard(1, MovementType.ONE_FORWARD)); break;
-            case Input.Keys.NUM_2: board.execute(player, new MovementCard(1, MovementType.TWO_FORWARD)); break;
-            case Input.Keys.NUM_3: board.execute(player, new MovementCard(1, MovementType.THREE_FORWARD)); break;
-            case Input.Keys.NUM_4: board.execute(player, new MovementCard(1, MovementType.ONE_BACKWARD)); break;
+            case Input.Keys.A:
+                board.execute(player, new RotationCard(1, RotationType.CLOCKWISE));
+                player.getGraphics().updatePlayerGraphic(oldDir);
+                break;
+            case Input.Keys.B:
+                board.execute(player, new RotationCard(1, RotationType.COUNTER_CLOCKWISE));
+                player.getGraphics().updatePlayerGraphic(oldDir);
+                break;
+            case Input.Keys.C:
+                board.execute(player, new RotationCard(1, RotationType.U_TURN));
+                player.getGraphics().updatePlayerGraphic(oldDir);
+                break;
+            case Input.Keys.NUM_1:
+                MovementCard card1 = new MovementCard(1, MovementType.ONE_FORWARD);
+                board.execute(player, card1);
+                player.getGraphics().updatePlayerGraphic(card1);
+                break;
+            case Input.Keys.NUM_2:
+                MovementCard card2 = new MovementCard(1, MovementType.TWO_FORWARD);
+                board.execute(player, card2);
+                player.getGraphics().updatePlayerGraphic(card2);
+                break;
+            case Input.Keys.NUM_3:
+                MovementCard card3 = new MovementCard(1, MovementType.THREE_FORWARD);
+                board.execute(player, card3);
+                player.getGraphics().updatePlayerGraphic(card3);
+                break;
+            case Input.Keys.NUM_4:
+                MovementCard card4 = new MovementCard(1, MovementType.ONE_BACKWARD);
+                board.execute(player, card4);
+                player.getGraphics().updatePlayerGraphic(card4);
+                break;
         }
         //Prints the new position after move in console
         System.out.println("Row: " + player.getRow() + " Col: " + player.getCol() + " Direction:" + player.getDirection());
