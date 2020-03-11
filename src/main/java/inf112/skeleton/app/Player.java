@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 
@@ -39,6 +40,10 @@ public class Player {
         this.direction = direction;
     }
 
+    public void setFinalHand() {
+        hand.setFinalHand();
+    }
+
     public void setHealthPoints (int hp) { this.healthPoints = hp;}
 
     public Direction getDirection () {
@@ -55,6 +60,10 @@ public class Player {
 
     public PlayerHand getHand () {
         return this.hand;
+    }
+
+    public Card[] getFinalHand() {
+        return hand.getFinalHand();
     }
 
     public int getHealthPoints() {

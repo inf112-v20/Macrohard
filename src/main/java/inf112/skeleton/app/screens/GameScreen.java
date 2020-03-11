@@ -4,12 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.*;
@@ -21,9 +18,9 @@ import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
 
-public class MainScreen implements Screen {
+public class GameScreen implements Screen {
 
-    private RoboRally parent;
+    private RoboRallyApplication parent;
 
     private TiledMap map;
     private OrthographicCamera camera;
@@ -39,13 +36,9 @@ public class MainScreen implements Screen {
 
     private Board board;
 
-    //Removed by request from Codacy
-    //private Player player;
-    //private TiledMapTileLayer.Cell playerCell;
-
     private Stage stage;
 
-    public MainScreen(RoboRally parent){
+    public GameScreen(RoboRallyApplication parent){
 
         stage = new Stage(new ScreenViewport());
 
@@ -109,6 +102,15 @@ public class MainScreen implements Screen {
             CardGraphic tempCard = new CardGraphic(card);
             stage.addActor(tempCard);
         }
+ /*      player.setFinalHand();
+        int cardIndex = 1;
+        for (int j = 0; j<cards.length; j++) {
+            if (cards[j].handIndex == cardIndex) {
+                player.getFinalHand()[cardIndex-1] = cards[j];
+                cardIndex++;
+            }
+        }
+        */
 
         PlayerGraphic playerGraphic = new PlayerGraphic(player);
         stage.addActor(playerGraphic);
@@ -124,7 +126,7 @@ public class MainScreen implements Screen {
     @Override
     public void show() {
         //Nothing yet
-        RoboRally.music.play();
+        RoboRallyApplication.music.play();
     }
 
     @Override

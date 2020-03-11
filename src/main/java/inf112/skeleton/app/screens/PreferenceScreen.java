@@ -10,11 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.skeleton.app.RoboRally;
+import inf112.skeleton.app.RoboRallyApplication;
 
 public class PreferenceScreen implements Screen {
 
-    private RoboRally parent;
+    private RoboRallyApplication parent;
     private Stage stage;
 
     private Label titleLabel;
@@ -28,7 +28,7 @@ public class PreferenceScreen implements Screen {
     //    private Label volumeMusicLabel;
     //    private Label volumeSoundLabel;
 
-    public PreferenceScreen(RoboRally parent){
+    public PreferenceScreen(RoboRallyApplication parent){
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
     }
@@ -103,7 +103,7 @@ public class PreferenceScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(RoboRally.MENU);
+                parent.changeScreen(RoboRallyApplication.MAIN_MENU);
             }
         });
 
@@ -139,13 +139,13 @@ public class PreferenceScreen implements Screen {
 
     @Override
     public void render(float v) {
-        RoboRally.music.setVolume(volume);
+        RoboRallyApplication.music.setVolume(volume);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
         stage.draw();
-        //RoboRally.music.stop
-        //RoboRally.music.setVolume(volume);
+        //RoboRallyApplication.music.stop
+        //RoboRallyApplication.music.setVolume(volume);
     }
 
     @Override

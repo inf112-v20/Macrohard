@@ -9,11 +9,11 @@ public class Main extends InputAdapter {
 
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
-        cfg.title = "RoboRally";
+        cfg.title = "RoboRallyApplication";
         cfg.width = 1200;
         cfg.height = 840;
 
-        new LwjglApplication(new RoboRally(), cfg);
+        new LwjglApplication(new RoboRallyApplication(), cfg);
 
         Deck deck = new Deck();
         deck.shuffle();

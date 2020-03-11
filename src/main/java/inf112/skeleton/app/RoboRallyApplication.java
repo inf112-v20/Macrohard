@@ -5,52 +5,51 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import inf112.skeleton.app.preferences.AppPreferences;
 import inf112.skeleton.app.screens.LoadingScreen;
-import inf112.skeleton.app.screens.MainScreen;
+import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 import inf112.skeleton.app.screens.PreferenceScreen;
 
-public class RoboRally extends com.badlogic.gdx.Game {
+public class RoboRallyApplication extends com.badlogic.gdx.Game {
 
-    //private LoadingScreen loadingScreen;
     private MenuScreen menuScreen;
-    private MainScreen mainScreen;
+    private GameScreen gameScreen;
     private PreferenceScreen preferenceScreen;
 
     private AppPreferences appPreferences;
 
-    public final static int MENU = 0;
+    public final static int MAIN_MENU = 0;
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
     public static Music music;
+
     private int currentScreen;
+    private boolean hasGame = false;
 
     @Override
     public void create() {
-        music = Gdx.audio.newMusic(Gdx.files.internal("data/test1.wav"));
-        music.setLooping(true);
-        music.play();
+        initializeMusic();
         LoadingScreen loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
         appPreferences = new AppPreferences();
+    }
+
+    private void initializeMusic() {
+        music = Gdx.audio.newMusic(Gdx.files.internal("data/test1.wav"));
+        music.setLooping(true);
+        music.play();
     }
 
     public AppPreferences getPreferences(){
         return appPreferences;
     }
 
-    public int getScreen(int screen){
-        return currentScreen;
-    }
-
     public void changeScreen(int screen){
         switch(screen){
-            case MENU:
-                if(menuScreen == null){
-                    menuScreen = new MenuScreen(this);
-                }
+            case MAIN_MENU:
+                menuScreen = new MenuScreen(this);
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
-                currentScreen = MENU;
+                currentScreen = MAIN_MENU;
                 break;
             case PREFERENCES:
                 if(preferenceScreen == null) {
@@ -61,11 +60,11 @@ public class RoboRally extends com.badlogic.gdx.Game {
                 currentScreen = PREFERENCES;
                 break;
             case APPLICATION:
-                if(mainScreen == null){
-                    mainScreen = new MainScreen(this);
+                if(gameScreen == null){
+                    gameScreen = new GameScreen(this);
                 }
-                this.setScreen(mainScreen);
-                mainScreen.setAsInputProcessor();
+                this.setScreen(gameScreen);
+                gameScreen.setAsInputProcessor();
                 currentScreen = APPLICATION;
                 break;
 
@@ -77,4 +76,13 @@ public class RoboRally extends com.badlogic.gdx.Game {
     public void dispose() {
         music.dispose();
     }
+
+    public boolean hasGame() {
+        return hasGame;
+    }
+
+    public void hasGame(boolean hasGame) {
+        this.hasGame = hasGame;
+    }
+
 }

@@ -11,17 +11,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import inf112.skeleton.app.RoboRally;
+import inf112.skeleton.app.RoboRallyApplication;
 
 public class MenuScreen implements Screen {
-    private RoboRally parent;
-    private Stage stage;
-    //private Label titleLabel;
+
+    private RoboRallyApplication parent;
+    private Stage stage = new Stage(new ScreenViewport());
+    private Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
 
-    public MenuScreen(RoboRally roborally){
-        parent = roborally;
-        stage = new Stage(new ScreenViewport());
+    public MenuScreen(RoboRallyApplication roboRallyApplication){
+        parent = roboRallyApplication;
     }
 
     public void setAsInputProcessor() {
@@ -34,16 +34,13 @@ public class MenuScreen implements Screen {
         table.setFillParent(true);
         table.setDebug(true);
 
-        Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
-
-        Label titleLabel = new Label("Preferences", skin);
-
         TextButton newGame = new TextButton("New Game", skin);
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 System.out.println("New Game button pressed. Attempting to change screen...");
-                parent.changeScreen(RoboRally.APPLICATION);
+                parent.changeScreen(RoboRallyApplication.APPLICATION);
+                parent.hasGame(true);
             }
         });
         TextButton preferences = new TextButton("Preferences", skin);
@@ -51,26 +48,38 @@ public class MenuScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 System.out.println("Preferences button pressed. Attempting to change screen...");
-                parent.changeScreen(RoboRally.PREFERENCES);
+                parent.changeScreen(RoboRallyApplication.PREFERENCES);
             }
         });
         TextButton exit = new TextButton("Exit", skin);
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                System.out.println("Exit button pressed. Attempting to change screen...");
+                System.out.println("Exit button pressed. Attempting to exit application...");
                 Gdx.app.exit();
             }
         });
 
-        titleLabel = new Label("RoboRally", skin);
+        Label titleLabel = new Label("RoboRally", skin);
         titleLabel.setFontScale(2f);
         table.add(titleLabel).colspan(2);
         table.row().pad(50, 15, 10, 0);
+        if (parent.hasGame()) {
+            TextButton resumeGame = new TextButton("Resume Game", skin);
+            resumeGame.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    System.out.println("Resume Game button pressed. Attempting to change screen...");
+                    parent.changeScreen(RoboRallyApplication.APPLICATION);
+                }
+            });
+            table.add(resumeGame).fillX().uniformX();
+            table.row().pad(10, 15, 10, 0);
+        }
         table.add(newGame).fillX().uniformX();
         table.row().pad(10, 15, 10, 0);
         table.add(preferences).fillX().uniformX();
-        table.row().pad(10, 15, 10, 0);;
+        table.row().pad(10, 15, 10, 0);
         table.add(exit).fillX().uniformX();
 
         stage.addActor(table);

@@ -40,14 +40,16 @@ public class CardGraphic extends Image {
 
     private int cardIndex;
     private float initialXPosition;
+    private Card card;
 
     FileHandle fileHandle;
 
     private boolean isSelected;
 
-    public CardGraphic(Card card){
+    public CardGraphic(final Card card){
         super(new Texture("./assets/cards/exampleCard.png"));
         initiatedCards++;
+        this.card = card;
 
         initialXPosition = statx - CARD_WIDTH / 2 + PADDING;
 
@@ -69,7 +71,8 @@ public class CardGraphic extends Image {
 
                 if(isSelected){
                     isSelected = false;
-
+                    card.selected = false;
+                    card.handIndex = -1;
                     int[] newIndecies = new int[indecies.length+1];
                     newIndecies[0] = cardIndex;
                     for(int i = 1; i<newIndecies.length; i++){
@@ -84,8 +87,10 @@ public class CardGraphic extends Image {
                     pixmap = new Pixmap(fileHandle);
                 }else {
                     isSelected = true;
+                    card.selected = true;
 
                     cardIndex = indecies[0];
+                    card.handIndex = cardIndex;
                     int[] newIndecies = new int[indecies.length-1];
                     for(int i = 1; i<indecies.length; i++){
                         newIndecies[i-1] = indecies[i];
@@ -112,6 +117,8 @@ public class CardGraphic extends Image {
                     texture = new Texture(pixmap);
                     setDrawable(new SpriteDrawable(new Sprite(texture)));
                 }
+                System.out.println(card.handIndex);
+
                 return true;
             }
 
