@@ -4,6 +4,8 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 
+import java.util.ArrayList;
+
 public class Player {
 
     private int row;
@@ -12,12 +14,22 @@ public class Player {
     public PlayerHand hand;
     private int healthPoints;
     private PlayerGraphic playerGraphic;
+    private ArrayList<Card> program;
 
     public Player(int row, int col, Direction direction) {
         this.row = row;
         this.col = col;
         this.direction = direction;
         this.healthPoints = 9;
+        this.program = new ArrayList<>();
+    }
+
+    public void insertCardInProgram(Card card) {
+        program.add(card);
+    }
+
+    public ArrayList<Card> getProgram() {
+        return program;
     }
 
     public int getRow() {
@@ -77,5 +89,9 @@ public class Player {
 
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
+    }
+
+    public void wipeProgram() {
+        program = new ArrayList<>();
     }
 }

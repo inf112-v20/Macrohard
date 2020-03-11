@@ -1,6 +1,7 @@
 package inf112.skeleton.app.cards;
 
 public class PlayerHand  {
+
     private int handSize = 9;
     private Card[] finalHand;
     private Card[] possibleHand;

@@ -3,6 +3,7 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.preferences.AppPreferences;
 import inf112.skeleton.app.screens.LoadingScreen;
 import inf112.skeleton.app.screens.GameScreen;
@@ -31,6 +32,10 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
         LoadingScreen loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
         appPreferences = new AppPreferences();
+    }
+
+    public Skin getSkin() {
+        return new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
     }
 
     private void initializeMusic() {

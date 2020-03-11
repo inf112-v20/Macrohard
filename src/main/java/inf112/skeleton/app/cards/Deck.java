@@ -60,6 +60,7 @@ public class Deck {
         Card[] cardChoices = new Card[choiceSize];
         for (int i = 0; i < choiceSize; i++) {
             cardChoices[i] = deck[i];
+            cardChoices[i].setPlayer(player);
         }
         PlayerHand p = new PlayerHand();
         p.setPossibleHand(cardChoices);

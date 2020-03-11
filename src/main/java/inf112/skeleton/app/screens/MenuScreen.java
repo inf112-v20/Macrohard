@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.RoboRallyApplication;
+import inf112.skeleton.app.RoboRallyGame;
 
 public class MenuScreen implements Screen {
 
