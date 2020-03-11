@@ -37,7 +37,7 @@ public class MainScreenInputManager extends InputAdapter {
         //Change the players new coordinates according to the keycode
         //For manual testing purposes
         Direction oldDir = player.getDirection();
-        switch(keycode){
+        /*switch(keycode){
             case Input.Keys.ESCAPE: parent.changeScreen(RoboRallyApplication.MAIN_MENU); break;
             case Input.Keys.A:
                 board.execute(player, new RotationCard(1, RotationType.CLOCKWISE));
@@ -71,7 +71,7 @@ public class MainScreenInputManager extends InputAdapter {
                 board.execute(player, card4);
                 player.getGraphics().updatePlayerGraphic(card4);
                 break;
-        }
+        }*/
         //Prints the new position after move in console
         System.out.println("Row: " + player.getRow() + " Col: " + player.getCol() + " Direction:" + player.getDirection());
 

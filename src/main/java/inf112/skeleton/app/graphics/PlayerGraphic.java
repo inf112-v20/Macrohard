@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 
 public class PlayerGraphic extends Image {
@@ -31,13 +32,15 @@ public class PlayerGraphic extends Image {
         return player;
     }
 
-    public void updatePlayerGraphic(MovementCard card) {
-        animateMove(player.getCol(), player.getRow(), card.getMoveID());
+    public void updatePlayerGraphic(Card card, Direction oldDirection) {
+        if (card instanceof MovementCard) {
+            animateMove(player.getCol(), player.getRow(), ((MovementCard) card).getMoveID());
+        }
+        else {
+            animateRotation(oldDirection, player.getDirection());
+        }
     }
 
-    public void updatePlayerGraphic(Direction oldDirection) {
-        animateRotation(oldDirection, player.getDirection());
-    }
 
     public void animateMove(int newCol, int newRow, int moves) {
         addAction(Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves)));

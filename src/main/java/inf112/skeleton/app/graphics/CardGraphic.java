@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import inf112.skeleton.app.Player;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.RotationCard;
@@ -112,10 +113,11 @@ public class CardGraphic extends Image {
 
                     // Draw highlight
                     pixmap.setColor(new Color(0.1f, 0.7f, 0.9f, 0.3f));
-                    pixmap.fillRectangle(0, 0, 128, 193);
+                    pixmap.fillRectangle(0, 0, 320, 350);
 
                     texture = new Texture(pixmap);
                     setDrawable(new SpriteDrawable(new Sprite(texture)));
+                    getCard().getPlayer().insertCardInProgram(getCard());
                 }
                 System.out.println(card.handIndex);
 
@@ -147,6 +149,7 @@ public class CardGraphic extends Image {
 
     }
 
-
-
+    public Card getCard() {
+        return card;
+    }
 }

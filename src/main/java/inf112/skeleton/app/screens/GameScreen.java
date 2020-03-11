@@ -7,16 +7,21 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import inf112.skeleton.app.*;
-import inf112.skeleton.app.cards.Card;
-import inf112.skeleton.app.cards.Deck;
-import inf112.skeleton.app.cards.PlayerHand;
+import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
+
+import java.awt.*;
 
 public class GameScreen implements Screen {
 
@@ -43,7 +48,7 @@ public class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
         this.parent = parent;
-        Player player = new Player(1,1, Direction.NORTH);
+        final Player player = new Player(1,1, Direction.NORTH);
         board = new Board(player, 12,12);
         //map = new TmxMapLoader().load("assets/robomap.tmx");
 
@@ -96,7 +101,6 @@ public class GameScreen implements Screen {
         PlayerHand hand = player.getHand();
         Card[] cards = hand.getPossibleHand();
         //Print-line for testing purposes
-        System.out.println(player.getHand());
 
         for (Card card : cards) {
             CardGraphic tempCard = new CardGraphic(card);
@@ -115,12 +119,31 @@ public class GameScreen implements Screen {
         PlayerGraphic playerGraphic = new PlayerGraphic(player);
         stage.addActor(playerGraphic);
 
+        TextButton button = new TextButton("GO!", parent.getSkin());
+        button.setBounds(750, 200, 100, 50);
+        button.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                runProgram(player);
+            }
+        });
+        stage.addActor(button);
+
         ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
+    public void runProgram(Player player) {
+        for (Card card : player.getProgram()) {
+            Direction dir = player.getDirection();
+            board.execute(player, card);
+            player.getGraphics().updatePlayerGraphic(card, dir);
+        }
+        player.wipeProgram();
+    }
+
     public void setAsInputProcessor() {
-        Gdx.input.setInputProcessor(ip);
-        //Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(ip);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
