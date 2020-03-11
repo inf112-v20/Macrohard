@@ -32,7 +32,6 @@ public class RoboRally extends com.badlogic.gdx.Game {
         LoadingScreen loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
         appPreferences = new AppPreferences();
-
     }
 
     public AppPreferences getPreferences(){

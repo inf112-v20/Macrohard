@@ -117,8 +117,8 @@ public class MainScreen implements Screen {
     }
 
     public void setAsInputProcessor() {
-        Gdx.input.setInputProcessor(ip);
-        //Gdx.input.setInputProcessor(stage);
+        //Gdx.input.setInputProcessor(ip);
+        Gdx.input.setInputProcessor(stage);
     }
 
     @Override
