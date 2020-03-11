@@ -1,7 +1,9 @@
 package inf112.skeleton.app.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Direction;
@@ -14,6 +16,8 @@ public class PlayerGraphic extends Image {
     final float PLAYER_WIDTH = 60;
     final float PLAYER_HEIGHT = 60;
     private final Player player;
+
+    SequenceAction sequenceAction = new SequenceAction();
 
     public PlayerGraphic(Player player){
         super(new Texture("./assets/robots/robot2.png"));
@@ -43,7 +47,7 @@ public class PlayerGraphic extends Image {
 
 
     public void animateMove(int newCol, int newRow, int moves) {
-        addAction(Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves)));
+        sequenceAction.addAction(Actions.delay(1, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves))));
     }
 
     public void animateRotation(Direction direction, Direction newDir) {
@@ -54,7 +58,11 @@ public class PlayerGraphic extends Image {
         if(degrees == -270){
             degrees = 90;
         }
-        addAction(Actions.rotateBy(degrees, 0.5f));
+        sequenceAction.addAction(Actions.delay(1, Actions.rotateBy(degrees, 0.5f)));
         System.out.println(degrees);
+    }
+
+    public void animate(){
+        addAction(sequenceAction);
     }
 }

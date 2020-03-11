@@ -10,8 +10,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import inf112.skeleton.app.*;
@@ -133,11 +135,13 @@ public class GameScreen implements Screen {
     }
 
     public void runProgram(Player player) {
-        for (Card card : player.getProgram()) {
+        for (int i = 0; i<player.getProgram().size(); i++) {
+            Card card = player.getProgram().get(i);
             Direction dir = player.getDirection();
             board.execute(player, card);
             player.getGraphics().updatePlayerGraphic(card, dir);
         }
+        player.getGraphics().animate();
         player.wipeProgram();
     }
 
