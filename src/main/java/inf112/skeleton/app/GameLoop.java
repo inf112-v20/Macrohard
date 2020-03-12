@@ -32,8 +32,8 @@ public class GameLoop {
                     deck.shuffle();
                     deck.dealHand(player);
                 }
-                for(int i = 0; i < players.get(clientPlayerIndex).getHand().getPossibleHand().length; i++){
-                    CardGraphic cardGraphic = new CardGraphic(players.get(clientPlayerIndex).getHand().getPossibleHand()[i]);
+                for(int i = 0; i < players.get(clientPlayerIndex).getHand().getDealtHand().length; i++){
+                    CardGraphic cardGraphic = new CardGraphic(players.get(clientPlayerIndex).getHand().getDealtHand()[i]);
                     gameScreen.addStageActor(cardGraphic);
                 }
             }

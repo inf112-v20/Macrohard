@@ -22,16 +22,8 @@ public class Player {
         this.col = col;
         this.direction = direction;
         this.healthPoints = 9;
-        this.program = new ArrayList<>();
     }
 
-    public void insertCardInProgram(Card card) {
-        program.add(card);
-    }
-
-    public ArrayList<Card> getProgram() {
-        return program;
-    }
 
     public int getRow() {
         return row;
@@ -53,8 +45,8 @@ public class Player {
         this.direction = direction;
     }
 
-    public void setFinalHand() {
-        hand.setFinalHand();
+    public void setProgram() {
+        hand.setProgram();
     }
 
     public void setHealthPoints (int hp) { this.healthPoints = hp;}
@@ -71,12 +63,12 @@ public class Player {
         return direction.getColumnTrajectory();
     }
 
-    public PlayerHand getHand () {
+    public PlayerHand getHand() {
         return this.hand;
     }
 
-    public Card[] getFinalHand() {
-        return hand.getFinalHand();
+    public Card[] getProgram() {
+        return hand.getProgram();
     }
 
     public int getHealthPoints() {
@@ -92,7 +84,4 @@ public class Player {
         return this.playerGraphic;
     }
 
-    public void wipeProgram() {
-        program = new ArrayList<>();
-    }
 }

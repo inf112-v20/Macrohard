@@ -98,7 +98,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                lockInProgram(players.get(clientPlayerIndex));
+                lockInProgram(players.get(clientPlayerIndex), players.get(clientPlayerIndex).getHand().getDealtHand());
             }
         });
         stage.addActor(button);
@@ -108,19 +108,35 @@ public class GameScreen implements Screen {
         gameLoop = new GameLoop(board, clientPlayerIndex, this);
     }
 
-    public void lockInProgram(Player player){
-
+    public void lockInProgram(Player player, Card[] cards){
+        player.setProgram();
+        // Create program of selected cards from hand
+        for (int j = 0; j<cards.length; j++) {
+            if (cards[j].handIndex == 1) {
+                player.getProgram()[0] = cards[j];
+            }else if (cards[j].handIndex == 2) {
+                player.getProgram()[1] = cards[j];
+            }else if (cards[j].handIndex == 3) {
+                player.getProgram()[2] = cards[j];
+            }else if (cards[j].handIndex == 4) {
+                player.getProgram()[3] = cards[j];
+            }else if (cards[j].handIndex == 5) {
+                player.getProgram()[4] = cards[j];
+            } else { continue;}
+        }
+        System.out.println(Arrays.toString(player.getProgram()
+        ));
     }
 
     public void runProgram(Player player) {
-        for (int i = 0; i<player.getProgram().size(); i++) {
-            Card card = player.getProgram().get(i);
+        for (int i = 0; i<player.getProgram().length; i++) {
+            Card card = player.getProgram()[i];
             Direction dir = player.getDirection();
             board.execute(player, card);
             player.getGraphics().updatePlayerGraphic(card, dir);
         }
         player.getGraphics().animate();
-        player.wipeProgram();
+
     }
 
     public void setAsInputProcessor() {
