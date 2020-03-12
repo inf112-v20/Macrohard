@@ -7,10 +7,14 @@ import inf112.skeleton.app.cards.RotationType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class BoardTest {
 
+    private ArrayList<Player> players;
     private Player player;
     private Board board;
     private int initRow = 3;
@@ -25,9 +29,8 @@ public class BoardTest {
 
     @Before
     public void setUp() {
-        Player[] players = new Player[2];
-        players[0] = new Player(initRow, initCol, Direction.NORTH);
-        players[1] = new Player(initRow, initCol+1, Direction.NORTH);
+        player = new Player(initRow, initCol, Direction.NORTH);
+        players = new ArrayList<>(Arrays.asList(player));
         board = new Board(players,10, 10);
     }
 
@@ -112,7 +115,7 @@ public class BoardTest {
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
-        assertNull(board.getPlayer(0));
+        assertNull(board.getPlayers());
     }
 
     @Test

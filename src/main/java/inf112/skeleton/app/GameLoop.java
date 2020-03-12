@@ -1,9 +1,11 @@
 package inf112.skeleton.app;
 
+import java.util.ArrayList;
+
 public class GameLoop {
 
     private Board board;
-    Player[] players;
+    ArrayList<Player> players;
     private int phase;
 
     public GameLoop(Board board) {
@@ -16,8 +18,8 @@ public class GameLoop {
 
         // Choose cards
         boolean cardsChosen = true;
-        for (int i = 0; i < players.length; i++) {
-            if(!players[i].hasChosenCards){
+        for (Player player : players) {
+            if(!player.hasChosenCards){
                 cardsChosen = false;
             }
         }
@@ -29,8 +31,8 @@ public class GameLoop {
     }
 
     public void phase(int phase){
-        for (int i = 0; i < players.length; i++) {
-            board.execute(players[i], players[i].getProgram().get(phase));
+        for (Player player : players) {
+            board.execute(player, player.getProgram().get(phase));
         }
     }
 }
