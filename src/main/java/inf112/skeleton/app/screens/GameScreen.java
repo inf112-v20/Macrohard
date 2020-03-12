@@ -9,11 +9,13 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
+import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.GameScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
@@ -85,15 +87,6 @@ public class GameScreen implements Screen {
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
-        // ---- CARDS ----
-        Deck deck = new Deck();
-        deck.shuffle();
-
-        // Give cards to each player
-        for (Player player : players) {
-            deck.dealHand(player);
-        }
-
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
@@ -112,7 +105,7 @@ public class GameScreen implements Screen {
 
         ip = new GameScreenInputManager(parent);
 
-        gameLoop = new GameLoop(board, clientPlayerIndex);
+        gameLoop = new GameLoop(board, clientPlayerIndex, this);
     }
 
     public void lockInProgram(Player player){
@@ -182,5 +175,9 @@ public class GameScreen implements Screen {
         map.dispose();
         renderer.dispose();
         //music.dispose();
+    }
+
+    public void addStageActor(Image actor) {
+        stage.addActor(actor);
     }
 }
