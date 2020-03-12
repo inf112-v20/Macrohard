@@ -3,31 +3,23 @@ package inf112.skeleton.app.cards;
 public class PlayerHand  {
 
     private int handSize = 9;
-    private Card[] finalHand;
-    private Card[] possibleHand;
+    private Card[] program;
+    private Card[] hand;
 
-    public void setPossibleHand(Card[] possibleHand) {
-        this.possibleHand = possibleHand;
+    public void setHand(Card[] possibleHand) {
+        this.hand = possibleHand;
         this.handSize = possibleHand.length;
     }
 
     public void setFinalHand() {
-        this.finalHand = new Card[5];
+        this.program = new Card[5];
     }
 
     public Card[] getPossibleHand() {
-        return possibleHand;
-    }
-
-    public String toString(){
-        String result = "";
-        for (Card i : possibleHand){
-            result += (i.toString() + "\n");
-        }
-        return result;
+        return hand;
     }
 
     public Card[] getFinalHand() {
-        return finalHand;
+        return program;
     }
 }

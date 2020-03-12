@@ -15,10 +15,5 @@ public class Main extends InputAdapter {
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
 
-        Deck deck = new Deck();
-        deck.shuffle();
-
-        Player player = new Player(0,0,Direction.NORTH);
-        deck.dealHand(player);
     }
 }

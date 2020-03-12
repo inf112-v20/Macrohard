@@ -24,6 +24,7 @@ import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
 
 import java.awt.*;
+import java.util.Arrays;
 
 public class GameScreen implements Screen {
 
@@ -101,22 +102,13 @@ public class GameScreen implements Screen {
         deck.shuffle();
         deck.dealHand(player);
         PlayerHand hand = player.getHand();
-        Card[] cards = hand.getPossibleHand();
+        final Card[] cards = hand.getPossibleHand();
         //Print-line for testing purposes
 
         for (Card card : cards) {
             CardGraphic tempCard = new CardGraphic(card);
             stage.addActor(tempCard);
         }
- /*      player.setFinalHand();
-        int cardIndex = 1;
-        for (int j = 0; j<cards.length; j++) {
-            if (cards[j].handIndex == cardIndex) {
-                player.getFinalHand()[cardIndex-1] = cards[j];
-                cardIndex++;
-            }
-        }
-        */
 
         PlayerGraphic playerGraphic = new PlayerGraphic(player);
         stage.addActor(playerGraphic);
@@ -126,7 +118,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                runProgram(player);
+                runProgram(player, cards);
             }
         });
         stage.addActor(button);
@@ -134,15 +126,32 @@ public class GameScreen implements Screen {
         ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
-    public void runProgram(Player player) {
-        for (int i = 0; i<player.getProgram().size(); i++) {
-            Card card = player.getProgram().get(i);
+    public void runProgram(Player player, Card[] cards) {
+        player.setProgram();
+
+        // Create program of selected cards from hand
+        for (int j = 0; j<cards.length; j++) {
+            if (cards[j].handIndex == 1) {
+                player.getProgram()[0] = cards[j];
+            }else if (cards[j].handIndex == 2) {
+                player.getProgram()[1] = cards[j];
+            }else if (cards[j].handIndex == 3) {
+                player.getProgram()[2] = cards[j];
+            }else if (cards[j].handIndex == 4) {
+                player.getProgram()[3] = cards[j];
+            }else if (cards[j].handIndex == 5) {
+                player.getProgram()[4] = cards[j];
+            } else { continue;}
+        }
+
+        // Execute program
+        for (int i = 0; i<player.getProgram().length; i++) {
+            Card card = player.getProgram()[i];
             Direction dir = player.getDirection();
             board.execute(player, card);
             player.getGraphics().updatePlayerGraphic(card, dir);
         }
         player.getGraphics().animate();
-        player.wipeProgram();
     }
 
     public void setAsInputProcessor() {

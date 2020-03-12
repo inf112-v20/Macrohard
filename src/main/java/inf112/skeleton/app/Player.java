@@ -14,23 +14,16 @@ public class Player {
     public PlayerHand hand;
     private int healthPoints;
     private PlayerGraphic playerGraphic;
-    private ArrayList<Card> program;
+
 
     public Player(int row, int col, Direction direction) {
         this.row = row;
         this.col = col;
         this.direction = direction;
         this.healthPoints = 9;
-        this.program = new ArrayList<>();
     }
 
-    public void insertCardInProgram(Card card) {
-        program.add(card);
-    }
 
-    public ArrayList<Card> getProgram() {
-        return program;
-    }
 
     public int getRow() {
         return row;
@@ -52,7 +45,7 @@ public class Player {
         this.direction = direction;
     }
 
-    public void setFinalHand() {
+    public void setProgram() {
         hand.setFinalHand();
     }
 
@@ -74,14 +67,13 @@ public class Player {
         return this.hand;
     }
 
-    public Card[] getFinalHand() {
+    public Card[] getProgram() {
         return hand.getFinalHand();
     }
 
     public int getHealthPoints() {
         return this.healthPoints;
     }
-
 
     public void setGraphic(PlayerGraphic playerGraphic) {
         this.playerGraphic = playerGraphic;
@@ -91,7 +83,5 @@ public class Player {
         return this.playerGraphic;
     }
 
-    public void wipeProgram() {
-        program = new ArrayList<>();
-    }
+
 }
