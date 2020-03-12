@@ -1,9 +1,11 @@
 package inf112.skeleton.app;
 
+import java.util.ArrayList;
+
 public class GameLoop {
 
     private Board board;
-    Player[] players;
+    ArrayList<Player> players;
     private int phase;
 
     private boolean cardsShown;

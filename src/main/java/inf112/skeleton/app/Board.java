@@ -4,15 +4,17 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.RotationCard;
 
+import java.util.ArrayList;
+
 public class Board {
 
     private final int height;
     private final int width;
 
     private Tile[][] board;
-    private Player[] players;
+    private ArrayList<Player> players;
 
-    public Board(Player[] players, int height, int width) {
+    public Board(ArrayList<Player> players, int height, int width) {
         this.players = players;
         this.height = height;
         this.width = width;
@@ -20,17 +22,16 @@ public class Board {
         initializeBoard(players, height, width);
     }
 
-    public void initializeBoard(Player[] players, int height, int width) {
+    public void initializeBoard(ArrayList<Player> players, int height, int width) {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(false, i, j);
             }
         }
-        for(int i = 0; i<players.length; i++){
-            setPlayer(players[i].getRow(), players[i].getCol());
+        for(Player player : players){
+            setPlayer(player.getRow(), player.getCol());
         }
-
     }
 
     public void setPlayer(int row, int col){
@@ -99,12 +100,12 @@ public class Board {
         return board[row][col];
     }
 
-    public Player[] getPlayers() {
+    public ArrayList<Player> getPlayers() {
         return players;
     }
 
     public Player getPlayer(int i){
-        return players[i];
+        return players.get(i);
     }
 
     private Boolean outOfBounds(int row, int col) {
