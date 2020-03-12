@@ -37,6 +37,7 @@ public class GameLoop {
                     gameScreen.addStageActor(cardGraphic);
                 }
             }
+            cardsShown = true;
         }
     }
 
