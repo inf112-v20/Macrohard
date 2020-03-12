@@ -160,7 +160,7 @@ public class GameScreen implements Screen {
 
         ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, players[clientPlayerIndex], board);
 
-        gameLoop = new GameLoop(board);
+        gameLoop = new GameLoop(board, clientPlayerIndex);
     }
 
     public void lockInProgram(Player player){
