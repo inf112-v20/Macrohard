@@ -25,8 +25,10 @@ public class BoardTest {
 
     @Before
     public void setUp() {
-        player = new Player(initRow, initCol, Direction.NORTH);
-        board = new Board(player,10, 10);
+        Player[] players = new Player[2];
+        players[0] = new Player(initRow, initCol, Direction.NORTH);
+        players[1] = new Player(initRow, initCol+1, Direction.NORTH);
+        board = new Board(players,10, 10);
     }
 
     @Test
@@ -110,7 +112,7 @@ public class BoardTest {
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
-        assertNull(board.getPlayer());
+        assertNull(board.getPlayer(0));
     }
 
     @Test

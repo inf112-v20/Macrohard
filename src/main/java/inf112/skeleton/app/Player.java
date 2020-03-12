@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 public class Player {
 
+    public boolean hasChosenCards;
     private int row;
     private int col;
     private Direction direction;

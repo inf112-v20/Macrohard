@@ -40,22 +40,31 @@ public class GameScreen implements Screen {
 
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
+    private TiledMapTileLayer.Cell playerCell;
 
     private Board board;
 
     private Stage stage;
+    private GameLoop gameLoop;
+    private Player[] players = new Player[2];
+    private int clientPlayerIndex = 0;
 
     public GameScreen(RoboRallyApplication parent){
 
+        // ---- INITIALISATION ----
         stage = new Stage(new ScreenViewport());
-
         this.parent = parent;
-        final Player player = new Player(1,1, Direction.NORTH);
-        board = new Board(player, 12,12);
+
+        // Initialise players
+        for(int i = 0; i<players.length; i++){
+            players[i] = new Player(1, 1+i, Direction.NORTH);
+        }
+
+        // Initialise board
+        board = new Board(players, 12,12);
         //map = new TmxMapLoader().load("assets/robomap.tmx");
 
-        //TESTING
-
+        // ---- TESTING ----
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
         TiledMapTileLayer.Cell cell = handler.getCell(7,3,"FLOOR");
         TiledMapTileLayer.Cell cell1 = handler.getCell(1,0,0);
@@ -80,25 +89,39 @@ public class GameScreen implements Screen {
         //System.out.println(cell.setTile());
         System.out.println(handler.getMap().getLayers().get(0).getName());
         //System.out.println(handler.getTile(0,0,"FLOOR").getTileType());
-        map = handler.getMap();
 
-        //
+        // ---- LIBGDX SETUP ----
+        map = handler.getMap();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(0, -tileSize*camera.zoom*2);
 
-        boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
 
+        // ---- TILED ----
+        boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
 
-        TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
-
-        playerLayer.setCell(player.getRow(), player.getCol(), playerCell);
+        // Place players on playerlayer
+        for (int i = 0; i < players.length; i++) {
+            TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
+            if(i == clientPlayerIndex){
+                this.playerCell = playerCell;
+            }
+            playerLayer.setCell(players[i].getRow(), players[i].getCol(), playerCell);
+        }
 
         renderer = new OrthogonalTiledMapRenderer(map);
 
+        // ---- CARDS ----
         Deck deck = new Deck();
         deck.shuffle();
+
+        // Give cards to each player
+        for (int i = 0; i < players.length; i++) {
+            deck.dealHand(players[i]);
+        }
+
+        /*
         deck.dealHand(player);
         PlayerHand hand = player.getHand();
         Card[] cards = hand.getPossibleHand();
@@ -108,7 +131,8 @@ public class GameScreen implements Screen {
             CardGraphic tempCard = new CardGraphic(card);
             stage.addActor(tempCard);
         }
- /*      player.setFinalHand();
+
+        player.setFinalHand();
         int cardIndex = 1;
         for (int j = 0; j<cards.length; j++) {
             if (cards[j].handIndex == cardIndex) {
@@ -118,20 +142,29 @@ public class GameScreen implements Screen {
         }
         */
 
-        PlayerGraphic playerGraphic = new PlayerGraphic(player);
-        stage.addActor(playerGraphic);
+        // ---- GRAPHICS ----
+        for (int i = 0; i < players.length; i++) {
+            PlayerGraphic playerGraphic = new PlayerGraphic(players[i]);
+            stage.addActor(playerGraphic);
+        }
 
         TextButton button = new TextButton("GO!", parent.getSkin());
         button.setBounds(750, 200, 100, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                runProgram(player);
+                lockInProgram(players[clientPlayerIndex]);
             }
         });
         stage.addActor(button);
 
-        ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
+        ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, players[clientPlayerIndex], board);
+
+        gameLoop = new GameLoop(board);
+    }
+
+    public void lockInProgram(Player player){
+
     }
 
     public void runProgram(Player player) {
@@ -160,6 +193,8 @@ public class GameScreen implements Screen {
     public void render(float v) {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        gameLoop.tick();
 
         renderer.setView(camera);
         renderer.render();

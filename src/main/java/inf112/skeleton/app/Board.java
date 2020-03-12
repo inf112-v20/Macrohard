@@ -10,31 +10,32 @@ public class Board {
     private final int width;
 
     private Tile[][] board;
-    private Player player;
+    private Player[] players;
 
-    public Board(Player player, int height, int width) {
-        this.player = player;
+    public Board(Player[] players, int height, int width) {
+        this.players = players;
         this.height = height;
         this.width = width;
 
-        initializeBoard(player, height, width);
+        initializeBoard(players, height, width);
     }
 
-    public void initializeBoard(Player player, int height, int width) {
+    public void initializeBoard(Player[] players, int height, int width) {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(false, i, j);
             }
         }
-        setPlayer(player.getRow(), player.getCol());
+        for(int i = 0; i<players.length; i++){
+            setPlayer(players[i].getRow(), players[i].getCol());
+        }
+
     }
 
     public void setPlayer(int row, int col){
         if (!outOfBounds(row, col)){
             board[row][col].setOccupied(true);
-        } else {
-            this.player = null;
         }
     }
 
@@ -98,8 +99,12 @@ public class Board {
         return board[row][col];
     }
 
-    public Player getPlayer() {
-        return player;
+    public Player[] getPlayers() {
+        return players;
+    }
+
+    public Player getPlayer(int i){
+        return players[i];
     }
 
     private Boolean outOfBounds(int row, int col) {
