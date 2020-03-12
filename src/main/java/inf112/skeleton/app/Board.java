@@ -4,37 +4,41 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.RotationCard;
 
+import java.util.ArrayList;
+
 public class Board {
 
     private final int height;
     private final int width;
 
     private Tile[][] board;
-    private Player player;
+    private ArrayList<Player> players;
 
-    public Board(Player player, int height, int width) {
-        this.player = player;
+    public Board(ArrayList<Player> players, int height, int width) {
+        this.players = players;
         this.height = height;
         this.width = width;
 
-        initializeBoard(player, height, width);
+        initializeBoard(players, height, width);
     }
 
-    public void initializeBoard(Player player, int height, int width) {
+    public void initializeBoard(ArrayList<Player> players, int height, int width) {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(false, i, j);
             }
         }
-        setPlayer(player.getRow(), player.getCol());
+        for (Player player : players) {
+            setPlayer(player.getRow(), player.getCol());
+        }
     }
 
     public void setPlayer(int row, int col){
         if (!outOfBounds(row, col)){
             board[row][col].setOccupied(true);
         } else {
-            this.player = null;
+            this.players = null;
         }
     }
 
@@ -90,16 +94,12 @@ public class Board {
         }
     }
 
-    public Tile[][] getBoard() {
-        return board;
-    }
-
     public Tile getTile(int row, int col){
         return board[row][col];
     }
 
-    public Player getPlayer() {
-        return player;
+    public ArrayList<Player> getPlayers() {
+        return players;
     }
 
     private Boolean outOfBounds(int row, int col) {

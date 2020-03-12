@@ -69,16 +69,13 @@ public class CardGraphic extends Image {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 Arrays.sort(indecies);
-
                 if(isSelected){
                     isSelected = false;
                     card.selected = false;
                     card.handIndex = -1;
                     int[] newIndecies = new int[indecies.length+1];
                     newIndecies[0] = cardIndex;
-                    for(int i = 1; i<newIndecies.length; i++){
-                        newIndecies[i] = indecies[i-1];
-                    }
+                    for(int i = 1; i<newIndecies.length; i++) newIndecies[i] = indecies[i - 1];
                     indecies = newIndecies;
 
                     texture = new Texture(originalPixmap);

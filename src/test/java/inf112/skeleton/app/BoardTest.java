@@ -110,7 +110,7 @@ public class BoardTest {
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
-        assertNull(board.getPlayer());
+        assertNull(board.getPlayers());
     }
 
     @Test
