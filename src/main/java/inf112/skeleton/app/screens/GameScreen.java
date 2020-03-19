@@ -45,7 +45,6 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private GameLoop gameLoop;
-    private ArrayList<Player> players;
     private int clientPlayerIndex = 0;
 
     public GameScreen(RoboRallyApplication parent){
@@ -55,8 +54,8 @@ public class GameScreen implements Screen {
         this.parent = parent;
 
         // Initialise players
-        Player player1 = new Player(1, 1, Direction.NORTH);
-        Player player2 = new Player(1, 2, Direction.NORTH);
+        final Player player1 = new Player(1, 1, Direction.NORTH);
+        final Player player2 = new Player(1, 4, Direction.NORTH);
         final ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2));
 
         // Initialise board
@@ -90,6 +89,7 @@ public class GameScreen implements Screen {
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
+            playerGraphics.add(playerGraphic);
             stage.addActor(playerGraphic);
         }
 

@@ -3,7 +3,6 @@ package inf112.skeleton.app;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
-
 import java.util.ArrayList;
 
 public class GameLoop {
@@ -20,7 +19,7 @@ public class GameLoop {
         this.gameScreen = gameScreen;
         this.board = board;
         this.players = board.getPlayers();
-        clientPlayerIndex = clientPlayerIndex;
+        this.clientPlayerIndex = clientPlayerIndex;
         phase = 0;
     }
 
@@ -39,9 +38,10 @@ public class GameLoop {
             }
             cardsShown = true;
         }
+
     }
 
     public void phase(int phase){
-
+        
     }
 }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
     Not very useful right now, but might be nice later.
  */
 public class TiledMapManager {
+
     private final TiledMap map;
 
     public TiledMapManager (String fileName){
