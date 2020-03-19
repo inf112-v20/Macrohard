@@ -63,7 +63,7 @@ public class Deck {
             cardChoices[i].setPlayer(player);
         }
         PlayerHand p = new PlayerHand();
-        p.setPossibleHand(cardChoices);
+        p.setHand(cardChoices);
         player.hand = p;
         deckSize -= choiceSize;
         resize(deck, choiceSize);

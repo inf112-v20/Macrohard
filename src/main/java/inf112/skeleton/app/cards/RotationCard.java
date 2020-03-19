@@ -28,6 +28,7 @@ public class RotationCard extends Card {
         return "RotationCard{" +
                 "rotationType=" + rotationType +
                 ", priority=" + priority +
+                ", handIndex=" + this.handIndex +
                 '}';
     }
 

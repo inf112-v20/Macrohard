@@ -114,9 +114,9 @@ public class CardGraphic extends Image {
 
                     texture = new Texture(pixmap);
                     setDrawable(new SpriteDrawable(new Sprite(texture)));
-                    getCard().getPlayer().insertCardInProgram(getCard());
+
                 }
-                System.out.println(card.handIndex);
+
 
                 return true;
             }
