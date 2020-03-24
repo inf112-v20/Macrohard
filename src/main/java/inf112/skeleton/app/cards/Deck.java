@@ -5,6 +5,7 @@ import inf112.skeleton.app.Player;
 import java.util.Random;
 
 public class Deck {
+
     private int deckSize = 84;
     private Card[] deck;
 
@@ -29,10 +30,6 @@ public class Deck {
         }
     }
 
-    public int getDeckSize (){
-        return deckSize;
-    }
-
     //Implementing Fisher–Yates / Knuth shuffle
     public void shuffle() {
         Random rand = new Random();
@@ -46,21 +43,11 @@ public class Deck {
         }
     }
 
-    @Override
-    public String toString(){
-        String result = "";
-        for (Card i : deck){
-            result += (i.toString() + "\n");
-        }
-        return result;
-    }
-
     public void dealHand(Player player) {
         int choiceSize = player.getHealthPoints();
         Card[] cardChoices = new Card[choiceSize];
         for (int i = 0; i < choiceSize; i++) {
             cardChoices[i] = deck[i];
-            cardChoices[i].setPlayer(player);
         }
         PlayerHand p = new PlayerHand();
         p.setHand(cardChoices);
@@ -77,5 +64,13 @@ public class Deck {
         return newDeck;
     }
 
+    @Override
+    public String toString(){
+        String result = "";
+        for (Card i : deck){
+            result += (i.toString() + "\n");
+        }
+        return result;
+    }
 
 }

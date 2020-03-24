@@ -146,7 +146,4 @@ public class CardGraphic extends Image {
 
     }
 
-    public Card getCard() {
-        return card;
-    }
 }

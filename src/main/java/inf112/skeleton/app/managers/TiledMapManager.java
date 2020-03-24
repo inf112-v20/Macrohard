@@ -18,16 +18,4 @@ public class TiledMapManager {
         return this.map;
     }
 
-    //get cell using layer name
-    public TiledMapTileLayer.Cell getCell (int x, int y, String layerName){
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerName);
-        return layer.getCell(x,y);
-    }
-
-    //get cell using layer id
-    public TiledMapTileLayer.Cell getCell (int x, int y, int id){
-        TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(id);
-        return layer.getCell(x,y);
-    }
-
 }

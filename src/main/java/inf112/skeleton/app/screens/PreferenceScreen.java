@@ -24,10 +24,6 @@ public class PreferenceScreen implements Screen {
     public static Boolean isCheckedMusic = true;
     private float volume;
 
-    //Removed by request from Codacy
-    //    private Label volumeMusicLabel;
-    //    private Label volumeSoundLabel;
-
     public PreferenceScreen(RoboRallyApplication parent){
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
@@ -144,8 +140,6 @@ public class PreferenceScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
         stage.draw();
-        //RoboRallyApplication.music.stop
-        //RoboRallyApplication.music.setVolume(volume);
     }
 
     @Override

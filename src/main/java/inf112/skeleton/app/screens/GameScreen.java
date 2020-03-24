@@ -9,22 +9,14 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
-import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
-import inf112.skeleton.app.managers.MainScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
-
-import java.awt.*;
-import java.util.Arrays;
 
 public class GameScreen implements Screen {
 
@@ -33,8 +25,6 @@ public class GameScreen implements Screen {
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
-
-    private MainScreenInputManager ip;
 
     private int tileSize = 60;
     private int gridSize = 12;
@@ -81,7 +71,6 @@ public class GameScreen implements Screen {
         deck.dealHand(player);
         PlayerHand hand = player.getHand();
         final Card[] cards = hand.getPossibleHand();
-        //Print-line for testing purposes
 
         for (Card card : cards) {
             CardGraphic tempCard = new CardGraphic(card);
@@ -100,26 +89,26 @@ public class GameScreen implements Screen {
             }
         });
         stage.addActor(button);
-
-        ip = new MainScreenInputManager(parent, boardLayer, playerLayer, playerCell, player, board);
     }
 
     public void runProgram(Player player, Card[] cards) {
         player.setProgram();
 
         // Create program of selected cards from hand
-        for (int j = 0; j<cards.length; j++) {
-            if (cards[j].handIndex == 1) {
-                player.getProgram()[0] = cards[j];
-            }else if (cards[j].handIndex == 2) {
-                player.getProgram()[1] = cards[j];
-            }else if (cards[j].handIndex == 3) {
-                player.getProgram()[2] = cards[j];
-            }else if (cards[j].handIndex == 4) {
-                player.getProgram()[3] = cards[j];
-            }else if (cards[j].handIndex == 5) {
-                player.getProgram()[4] = cards[j];
-            } else { continue;}
+        for (Card card : cards) {
+            if (card.handIndex == 1) {
+                player.getProgram()[0] = card;
+            } else if (card.handIndex == 2) {
+                player.getProgram()[1] = card;
+            } else if (card.handIndex == 3) {
+                player.getProgram()[2] = card;
+            } else if (card.handIndex == 4) {
+                player.getProgram()[3] = card;
+            } else if (card.handIndex == 5) {
+                player.getProgram()[4] = card;
+            } else {
+
+            }
         }
 
         // Execute program
@@ -133,7 +122,6 @@ public class GameScreen implements Screen {
     }
 
     public void setAsInputProcessor() {
-        //Gdx.input.setInputProcessor(ip);
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -181,6 +169,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
-        //music.dispose();
     }
 }

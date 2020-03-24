@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.RoboRallyApplication;
-import inf112.skeleton.app.RoboRallyGame;
 
 public class MenuScreen implements Screen {
 
@@ -39,7 +38,6 @@ public class MenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                System.out.println("New Game button pressed. Attempting to change screen...");
                 parent.changeScreen(RoboRallyApplication.APPLICATION);
                 parent.hasGame(true);
             }
@@ -48,7 +46,6 @@ public class MenuScreen implements Screen {
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                System.out.println("Preferences button pressed. Attempting to change screen...");
                 parent.changeScreen(RoboRallyApplication.PREFERENCES);
             }
         });
@@ -56,7 +53,6 @@ public class MenuScreen implements Screen {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                System.out.println("Exit button pressed. Attempting to exit application...");
                 Gdx.app.exit();
             }
         });
@@ -70,7 +66,6 @@ public class MenuScreen implements Screen {
             resumeGame.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
-                    System.out.println("Resume Game button pressed. Attempting to change screen...");
                     parent.changeScreen(RoboRallyApplication.APPLICATION);
                 }
             });

@@ -90,20 +90,8 @@ public class Board {
         }
     }
 
-    public Tile getTile(int row, int col){
-        return board[row][col];
-    }
-
-    public Player getPlayer() {
-        return player;
-    }
-
     private Boolean outOfBounds(int row, int col) {
         return row < 0 || col < 0 || row >= height || col >= width;
-    }
-
-    public Boolean isOccupied(Tile tile){
-        return tile.getOccupied();
     }
 
 }

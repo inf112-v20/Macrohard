@@ -98,25 +98,6 @@ public class BoardTest {
     }
 
     @Test
-    public void playerTileIsOccupied() {
-        assertTrue(board.isOccupied(board.getTile(3,2)));
-        assertFalse(board.isOccupied(board.getTile(2,3)));
-    }
-
-    @Test
-    public void setPlayerTest() {
-        board.setPlayer(1,1);
-        assertTrue(board.getTile(1,1).getOccupied());
-    }
-
-    @Test
-    // Should set board.player to null when out of bounds
-    public void setPlayerOutOfBoundsTest() {
-        board.setPlayer(13,13);
-        assertNull(board.getPlayer());
-    }
-
-    @Test
     public void movingForwardDoesNotAffectDirectionOfPlayer() {
         board.execute(player1, move2);
 
