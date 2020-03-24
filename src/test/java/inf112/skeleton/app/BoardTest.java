@@ -7,11 +7,14 @@ import inf112.skeleton.app.cards.RotationType;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class BoardTest {
 
-    private Player player;
+    private Player player1;
     private Board board;
     private int initRow = 3;
     private int initCol = 2;
@@ -25,73 +28,73 @@ public class BoardTest {
 
     @Before
     public void setUp() {
-        player = new Player(initRow, initCol, Direction.NORTH);
-        board = new Board(player,10, 10);
+        player1 = new Player(initRow, initCol, Direction.NORTH);
+        board = new Board(player1,10, 10);
     }
 
     @Test
     public void move1NorthIncrementsPlayerRowWithOne() {
-        board.execute(player, move1);
+        board.execute(player1, move1);
 
-        assertEquals(initRow + 1, player.getRow());
+        assertEquals(initRow + 1, player1.getRow());
     }
 
     @Test
     public void movingVerticallyDoesNotAffectPlayerColumn() {
-        board.execute(player, move1);
+        board.execute(player1, move1);
 
-        assertEquals(initCol, player.getCol());
+        assertEquals(initCol, player1.getCol());
     }
 
 
     @Test
     public void move2NorthIncrementsPlayerRowWithTwo() {
-        board.execute(player, move2);
+        board.execute(player1, move2);
 
-        assertEquals(initRow + 2, player.getRow());
+        assertEquals(initRow + 2, player1.getRow());
     }
 
     @Test
     public void moving1EastIncrementsPlayerColumnWithOne() {
-        player.setDirection(Direction.EAST);
+        player1.setDirection(Direction.EAST);
 
-        board.execute(player, move1);
+        board.execute(player1, move1);
 
-        assertEquals(initCol + 1, player.getCol());
+        assertEquals(initCol + 1, player1.getCol());
     }
 
     @Test
     public void moving3EastIncrementsPlayerColumnWithThree() {
-        player.setDirection(Direction.EAST);
+        player1.setDirection(Direction.EAST);
 
-        board.execute(player, move3);
+        board.execute(player1, move3);
 
-        assertEquals(initCol + 3, player.getCol());
+        assertEquals(initCol + 3, player1.getCol());
     }
 
     @Test
     public void movingHorizontallyDoesNotAffectPlayerRow() {
-        player.setDirection(Direction.WEST);
+        player1.setDirection(Direction.WEST);
 
-        board.execute(player, move1);
+        board.execute(player1, move1);
 
-        assertEquals(initRow, player.getRow());
+        assertEquals(initRow, player1.getRow());
     }
 
     @Test
     public void movingBackFacingNorthDecrementsPlayerRowWithOne() {
-        board.execute(player, moveBack);
+        board.execute(player1, moveBack);
 
-        assertEquals(initRow - 1, player.getRow());
+        assertEquals(initRow - 1, player1.getRow());
     }
 
     @Test
     public void movingBackFacingWestIncrementsPlayerColumnWithOne() {
-        player.setDirection(Direction.WEST);
+        player1.setDirection(Direction.WEST);
 
-        board.execute(player, moveBack);
+        board.execute(player1, moveBack);
 
-        assertEquals(initCol + 1, player.getCol());
+        assertEquals(initCol + 1, player1.getCol());
     }
 
     @Test
@@ -110,55 +113,55 @@ public class BoardTest {
     // Should set board.player to null when out of bounds
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
-        assertNull(board.getPlayers());
+        assertNull(board.getPlayer());
     }
 
     @Test
     public void movingForwardDoesNotAffectDirectionOfPlayer() {
-        board.execute(player, move2);
+        board.execute(player1, move2);
 
-        assertEquals(Direction.NORTH, player.getDirection());
+        assertEquals(Direction.NORTH, player1.getDirection());
     }
 
     @Test
     public void rotatingClockwiseFromNorthYieldsEast() {
-        board.execute(player,clockwise);
+        board.execute(player1,clockwise);
 
-        assertEquals(Direction.EAST, player.getDirection());
+        assertEquals(Direction.EAST, player1.getDirection());
     }
 
     @Test
     public void rotatingCounterClockwiseAndThenMoving1ForwardDecrementPlayerColumnWithOne() {
-        board.execute(player, countClockwise);
-        board.execute(player, move1);
+        board.execute(player1, countClockwise);
+        board.execute(player1, move1);
 
-        assertEquals( initCol - 1, player.getCol());
+        assertEquals( initCol - 1, player1.getCol());
     }
 
     @Test
     public void uTurningAndThenMoving1ForwardDecrementPlayerColumnWithOne() {
-        board.execute(player, uTurn);
-        board.execute(player, move1);
+        board.execute(player1, uTurn);
+        board.execute(player1, move1);
 
-        assertEquals(initRow - 1, player.getRow());
+        assertEquals(initRow - 1, player1.getRow());
     }
 
     @Test
     public void movingOutOfBoundsVerticallyDoesNotAffectPlayerRow() {
-        player.setRow(9);
+        player1.setRow(9);
 
-        board.execute(player,move1);
+        board.execute(player1,move1);
 
-        assertEquals(9, player.getRow());
+        assertEquals(9, player1.getRow());
     }
 
     @Test
     public void movingOutOfBoundsHorizontallyDoesNotAffectPlayerColumn() {
-        player.setCol(9);
-        player.setDirection(Direction.EAST);
+        player1.setCol(9);
+        player1.setDirection(Direction.EAST);
 
-        board.execute(player,move1);
+        board.execute(player1,move1);
 
-        assertEquals(9, player.getCol());
+        assertEquals(9, player1.getCol());
     }
 }

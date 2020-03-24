@@ -4,41 +4,37 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.RotationCard;
 
-import java.util.ArrayList;
-
 public class Board {
 
     private final int height;
     private final int width;
 
     private Tile[][] board;
-    private ArrayList<Player> players;
+    private Player player;
 
-    public Board(ArrayList<Player> players, int height, int width) {
-        this.players = players;
+    public Board(Player player, int height, int width) {
+        this.player = player;
         this.height = height;
         this.width = width;
 
-        initializeBoard(players, height, width);
+        initializeBoard(player, height, width);
     }
 
-    public void initializeBoard(ArrayList<Player> players, int height, int width) {
+    public void initializeBoard(Player player, int height, int width) {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(false, i, j);
             }
         }
-        for (Player player : players) {
-            setPlayer(player.getRow(), player.getCol());
-        }
+        setPlayer(player.getRow(), player.getCol());
     }
 
     public void setPlayer(int row, int col){
         if (!outOfBounds(row, col)){
             board[row][col].setOccupied(true);
         } else {
-            this.players = null;
+            this.player = null;
         }
     }
 
@@ -98,8 +94,8 @@ public class Board {
         return board[row][col];
     }
 
-    public ArrayList<Player> getPlayers() {
-        return players;
+    public Player getPlayer() {
+        return player;
     }
 
     private Boolean outOfBounds(int row, int col) {

@@ -58,29 +58,7 @@ public class GameScreen implements Screen {
         //TESTING
 
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
-        TiledMapTileLayer.Cell cell = handler.getCell(7,3,"FLOOR");
-        TiledMapTileLayer.Cell cell1 = handler.getCell(1,0,0);
-        TiledMapTileLayer.Cell cell3 = handler.getCell(2,0,0);
-        TiledMapTileLayer.Cell cell4 = handler.getCell(3,0,0);
-        TiledMapTileLayer.Cell cell5 = handler.getCell(4,0,0);
-        TiledMapTileLayer.Cell cell6 = handler.getCell(5,0,0);
-        TiledMapTileLayer.Cell cell7 = handler.getCell(6,0,0);
 
-        System.out.println(Tile.getType(cell1));
-        System.out.println(Tile.getType(cell3));
-        System.out.println(Tile.getType(cell4));
-        System.out.println(Tile.getType(cell5));
-        System.out.println(Tile.getType(cell6));
-        System.out.println(Tile.getType(cell7));
-
-
-        System.out.println(Tile.getType(cell));
-        //System.out.println(TileType.getType(cell2));
-        TiledMapTileLayer floor = (TiledMapTileLayer) handler.getMap().getLayers().get("Player");
-        System.out.println(floor.getCell(5,5) != null);
-        //System.out.println(cell.setTile());
-        System.out.println(handler.getMap().getLayers().get(0).getName());
-        //System.out.println(handler.getTile(0,0,"FLOOR").getTileType());
         map = handler.getMap();
 
         //
