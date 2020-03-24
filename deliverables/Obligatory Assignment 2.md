@@ -127,11 +127,12 @@ button in order to shut the application down.
     In the main menu there are currently three options, start a new
     game, a ‘preferences’ tab or exit the game.
 
-MVPs completed since the previous version \* The product should have a
-method representing a deck of cards containing 84 ‘programming cards’ \*
-The ‘programming cards’ should have a priority value \* The product
-should have a method to shuffle the deck of ‘programming cards’ \* The
-application should have a main menu.
+MVPs completed since the previous version 
+- The product should have a
+method representing a deck of cards containing 84 ‘programming cards’ 
+- The ‘programming cards’ should have a priority value 
+- The product should have a method to shuffle the deck of ‘programming cards’ 
+- The application should have a main menu.
 
 -   In the next version, we plan to implement the playing cards
     graphically and make the player move using cards. We also plan to
