@@ -59,9 +59,13 @@ public class Deck {
     public Card[] resize (Card[] oldDeck, int sizeDifference) {
         Card[] newDeck = new Card[deckSize];
         for (int i = 0; i < deckSize; i ++) {
-            newDeck[i] = oldDeck[8+i];
+            newDeck[i] = oldDeck[sizeDifference+i];
         }
         return newDeck;
+    }
+
+    public int getDeckSize(){
+        return deckSize;
     }
 
     @Override
