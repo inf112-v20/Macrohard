@@ -83,7 +83,7 @@ public class CardGraphic extends Image {
 
                     // Reset highlight
                     pixmap = new Pixmap(fileHandle);
-                }else {
+                }else if (indecies.length > 4){
                     isSelected = true;
                     card.selected = true;
 
