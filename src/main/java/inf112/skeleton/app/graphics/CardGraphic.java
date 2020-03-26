@@ -73,6 +73,8 @@ public class CardGraphic extends Image {
                     isSelected = false;
                     card.selected = false;
                     card.handIndex = -1;
+                    System.out.println("deselected " + card.toString());
+                    System.out.println("Animating deselected card back to card-options (bottom-side)");
                     int[] newIndecies = new int[indecies.length+1];
                     newIndecies[0] = cardIndex;
                     for(int i = 1; i<newIndecies.length; i++) newIndecies[i] = indecies[i - 1];
@@ -86,7 +88,8 @@ public class CardGraphic extends Image {
                 }else {
                     isSelected = true;
                     card.selected = true;
-
+                    System.out.println("selected " + card.toString());
+                    System.out.println("Animating selected card into program-slot (right-side)");
                     cardIndex = indecies[0];
                     card.handIndex = cardIndex;
                     int[] newIndecies = new int[indecies.length-1];

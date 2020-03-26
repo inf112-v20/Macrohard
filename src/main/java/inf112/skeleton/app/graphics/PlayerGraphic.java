@@ -10,6 +10,7 @@ import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.RotationCard;
 
 public class PlayerGraphic extends Image {
 
@@ -38,10 +39,14 @@ public class PlayerGraphic extends Image {
 
     public void updatePlayerGraphic(Card card, Direction oldDirection) {
         if (card instanceof MovementCard) {
+            System.out.println("Animating move: " + card);
             animateMove(player.getCol(), player.getRow(), ((MovementCard) card).getMoveID());
         }
-        else {
+        else if (card instanceof RotationCard) {
+            System.out.println("Animating rotation: " + card);
             animateRotation(oldDirection, player.getDirection());
+        } else {
+            System.out.println("This program-slot is empty");
         }
     }
 
