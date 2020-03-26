@@ -20,6 +20,20 @@ public enum Direction {
         return directions[(this.ordinal() - 1) % directions.length];
     }
 
+    public static Direction fromString(String string) {
+        switch (string) {
+            case "NORTH": return NORTH;
+            case "EAST": return EAST;
+            case "SOUTH": return SOUTH;
+            case "WEST": return WEST;
+            default: throw new IllegalArgumentException();
+        }
+    }
+
+    public Direction opposite() {
+        return this.turnClockwise().turnClockwise();
+    }
+
     public int[] getMoveCoordinates() {
         if (this.equals(NORTH)) {
             return new int[] {1, 0};

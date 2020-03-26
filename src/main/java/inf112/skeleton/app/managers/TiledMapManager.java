@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
     Not very useful right now, but might be nice later.
  */
 public class TiledMapManager {
+
     private final TiledMap map;
 
     public TiledMapManager (String fileName){
@@ -15,7 +16,15 @@ public class TiledMapManager {
     }
 
     public TiledMap getMap (){
-        return this.map;
+        return map;
+    }
+
+    public TiledMapTileLayer getLayer(String layerName) {
+        return (TiledMapTileLayer) map.getLayers().get(layerName);
+    }
+
+    public TiledMapTileLayer.Cell getCell(String layerName, int row, int col) {
+        return getLayer(layerName).getCell(col, row);
     }
 
 }

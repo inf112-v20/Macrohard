@@ -41,17 +41,14 @@ public class GameScreen implements Screen {
         stage = new Stage(new ScreenViewport());
 
         this.parent = parent;
-        final Player player = new Player(1,1, Direction.NORTH);
-        board = new Board(player, 12,12);
-        //map = new TmxMapLoader().load("assets/robomap.tmx");
-
-        //TESTING
 
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
 
         map = handler.getMap();
 
-        //
+        final Player player = new Player(1,1, Direction.NORTH);
+        board = new Board(player, handler);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(0, -tileSize*camera.zoom*2);

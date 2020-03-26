@@ -29,7 +29,7 @@ public class BoardTest {
     @Before
     public void setUp() {
         player1 = new Player(initRow, initCol, Direction.NORTH);
-        board = new Board(player1,10, 10);
+       // board = new Board(player1,10, 10);
     }
 
     @Test
