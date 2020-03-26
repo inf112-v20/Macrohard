@@ -51,12 +51,14 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     public void changeScreen(int screen){
         switch(screen){
             case MAIN_MENU:
+                System.out.println("Changing screen to Main Menu");
                 menuScreen = new MenuScreen(this);
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
                 currentScreen = MAIN_MENU;
                 break;
             case PREFERENCES:
+                System.out.println("Changing screen to Preferences");
                 if(preferenceScreen == null) {
                     preferenceScreen = new PreferenceScreen(this);
                 }
@@ -65,6 +67,7 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
                 currentScreen = PREFERENCES;
                 break;
             case APPLICATION:
+                System.out.println("Changing screen to Application");
                 if(gameScreen == null){
                     gameScreen = new GameScreen(this);
                 }

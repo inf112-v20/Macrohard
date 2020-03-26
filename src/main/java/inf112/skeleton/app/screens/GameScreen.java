@@ -82,6 +82,7 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                System.out.println("GO! button pressed. Should execute selected program");
                 runProgram(player, cards);
             }
         });

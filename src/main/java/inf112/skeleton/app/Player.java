@@ -41,6 +41,10 @@ public class Player {
         this.direction = direction;
     }
 
+    public void setHealthPoints(int newHealthPointValue) {
+        this.healthPoints = newHealthPointValue;
+    }
+
     public void setProgram() {
         hand.setFinalHand();
     }
