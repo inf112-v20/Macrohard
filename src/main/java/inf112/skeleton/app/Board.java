@@ -17,39 +17,48 @@ public class Board {
     private Tile[][] board;
     private Player player;
 
+    //Graphic-independent constructor for test-classes
+    public Board(Player player, int height, int width) {
+        this.player = player;
+        this.height = height;
+        this.width = width;
+
+        initializeBoard(player, height, width);
+    }
+
     public Board(Player player, TiledMapManager manager) {
         this.player = player;
         this.height = 12;
         this.width = 12;
 
-        initializeBoard(player, manager, height, width);
+        initializeBoard(player, height, width);
+        buildWalls(manager);
     }
 
-    public void initializeBoard(Player player, TiledMapManager manager, int height, int width) {
+    public void initializeBoard(Player player, int height, int width) {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(false, i, j);
             }
         }
+        setPlayer(player.getRow(), player.getCol());
+    }
+
+    private void buildWalls(TiledMapManager manager) {
         for (int row = 0; row < height; row ++) {
             for (int col = 0; col < width; col ++) {
                 if (manager.getCell("WALLS", row, col) != null) {
                     TiledMapTileLayer.Cell wall = manager.getCell("WALLS", row, col);
                     String value = (String) wall.getTile().getProperties().get("Direction");
                     Direction dir = Direction.fromString(value);
-                    buildWall(row, col, dir);
+                    board[row][col].getWalls().add(dir);
+                    if (!outOfBounds(row + dir.getRowTrajectory(), col + dir.getColumnTrajectory())) {
+                        Tile tile = board[row + dir.getRowTrajectory()][col + dir.getColumnTrajectory()];
+                        if (tile != null)  { ArrayList<Direction> walls = tile.getWalls(); walls.add(dir.opposite()); }
+                    }
                 }
             }
-        }
-        setPlayer(player.getRow(), player.getCol());
-    }
-
-    private void buildWall(int row, int col, Direction dir) {
-        board[row][col].getWalls().add(dir);
-        if (!outOfBounds(row + dir.getRowTrajectory(), col + dir.getColumnTrajectory())) {
-            Tile tile = board[row + dir.getRowTrajectory()][col + dir.getColumnTrajectory()];
-            if (tile != null)  { ArrayList<Direction> walls = tile.getWalls(); walls.add(dir.opposite()); }
         }
     }
 
@@ -114,7 +123,7 @@ public class Board {
     }
 
     private Boolean outOfBounds(int row, int col) {
-        return row < 1 || col < 0 || row >= height || col >= width;
+        return row < 0 || col < 0 || row >= height || col >= width;
     }
 
     private Boolean forwardCollision(Player player) {
