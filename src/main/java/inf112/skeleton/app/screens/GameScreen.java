@@ -86,6 +86,9 @@ public class GameScreen implements Screen {
             }
         });
         stage.addActor(button);
+
+        GameScreenInputProcessor gameScreenInputProcessor = new GameScreenInputProcessor(player, board);
+        stage.addListener(gameScreenInputProcessor);
     }
 
     public void runProgram(Player player, Card[] cards) {
