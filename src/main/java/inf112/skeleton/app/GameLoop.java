@@ -81,7 +81,13 @@ public class GameLoop {
 
                 while (!roundPriority.isEmpty()) {
                     gameScreen.runProgram(players.get((Integer) roundPriority.pop()), cardNumber); }
-                break;
+                cardNumber++;
+                if (roundPriority.isEmpty() && cardNumber < 5) {
+                    phase--;
+                    break;
+                } else {
+                    break;
+                }
            default:
                System.out.println("something went wrong :)");
         }
@@ -93,12 +99,13 @@ public class GameLoop {
     public int priorityHandler(ArrayList<Player> players) {
         int max = Integer.MIN_VALUE;
         for (int i = 0; i<players.size(); i++) {
+            if (players.get(i).getProgram()[cardNumber] == null) continue;
             if (players.get(i).getProgram()[cardNumber].getPrio() > max) {
                 if (!roundPriority.isEmpty() &&(Integer) roundPriority.peek() == i) continue;
                 max = i;
             }
         }
-        System.out.println(max);
+        if (max == Integer.MIN_VALUE) return 0;
         return max;
     }
 }

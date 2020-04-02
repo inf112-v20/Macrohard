@@ -141,22 +141,10 @@ public class GameScreen implements Screen {
             ranval[index] = temp;
         }
         for (int i = 0; i<5; i++) {
-            if (player.getProgram()[i] == null) {
                 player.getProgram()[i] = player.getHand().getDealtHand()[i];
-            }
         }
     }
 
-   /* public void runProgram(Player player) {
-        for (int i = 0; i<player.getProgram().length; i++) {
-            Card card = player.getProgram()[i];
-            Direction dir = player.getDirection();
-            board.execute(player, card);
-            player.getGraphics().updatePlayerGraphic(card, dir);
-        }
-        player.getGraphics().animate();
-
-    }*/
     public void runProgram(Player player, int cardNumber) {
         Card card = player.getProgram()[cardNumber];
         Direction dir = player.getDirection();
