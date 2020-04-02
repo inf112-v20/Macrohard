@@ -46,7 +46,7 @@ public class GameScreen implements Screen {
     private Stage stage;
     private GameLoop gameLoop;
     private ArrayList<Player> players;
-    private int clientPlayerIndex = 0;
+    public int clientPlayerIndex = 0;
 
     public GameScreen(RoboRallyApplication parent){
 
@@ -124,17 +124,26 @@ public class GameScreen implements Screen {
                 player.getProgram()[4] = cards[j];
             } else { continue;}
         }
+        player.hasChosenCards = true;
         System.out.println(Arrays.toString(player.getProgram()
         ));
     }
 
-    public void runProgram(Player player) {
+   /* public void runProgram(Player player) {
         for (int i = 0; i<player.getProgram().length; i++) {
             Card card = player.getProgram()[i];
             Direction dir = player.getDirection();
             board.execute(player, card);
             player.getGraphics().updatePlayerGraphic(card, dir);
         }
+        player.getGraphics().animate();
+
+    }*/
+    public void runProgram(Player player, int cardNumber) {
+        Card card = player.getProgram()[cardNumber];
+        Direction dir = player.getDirection();
+        board.execute(player, card);
+        player.getGraphics().updatePlayerGraphic(card, dir);
         player.getGraphics().animate();
 
     }
@@ -195,5 +204,10 @@ public class GameScreen implements Screen {
 
     public void addStageActor(Image actor) {
         stage.addActor(actor);
+    }
+    public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
+        for (CardGraphic cardGraphic : cardsOnScreen) {
+            cardGraphic.remove();
+        }
     }
 }

@@ -23,6 +23,9 @@ public abstract class Card {
         this.player = player;
     }
 
+    public int getPrio() {
+        return this.priority;}
+
     public Player getPlayer() {
         return player;
     }
