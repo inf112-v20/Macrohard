@@ -55,14 +55,14 @@ public class PlayerGraphic extends Image {
         if(degrees == 270){
             degrees = -90;
         }
-        if(degrees == -270){
+        else if(degrees == -270){
             degrees = 90;
         }
         sequenceAction.addAction(Actions.delay(1, Actions.rotateBy(degrees, 0.5f)));
-        System.out.println(degrees);
     }
 
     public void animate(){
         addAction(sequenceAction);
     }
+
 }

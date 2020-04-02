@@ -4,11 +4,9 @@ import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.cards.RotationType;
+import inf112.skeleton.app.managers.TiledMapManager;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -29,7 +27,7 @@ public class BoardTest {
     @Before
     public void setUp() {
         player1 = new Player(initRow, initCol, Direction.NORTH);
-        board = new Board(player1,10, 10);
+        board = new Board(player1, 10, 10);
     }
 
     @Test
@@ -95,25 +93,6 @@ public class BoardTest {
         board.execute(player1, moveBack);
 
         assertEquals(initCol + 1, player1.getCol());
-    }
-
-    @Test
-    public void playerTileIsOccupied() {
-        assertTrue(board.isOccupied(board.getTile(3,2)));
-        assertFalse(board.isOccupied(board.getTile(2,3)));
-    }
-
-    @Test
-    public void setPlayerTest() {
-        board.setPlayer(1,1);
-        assertTrue(board.getTile(1,1).getOccupied());
-    }
-
-    @Test
-    // Should set board.player to null when out of bounds
-    public void setPlayerOutOfBoundsTest() {
-        board.setPlayer(13,13);
-        assertNull(board.getPlayer());
     }
 
     @Test

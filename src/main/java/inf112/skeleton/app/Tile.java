@@ -1,12 +1,15 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+//Might be useful when implementing collisions and tile dynamics
+
+import java.util.ArrayList;
 
 public class Tile {
 
     private boolean occupied;
     private int row;
     private int col;
+    private ArrayList<Direction> walls = new ArrayList<>();
 
     public Tile(boolean occupied, int row, int col) {
         this.occupied = occupied;
@@ -14,22 +17,16 @@ public class Tile {
         this.col = col;
     }
 
+    public void buildWall(Direction direction) {
+        walls.add(direction);
+    }
+
+    public ArrayList<Direction> getWalls() {
+        return walls;
+    }
+
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
-    }
-
-    public boolean getOccupied() {
-        return occupied;
-    }
-
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() { return col; }
-
-    public static String getType(TiledMapTileLayer.Cell cell) {
-        return (String) cell.getTile().getProperties().get("Type");
     }
 
 }

@@ -11,8 +11,8 @@ public enum RotationType implements CardType {
             case COUNTER_CLOCKWISE: return "rotateCounterclockwise";
             case CLOCKWISE: return "rotateClockwise";
             case U_TURN: return "uTurn";
+            default: return "";
         }
-        return "";
     }
 
 }
