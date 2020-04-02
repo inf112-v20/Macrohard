@@ -21,6 +21,7 @@ import inf112.skeleton.app.managers.GameScreenInputManager;
 import inf112.skeleton.app.managers.TiledMapManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Random;
 
 public class GameScreen implements Screen {
 
@@ -55,9 +56,9 @@ public class GameScreen implements Screen {
         this.parent = parent;
 
         // Initialise players
-        Player player1 = new Player(1, 1, Direction.NORTH);
-        Player player2 = new Player(1, 2, Direction.NORTH);
-        final ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2));
+        Player player1 = new Player(1, 1, Direction.NORTH, false);
+        Player player2 = new Player(1, 2, Direction.NORTH, true);
+         final ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2));
 
         // Initialise board
         board = new Board(players, 12,12);
@@ -128,6 +129,22 @@ public class GameScreen implements Screen {
         player.hasChosenCards = true;
         System.out.println(Arrays.toString(player.getProgram()
         ));
+    }
+    public void lockRandomProgram(Player player) {
+        player.setProgram();
+        Random rand = new Random();
+        int[] ranval ={0,1,2,3,4,5,6,7,8,9};
+        for (int i = ranval.length - 1; i > 0; i--) {
+            int index = rand.nextInt(i + 1);
+            int temp = ranval[i];
+            ranval[i] = ranval[index];
+            ranval[index] = temp;
+        }
+        for (int i = 0; i<5; i++) {
+            if (player.getProgram()[i] == null) {
+                player.getProgram()[i] = player.getHand().getDealtHand()[i];
+            }
+        }
     }
 
    /* public void runProgram(Player player) {

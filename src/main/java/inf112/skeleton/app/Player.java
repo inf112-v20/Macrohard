@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public class Player {
 
     public boolean hasChosenCards;
+    public boolean isNPC;
     private int row;
     private int col;
     private Direction direction;
@@ -17,10 +18,11 @@ public class Player {
     private PlayerGraphic playerGraphic;
     private ArrayList<Card> program;
 
-    public Player(int row, int col, Direction direction) {
+    public Player(int row, int col, Direction direction, boolean isNPC) {
         this.row = row;
         this.col = col;
         this.direction = direction;
+        this.isNPC = isNPC;
         this.healthPoints = 9;
     }
 
@@ -82,6 +84,9 @@ public class Player {
 
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
+    }
+    public boolean programHasNull() {
+        return hand.hasNull(getProgram());
     }
 
 }

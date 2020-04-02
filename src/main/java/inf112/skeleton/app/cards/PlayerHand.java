@@ -1,6 +1,6 @@
 package inf112.skeleton.app.cards;
 
-public class PlayerHand  {
+public class PlayerHand {
 
     private int handSize = 9;
     private Card[] program;
@@ -22,4 +22,11 @@ public class PlayerHand  {
     public Card[] getProgram() {
         return program;
     }
+    public boolean hasNull(Card[] program) {
+        for (int i= 0; i<program.length; i++) {
+            if (program[i] == null) return true;
+        }
+        return false;
+    }
 }
+

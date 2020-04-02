@@ -3,6 +3,8 @@ package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
+import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import java.util.ArrayList;
@@ -34,23 +36,7 @@ public class GameLoop {
     }
 
     public void tick() {
-        if (!cardsShown) {
-            phase(0);
-        }
-        if (!programLocked) {
-            phase(1);
-        } else{
-            phase(2);
-
-        }
-        /*if (orderFixed) {
-            phase(phase);
-        }*/
-        }
-
-
-    public void phase(int phase){
-        switch (phase) {
+       switch (phase) {
             case 0:
             // Deal hand to all players.
             for(Player player : players){
@@ -58,70 +44,61 @@ public class GameLoop {
                 deck.shuffle();
                 deck.dealHand(player);
             }
-            cardsShown = true;
-            phase++;
+            phase ++;
             break;
 
-            case 1:
-                // Draw cards on screen
-                for(int i = 0; i < players.get(clientPlayerIndex).getHand().getDealtHand().length; i++){
-                    CardGraphic cardGraphic = new CardGraphic(players.get(clientPlayerIndex).getHand().getDealtHand()[i]);
+           case 1:
+            // Draw cards on screen
+               if (!cardsShown) {
+                for(int i = 0; i < players.get(0).getHand().getDealtHand().length; i++){
+                    CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getDealtHand()[i]);
                     gameScreen.addStageActor(cardGraphic);
                     cardImages.add(cardGraphic);
-                }
-                programLocked = true;
+                    cardsShown = true;
+                    }
+               for (int j = 1; j<players.size(); j++) {
+                    gameScreen.lockRandomProgram((players.get(j)));
+                    }
+               }
+            if (players.get(0).hasChosenCards) {
                 phase++;
                 break;
+            }
+            break;
 
             case 2:
-                // Clear screen and let next player lock in program, or continue if last player locked in program.
-                if (players.get(clientPlayerIndex).hasChosenCards && players.size()-clientPlayerIndex != 1) {
-                    gameScreen.clearCards(cardImages);
-                    gameScreen.clientPlayerIndex++;
-                    clientPlayerIndex++;
-                    programLocked = false;
-                    phase--;
-                    break;
-                } else {
-                    // All players have chosen program. continue game.
-                    /*gameScreen.clientPlayerIndex = 0;
-                    clientPlayerIndex = 0;*/
-                    /*programLocked = true;
-                    orderFixed = false;*/
-                   // phase++;
-                    break;
-                }
-            case 3:
-                // Arranges the order in which the cards in program slot number cardNumber will be played.
                 roundPriority = new Stack();
                 for (int j = 0; j<players.size(); j++) {
-                    roundPriority.push(players.get(priorityHandler(players)));
+                    roundPriority.push(priorityHandler(players));
                 }
-                orderFixed = true;
-                phase++;
+                if (roundPriority.size() == players.size()) {
+                    phase ++;
+                    break;
+                }
                 break;
 
-            case 4:
-                // execute cards in order
+           case 3:
+
                 while (!roundPriority.isEmpty()) {
-                    gameScreen.runProgram((Player) roundPriority.pop(), cardNumber);
-                }
-                cardNumber++;
-                if (cardNumber == 5) break;
-                orderFixed = false;
-                phase--;
+                    gameScreen.runProgram(players.get((Integer) roundPriority.pop()), cardNumber); }
                 break;
-
+           default:
+               System.out.println("something went wrong :)");
         }
-    }
+        }
+
+
+
     // returns the players index of the player with the highest priority card in slot equal to cardNumber
     public int priorityHandler(ArrayList<Player> players) {
         int max = Integer.MIN_VALUE;
         for (int i = 0; i<players.size(); i++) {
             if (players.get(i).getProgram()[cardNumber].getPrio() > max) {
+                if (!roundPriority.isEmpty() &&(Integer) roundPriority.peek() == i) continue;
                 max = i;
             }
         }
+        System.out.println(max);
         return max;
     }
 }
