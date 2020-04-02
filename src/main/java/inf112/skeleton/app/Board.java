@@ -5,6 +5,7 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.managers.TiledMapManager;
+import inf112.skeleton.app.tiles.Tile;
 
 import java.util.ArrayList;
 

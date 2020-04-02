@@ -3,6 +3,7 @@ package inf112.skeleton.app;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.PlayerGraphic;
+import inf112.skeleton.app.tiles.Tile;
 
 public class Player {
 
