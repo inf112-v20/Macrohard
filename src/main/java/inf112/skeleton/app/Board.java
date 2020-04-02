@@ -1,6 +1,5 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
@@ -42,7 +41,9 @@ public class Board {
                 board[i][j] = new Tile(false, i, j);
             }
         }
+
         setPlayer(player.getRow(), player.getCol());
+        player.setSpawnPoint(board[player.getRow()][player.getCol()]);
     }
 
     private void buildWalls(TiledMapManager manager) {
@@ -57,6 +58,9 @@ public class Board {
                         Tile tile = board[row + dir.getRowTrajectory()][col + dir.getColumnTrajectory()];
                         if (tile != null)  { ArrayList<Direction> walls = tile.getWalls(); walls.add(dir.opposite()); }
                     }
+                }
+                else if (manager.getCell("HOLES", row, col) != null) {
+                    board[row][col].setHole(true);
                 }
             }
         }
@@ -85,49 +89,39 @@ public class Board {
     }
 
     private void move(Player player, MovementCard card) {
-        if (card.getMoveID() == -1) {
-            moveBackwards(player);
-        }
-        else {
-            moveForward(player, card.getMoveID());
-        }
-    }
+        int roof = (card.getMoveID() == -1 ? 1 : card.getMoveID());
+        int directionScalar = (card.getMoveID() == -1 ? -1 : 1);
+        Direction direction = (card.getMoveID() == -1? player.getDirection().opposite() : player.getDirection());
 
-    private void moveBackwards(Player player) {
-        int newRow = player.getRow() - player.getRowTrajectory();
-        int newCol = player.getCol() - player.getColumnTrajectory();
-        if (!outOfBounds(newRow, newCol)) {
-            board[player.getRow()][player.getCol()].setOccupied(false);
-            player.setRow(newRow);
-            player.setCol(newCol);
-            board[newRow][newCol].setOccupied(true);
-        }
-        else { System.out.println("Cannot move out of bounds"); }
-    }
-
-    private void moveForward(Player player, int numOfMoves) {
-        for (int i = 0; i < numOfMoves; i++) {
-            int newRow = player.getRow() + player.getRowTrajectory();
-            int newCol = player.getCol() + player.getColumnTrajectory();
-            if(!outOfBounds(newRow, newCol) && !forwardCollision(player)){
+        for (int i = 0; i < roof; i ++) {
+            int newRow = player.getNextRow(directionScalar);
+            int newCol = player.getNextCol(directionScalar);
+            if (!outOfBounds(newRow, newCol) && !collision(player, direction)) {
                 board[player.getRow()][player.getCol()].setOccupied(false);
-                player.setRow(newRow);
-                player.setCol(newCol);
-                board[newRow][newCol].setOccupied(true);
+                if (!board[newRow][newCol].isHole()) {
+                    player.setRow(newRow);
+                    player.setCol(newCol);
+                    board[newRow][newCol].setOccupied(true);
+                }
+                else {
+                    player.reSpawn();
+                    player.getSpawnPoint().setOccupied(true);
+                    break;
+                }
             }
             else {
-                System.out.println("Cannot move out of bounds");
                 break;
             }
         }
+
     }
 
     private Boolean outOfBounds(int row, int col) {
         return row < 0 || col < 0 || row >= height || col >= width;
     }
 
-    private Boolean forwardCollision(Player player) {
-        return board[player.getRow()][player.getCol()].getWalls().contains(player.getDirection());
+    private Boolean collision(Player player, Direction direction) {
+        return board[player.getRow()][player.getCol()].getWalls().contains(direction);
     }
 
 }

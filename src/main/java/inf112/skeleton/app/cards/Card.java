@@ -1,7 +1,5 @@
 package inf112.skeleton.app.cards;
 
-import inf112.skeleton.app.Player;
-
 public abstract class Card {
 
     protected final int priority;

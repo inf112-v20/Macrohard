@@ -8,6 +8,7 @@ public class Player {
 
     private int row;
     private int col;
+    private Tile spawnPoint;
     private Direction direction;
     public PlayerHand hand;
     private int healthPoints;
@@ -19,6 +20,14 @@ public class Player {
         this.col = col;
         this.direction = direction;
         this.healthPoints = 9;
+    }
+
+    public Tile getSpawnPoint() {
+        return spawnPoint;
+    }
+
+    public void setSpawnPoint(Tile spawnPoint) {
+        this.spawnPoint = spawnPoint;
     }
 
     public int getRow() {
@@ -75,6 +84,19 @@ public class Player {
 
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
+    }
+
+    public void reSpawn() {
+        setRow(spawnPoint.getRow());
+        setCol(spawnPoint.getCol());
+    }
+
+    public int getNextRow(int directionScalar) {
+        return row + (directionScalar * getRowTrajectory());
+    }
+
+    public int getNextCol(int directionScalar) {
+        return col + (directionScalar * getColumnTrajectory());
     }
 
 }
