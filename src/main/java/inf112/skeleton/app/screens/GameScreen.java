@@ -90,6 +90,7 @@ public class GameScreen implements Screen {
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
+            playerGraphics.add(playerGraphic);
             stage.addActor(playerGraphic);
         }
 

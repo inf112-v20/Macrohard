@@ -5,7 +5,6 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
-
 import java.util.ArrayList;
 import java.util.Stack;
 
