@@ -114,9 +114,7 @@ public class CardGraphic extends Image {
 
                     texture = new Texture(pixmap);
                     setDrawable(new SpriteDrawable(new Sprite(texture)));
-
                 }
-
 
                 return true;
             }

@@ -19,6 +19,7 @@ public class Board {
 
     private Tile[][] board;
     private Player player;
+    private ArrayList<Player> players;
 
     //Graphic-independent constructor for test-classes
     public Board(Player player, int height, int width) {
@@ -42,14 +43,18 @@ public class Board {
         set(player);
     }
 
-    private void digHoles(TiledMapManager mapManager) {
-        for (int row = 0; row < height; row ++) {
-            for (int col = 0; col < width; col ++) {
-                if (mapManager.getCell("HOLES", row, col) != null) {
-                    board[row][col] = new Hole(row, col);
-                }
-            }
-        }
+    //Constructor for multiple players
+    public Board(ArrayList<Player> players, TiledMapManager manager, int height, int width) {
+        this.players = players;
+        this.height = height;
+        this.width = width;
+
+        initializeBoard(players, height, width);
+        installConveyorBelts(mapManager);
+        digHoles(mapManager);
+        erectWalls(mapManager);
+
+        for (Player player : players) { set(player); }
     }
 
     private void set(Player player) {
@@ -62,6 +67,16 @@ public class Board {
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(i, j);
+            }
+        }
+    }
+
+    private void digHoles(TiledMapManager mapManager) {
+        for (int row = 0; row < height; row ++) {
+            for (int col = 0; col < width; col ++) {
+                if (mapManager.getCell("HOLES", row, col) != null) {
+                    board[row][col] = new Hole(row, col);
+                }
             }
         }
     }
@@ -99,9 +114,7 @@ public class Board {
 
     public void setPlayer(int row, int col){
         if (!outOfBounds(row, col)){
-            board[row][col].setPlayer(player);
-        } else {
-            this.player = null;
+            board[row][col].setOccupied(true);
         }
     }
 
@@ -177,5 +190,25 @@ public class Board {
     private boolean collision(Player player, Direction direction) {
         return board[player.getRow()][player.getCol()].getWalls().contains(direction);
     }
+
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    public Tile getTile(int row, int col){
+        return board[row][col];
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getPlayer(int i){
+        return players.get(i);
+    }
+
+    public boolean isOccupied(Tile tile){
+            return tile.getOccupied();
+        }
 
 }
