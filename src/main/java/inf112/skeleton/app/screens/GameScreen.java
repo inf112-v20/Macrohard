@@ -17,22 +17,22 @@ import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
-import inf112.skeleton.app.managers.GameScreenInputManager;
+import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.ListIterator;
 import java.util.Random;
 
 public class GameScreen implements Screen {
 
+    private final GameScreenInputProcessor inputProcessor;
     private TiledMapTileLayer.Cell playerCell;
     private RoboRallyApplication parent;
 
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
-
-    private GameScreenInputManager ip;
 
     private int tileSize = 60;
     private int gridSize = 12;
@@ -94,14 +94,22 @@ public class GameScreen implements Screen {
             stage.addActor(playerGraphic);
         }
 
+        // --- INPUT ----
+
+        inputProcessor = new GameScreenInputProcessor(parent, player2, board);
+        stage.addListener(inputProcessor);
+
+        //Initialise buttons
         TextButton conveyor = new TextButton("CONVEYOR", parent.getSkin());
         conveyor.setBounds(750, 452, 150, 50);
         conveyor.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 board.rollConveyorBelts(false);
-                player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
-                player.getGraphics().animate();
+                for (Player player : players) {
+                    player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                    player.getGraphics().animate();
+                }
             }
         });
         stage.addActor(conveyor);
@@ -112,8 +120,10 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 board.rollConveyorBelts(true);
-                player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
-                player.getGraphics().animate();
+                for (Player player : players) {
+                    player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                    player.getGraphics().animate();
+                }
             }
         });
         stage.addActor(conveyorExpress);
@@ -129,12 +139,21 @@ public class GameScreen implements Screen {
         });
         stage.addActor(button);
 
-        //ip = new GameScreenInputManager(parent);
+        TextButton changePlayer = new TextButton("CHANGE", parent.getSkin());
+        changePlayer.setBounds(750, 296, 150, 50);
+        changePlayer.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                System.out.println(players.indexOf(inputProcessor.getPlayer()));
+                int index = (players.indexOf(inputProcessor.getPlayer()) + 1) % players.size();
+                System.out.println(index);
+                inputProcessor.setPlayer(players.get(index));
+            }
+        });
+        stage.addActor(changePlayer);
 
         gameLoop = new GameLoop(board, clientPlayerIndex, this);
 
-       /* GameScreenInputProcessor gameScreenInputProcessor = new GameScreenInputProcessor(player1, board);
-        stage.addListener(gameScreenInputProcessor);*/
     }
 
     public void lockInProgram(Player player, Card[] cards){
@@ -184,13 +203,11 @@ public class GameScreen implements Screen {
     }
 
     public void setAsInputProcessor() {
-        //Gdx.input.setInputProcessor(ip);
         Gdx.input.setInputProcessor(stage);
     }
 
     @Override
     public void show() {
-        //Nothing yet
         RoboRallyApplication.music.play();
     }
 
@@ -200,7 +217,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Comment this out to disable GameLoop
-        gameLoop.tick();
+        //gameLoop.tick();
 
         renderer.setView(camera);
         renderer.render();

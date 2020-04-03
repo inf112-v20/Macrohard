@@ -105,16 +105,8 @@ public class BoardMovementTest {
 
     @Test
     public void setPlayerTest() {
-        board.setPlayer(1,1);
-        assertTrue(board.getTile(1,1).getOccupied());
-    }
-
-    @Test
-    // Player should stay on current position if next position is out of bounds
-    public void setPlayerOutOfBoundsTest() {
-        board.setPlayer(13,13);
-        assertTrue(player.getRow() == 3);
-        assertTrue(player.getCol()==2);
+        board.set(player);
+        assertTrue(board.getTile(player.getRow(),player.getCol()).isOccupied());
     }
 
     @Test

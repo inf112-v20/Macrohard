@@ -1,17 +1,23 @@
-package inf112.skeleton.app;
+package inf112.skeleton.app.managers;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import inf112.skeleton.app.Board;
+import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.Player;
+import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.screens.GameScreen;
 
 public class GameScreenInputProcessor extends InputListener {
 
+    RoboRallyApplication parent;
     Player player;
     Board board;
 
-    public GameScreenInputProcessor(Player player, Board board){
+    public GameScreenInputProcessor(RoboRallyApplication parent, Player player, Board board){
+        this.parent = parent;
         this.player = player;
         this.board = board;
     }
@@ -22,6 +28,9 @@ public class GameScreenInputProcessor extends InputListener {
 
         switch (keycode){
 
+            case Input.Keys.ESCAPE:
+                parent.changeScreen(RoboRallyApplication.MAIN_MENU);
+                return super.keyDown(event, keycode);
             case Input.Keys.UP:
                 MovementCard movementCardUp = new MovementCard(0, MovementType.ONE_FORWARD);
                 board.execute(player, movementCardUp);
@@ -44,10 +53,19 @@ public class GameScreenInputProcessor extends InputListener {
                 board.execute(player, rotationCardLeft);
                 player.getGraphics().animateRotation(oldDirectionL, player.getDirection());
                 break;
+
         }
 
         player.getGraphics().animate();
 
         return true;
+    }
+
+    public Player getPlayer() {
+        return player;
+    }
+
+    public void setPlayer(Player player) {
+        this.player = player;
     }
 }

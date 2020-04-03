@@ -44,12 +44,12 @@ public class Board {
     }
 
     //Constructor for multiple players
-    public Board(ArrayList<Player> players, TiledMapManager manager, int height, int width) {
+    public Board(ArrayList<Player> players, TiledMapManager mapManager, int height, int width) {
         this.players = players;
         this.height = height;
         this.width = width;
 
-        initializeBoard(players, height, width);
+        initializeBoard(height, width);
         installConveyorBelts(mapManager);
         digHoles(mapManager);
         erectWalls(mapManager);
@@ -57,8 +57,8 @@ public class Board {
         for (Player player : players) { set(player); }
     }
 
-    private void set(Player player) {
-        setPlayer(player.getRow(), player.getCol());
+    void set(Player player) {
+        board[player.getRow()][player.getCol()].setPlayer(player);
         player.setSpawnPoint(board[player.getRow()][player.getCol()]);
     }
 
@@ -109,12 +109,6 @@ public class Board {
                     board[row][col] = new ConveyorBelt(row, col, dir, express);
                 }
             }
-        }
-    }
-
-    public void setPlayer(int row, int col){
-        if (!outOfBounds(row, col)){
-            board[row][col].setOccupied(true);
         }
     }
 
@@ -208,7 +202,7 @@ public class Board {
     }
 
     public boolean isOccupied(Tile tile){
-            return tile.getOccupied();
+            return tile.isOccupied();
         }
 
 }
