@@ -38,16 +38,31 @@ public class PlayerGraphic extends Image {
 
     public void updatePlayerGraphic(Card card, Direction oldDirection) {
         if (card instanceof MovementCard) {
-            animateMove(player.getCol(), player.getRow(), ((MovementCard) card).getMoveID());
+            animateMoveDelayed(player.getCol(), player.getRow(), ((MovementCard) card).getMoveID());
         }
         else {
-            animateRotation(oldDirection, player.getDirection());
+            animateRotationDelayed(oldDirection, player.getDirection());
         }
     }
 
 
-    public void animateMove(int newCol, int newRow, int moves) {
+    public void animateMoveDelayed(int newCol, int newRow, int moves) {
         sequenceAction.addAction(Actions.delay(1, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves))));
+    }
+
+    public void animateMove(int newCol, int newRow, int moves) {
+        sequenceAction.addAction(Actions.delay(0, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves))));
+    }
+
+    public void animateRotationDelayed(Direction direction, Direction newDir) {
+        float degrees = (direction.ordinal() - newDir.ordinal())*90;
+        if(degrees == 270){
+            degrees = -90;
+        }
+        else if(degrees == -270){
+            degrees = 90;
+        }
+        sequenceAction.addAction(Actions.delay(1, Actions.rotateBy(degrees, 0.5f)));
     }
 
     public void animateRotation(Direction direction, Direction newDir) {
@@ -58,7 +73,7 @@ public class PlayerGraphic extends Image {
         else if(degrees == -270){
             degrees = 90;
         }
-        sequenceAction.addAction(Actions.delay(1, Actions.rotateBy(degrees, 0.5f)));
+        sequenceAction.addAction(Actions.delay(0, Actions.rotateBy(degrees, 0.5f)));
     }
 
     public void animate(){
