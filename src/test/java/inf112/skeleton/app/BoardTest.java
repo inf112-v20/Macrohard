@@ -8,6 +8,9 @@ import inf112.skeleton.app.managers.TiledMapManager;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 import static org.junit.Assert.*;
 
 public class BoardTest {

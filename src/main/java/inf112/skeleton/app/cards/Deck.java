@@ -50,7 +50,7 @@ public class Deck {
             cardChoices[i] = deck[i];
         }
         PlayerHand p = new PlayerHand();
-        p.setHand(cardChoices);
+        p.setPossibleHand(cardChoices);
         player.hand = p;
         deckSize -= choiceSize;
         resize(deck, choiceSize);

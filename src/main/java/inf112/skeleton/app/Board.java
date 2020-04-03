@@ -23,20 +23,28 @@ public class Board {
     //Graphic-independent constructor for test-classes
     public Board(Player player, int height, int width) {
         this.player = player;
-    public Board(ArrayList<Player> players, int height, int width) {
+        this.height = height;
+        this.width = width;
+        initializeBoard(player,height,width);
+    }
+
+    public void initializeBoard(Player player, int height, int width) {
+        board = new Tile[height][width];
+        for (int i = 0; i < height; i ++){
+            for (int j = 0; j < width; j ++) {
+                board[i][j] = new Tile(false, i, j);
+            }
+        }
+        setPlayer(player.getRow(), player.getCol());
+    }
+
+
+    public Board(ArrayList<Player> players, TiledMapManager manager, int height, int width) {
         this.players = players;
         this.height = height;
         this.width = width;
 
         initializeBoard(players, height, width);
-    }
-
-    public Board(Player player, TiledMapManager manager) {
-        this.player = player;
-        this.height = 12;
-        this.width = 12;
-
-        initializeBoard(player, height, width);
         buildWalls(manager);
     }
 

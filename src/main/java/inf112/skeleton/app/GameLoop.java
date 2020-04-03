@@ -19,6 +19,7 @@ public class GameLoop {
     private int programRegister = 0;
 
     private boolean cardsShown;
+    private boolean canClean;
 
     public GameLoop(Board board, int clientPlayerIndex, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -62,13 +63,12 @@ public class GameLoop {
 
             case 2:
                 // Decide the order in which program cards will be played
-                if (players.get(0).getProgram() != null) {
+                if (players.get(0).getProgram() != null && programRegister <5) {
                 roundPriority = new Stack();
                 for (int j = 0; j<players.size(); j++) {
                     roundPriority.push(priorityHandler(players));
                 }
                 if (roundPriority.size() == players.size()) {
-                    programRegister++;
                     phase ++;
                     break;
                 } }
@@ -78,17 +78,19 @@ public class GameLoop {
                 // Execute program cards in order. If cards on last program register are played, continue.
                 while (!roundPriority.isEmpty() && programRegister < 5) {
                     gameScreen.runProgram(players.get((Integer) roundPriority.pop()), programRegister); }
-                if (programRegister < 5) {
+                if (programRegister < 4) {
+                    programRegister++;
                     phase--;
                     break;
                 } else {
+                    canClean = true;
                     phase ++;
                     break;
                 }
 
            case 4:
                // Cleanup
-               if (programRegister >=5) {
+               if (canClean) {
                  for (Player player : players) {
                       player.clearHand();
                      }
@@ -97,6 +99,7 @@ public class GameLoop {
                  cardsShown = false;
                  programRegister = 0;
                  phase = 0;
+                 canClean = false;
                    break;
                } else {
                    break;

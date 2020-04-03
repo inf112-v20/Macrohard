@@ -56,15 +56,14 @@ public class GameScreen implements Screen {
         this.parent = parent;
 
         // Initialise players
-        Player player1 = new Player(1, 1, Direction.NORTH, false);
-        Player player2 = new Player(1, 2, Direction.NORTH, true);
-         final ArrayList<Player> players = new ArrayList<>(Arrays.asList(player1, player2));
+        Player player1 = new Player(3,3,Direction.NORTH,false);
+        Player player2 = new Player(1, 1, Direction.NORTH, false);
+        Player player3 = new Player(1, 2, Direction.NORTH, true);
+         final ArrayList<Player> players = new ArrayList<>(Arrays.asList(player2, player3));
 
         // Initialise board
-        board = new Board(players, 12,12);
-
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
-
+        board = new Board(players, handler,  12,12);
         map = handler.getMap();
 
         camera = new OrthographicCamera();
@@ -106,11 +105,11 @@ public class GameScreen implements Screen {
         });
         stage.addActor(button);
 
-        ip = new GameScreenInputManager(parent);
+        //ip = new GameScreenInputManager(parent);
 
         gameLoop = new GameLoop(board, clientPlayerIndex, this);
 
-      /*  GameScreenInputProcessor gameScreenInputProcessor = new GameScreenInputProcessor(player, board);
+       /* GameScreenInputProcessor gameScreenInputProcessor = new GameScreenInputProcessor(player1, board);
         stage.addListener(gameScreenInputProcessor);*/
     }
 
@@ -176,6 +175,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        // Comment this out to disable GameLoop
         gameLoop.tick();
 
         renderer.setView(camera);

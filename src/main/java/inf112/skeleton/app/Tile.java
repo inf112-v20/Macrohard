@@ -28,5 +28,8 @@ public class Tile {
     public void setOccupied(boolean occupied) {
         this.occupied = occupied;
     }
+    public boolean getOccupied() {
+        return occupied;
+    }
 
 }
