@@ -9,6 +9,8 @@ import inf112.skeleton.app.managers.TiledMapManager;
 
 import java.util.ArrayList;
 
+import java.util.ArrayList;
+
 public class Board {
 
     private final int height;
@@ -16,14 +18,17 @@ public class Board {
 
     private Tile[][] board;
     private Player player;
+    private ArrayList<Player> players;
 
     //Graphic-independent constructor for test-classes
     public Board(Player player, int height, int width) {
         this.player = player;
+    public Board(ArrayList<Player> players, int height, int width) {
+        this.players = players;
         this.height = height;
         this.width = width;
 
-        initializeBoard(player, height, width);
+        initializeBoard(players, height, width);
     }
 
     public Board(Player player, TiledMapManager manager) {
@@ -35,14 +40,16 @@ public class Board {
         buildWalls(manager);
     }
 
-    public void initializeBoard(Player player, int height, int width) {
+    public void initializeBoard(ArrayList<Player> players, int height, int width) {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
                 board[i][j] = new Tile(false, i, j);
             }
         }
-        setPlayer(player.getRow(), player.getCol());
+        for(Player player : players){
+            setPlayer(player.getRow(), player.getCol());
+        }
     }
 
     private void buildWalls(TiledMapManager manager) {
@@ -65,8 +72,6 @@ public class Board {
     public void setPlayer(int row, int col){
         if (!outOfBounds(row, col)){
             board[row][col].setOccupied(true);
-        } else {
-            this.player = null;
         }
     }
 
@@ -122,6 +127,22 @@ public class Board {
         }
     }
 
+    public Tile[][] getBoard() {
+        return board;
+    }
+
+    public Tile getTile(int row, int col){
+        return board[row][col];
+    }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getPlayer(int i){
+        return players.get(i);
+    }
+
     private Boolean outOfBounds(int row, int col) {
         return row < 0 || col < 0 || row >= height || col >= width;
     }
@@ -129,5 +150,8 @@ public class Board {
     private Boolean forwardCollision(Player player) {
         return board[player.getRow()][player.getCol()].getWalls().contains(player.getDirection());
     }
+        public Boolean isOccupied(Tile tile){
+            return tile.getOccupied();
+        }
 
 }

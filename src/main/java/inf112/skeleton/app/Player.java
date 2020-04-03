@@ -6,6 +6,8 @@ import inf112.skeleton.app.graphics.PlayerGraphic;
 
 public class Player {
 
+    public boolean hasChosenCards;
+    public boolean isNPC;
     private int row;
     private int col;
     private Direction direction;
@@ -14,10 +16,11 @@ public class Player {
     private PlayerGraphic playerGraphic;
 
 
-    public Player(int row, int col, Direction direction) {
+    public Player(int row, int col, Direction direction, boolean isNPC) {
         this.row = row;
         this.col = col;
         this.direction = direction;
+        this.isNPC = isNPC;
         this.healthPoints = 9;
     }
 
@@ -42,8 +45,10 @@ public class Player {
     }
 
     public void setProgram() {
-        hand.setFinalHand();
+        hand.setProgram();
     }
+
+    public void setHealthPoints (int hp) { this.healthPoints = hp;}
 
     public Direction getDirection () {
         return this.direction;
@@ -57,17 +62,18 @@ public class Player {
         return direction.getColumnTrajectory();
     }
 
-    public PlayerHand getHand () {
+    public PlayerHand getHand() {
         return this.hand;
     }
 
     public Card[] getProgram() {
-        return hand.getFinalHand();
+        return hand.getProgram();
     }
 
     public int getHealthPoints() {
         return this.healthPoints;
     }
+
 
     public void setGraphic(PlayerGraphic playerGraphic) {
         this.playerGraphic = playerGraphic;
@@ -75,6 +81,10 @@ public class Player {
 
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
+    }
+
+    public void clearHand() {
+        hand.clear();
     }
 
 }

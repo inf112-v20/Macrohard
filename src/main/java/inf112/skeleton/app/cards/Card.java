@@ -18,4 +18,8 @@ public abstract class Card {
         return cardType.toString();
     }
 
+
+    public int getPrio() {
+        return this.priority;}
+
 }

@@ -1,25 +1,31 @@
 package inf112.skeleton.app.cards;
 
-public class PlayerHand  {
+public class PlayerHand {
 
     private int handSize = 9;
     private Card[] program;
     private Card[] hand;
 
-    public void setHand(Card[] possibleHand) {
+    public void setPossibleHand(Card[] possibleHand) {
         this.hand = possibleHand;
         this.handSize = possibleHand.length;
     }
 
-    public void setFinalHand() {
+    public void setProgram() {
         this.program = new Card[5];
     }
 
-    public Card[] getPossibleHand() {
+    public Card[] getDealtHand() {
         return hand;
     }
 
-    public Card[] getFinalHand() {
+    public Card[] getProgram() {
         return program;
     }
+    public void clear() {
+        program = null;
+        hand = null;
+
+    }
 }
+

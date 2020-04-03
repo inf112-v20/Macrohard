@@ -10,6 +10,9 @@ import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 import inf112.skeleton.app.screens.PreferenceScreen;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class RoboRallyApplication extends com.badlogic.gdx.Game {
 
     private MenuScreen menuScreen;
@@ -23,7 +26,6 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     public final static int APPLICATION = 2;
     public static Music music;
 
-    private int currentScreen;
     private boolean hasGame = false;
 
     @Override
@@ -54,7 +56,6 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
                 menuScreen = new MenuScreen(this);
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
-                currentScreen = MAIN_MENU;
                 break;
             case PREFERENCES:
                 if(preferenceScreen == null) {
@@ -62,7 +63,6 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
                 }
                 this.setScreen(preferenceScreen);
                 preferenceScreen.setAsInputProcessor();
-                currentScreen = PREFERENCES;
                 break;
             case APPLICATION:
                 if(gameScreen == null){
@@ -70,7 +70,6 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
                 }
                 this.setScreen(gameScreen);
                 gameScreen.setAsInputProcessor();
-                currentScreen = APPLICATION;
                 break;
 
              default:
