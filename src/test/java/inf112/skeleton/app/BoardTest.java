@@ -112,10 +112,11 @@ public class BoardTest {
     }
 
     @Test
-    // Should set board.player to null when out of bounds
+    // Player should stay on current position if next position is out of bounds
     public void setPlayerOutOfBoundsTest() {
         board.setPlayer(13,13);
-        assertNull(board.getPlayers());
+        assertTrue(player.getRow() == 3);
+        assertTrue(player.getCol()==2);
     }
 
     @Test
