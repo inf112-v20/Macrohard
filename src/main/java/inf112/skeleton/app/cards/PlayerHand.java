@@ -22,11 +22,10 @@ public class PlayerHand {
     public Card[] getProgram() {
         return program;
     }
-    public boolean hasNull(Card[] program) {
-        for (int i= 0; i<program.length; i++) {
-            if (program[i] == null) return true;
-        }
-        return false;
+    public void clear() {
+        program = null;
+        hand = null;
+
     }
 }
 

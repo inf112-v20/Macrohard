@@ -1,10 +1,7 @@
 package inf112.skeleton.app;
 
 
-import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
-import inf112.skeleton.app.cards.MovementCard;
-import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import java.util.ArrayList;
@@ -17,14 +14,11 @@ public class GameLoop {
     ArrayList<Player> players;
     ArrayList<CardGraphic> cardImages;
     Stack roundPriority;
+    Deck deck;
     private int phase;
-    private int cardNumber = 0;
-    private Player largest;
+    private int programRegister = 0;
 
     private boolean cardsShown;
-    private boolean programLocked;
-    private boolean orderFixed;
-    private int clientPlayerIndex;
 
     public GameLoop(Board board, int clientPlayerIndex, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -40,7 +34,7 @@ public class GameLoop {
             case 0:
             // Deal hand to all players.
             for(Player player : players){
-                Deck deck = new Deck();
+                deck = new Deck();
                 deck.shuffle();
                 deck.dealHand(player);
             }
@@ -48,7 +42,7 @@ public class GameLoop {
             break;
 
            case 1:
-            // Draw cards on screen
+            // Draw cards on screen and lock in program for NPC's
                if (!cardsShown) {
                 for(int i = 0; i < players.get(0).getHand().getDealtHand().length; i++){
                     CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getDealtHand()[i]);
@@ -67,44 +61,66 @@ public class GameLoop {
             break;
 
             case 2:
+                // Decide the order in which program cards will be played
+                if (players.get(0).getProgram() != null) {
                 roundPriority = new Stack();
                 for (int j = 0; j<players.size(); j++) {
                     roundPriority.push(priorityHandler(players));
                 }
                 if (roundPriority.size() == players.size()) {
+                    programRegister++;
                     phase ++;
                     break;
-                }
+                } }
                 break;
 
            case 3:
-
-                while (!roundPriority.isEmpty()) {
-                    gameScreen.runProgram(players.get((Integer) roundPriority.pop()), cardNumber); }
-                cardNumber++;
-                if (roundPriority.isEmpty() && cardNumber < 5) {
+                // Execute program cards in order. If cards on last program register are played, continue.
+                while (!roundPriority.isEmpty() && programRegister < 5) {
+                    gameScreen.runProgram(players.get((Integer) roundPriority.pop()), programRegister); }
+                if (programRegister < 5) {
                     phase--;
                     break;
                 } else {
+                    phase ++;
                     break;
                 }
+
+           case 4:
+               // Cleanup
+               if (programRegister >=5) {
+                 for (Player player : players) {
+                      player.clearHand();
+                     }
+                 deck = null;
+                 gameScreen.clearCards(cardImages);
+                 cardsShown = false;
+                 programRegister = 0;
+                 phase = 0;
+                   break;
+               } else {
+                   break;
+               }
+
            default:
-               System.out.println("something went wrong :)");
+               System.out.println("phase index did an oopsie :)");
         }
         }
 
 
 
-    // returns the players index of the player with the highest priority card in slot equal to cardNumber
+    // returns the players index of the player with the highest priority card in the given programRegister
+    // Currently lots of workarounds to avoid nullpointer, should probably be cleaned up.
     public int priorityHandler(ArrayList<Player> players) {
         int max = Integer.MIN_VALUE;
+        if (phase == 2) {
         for (int i = 0; i<players.size(); i++) {
-            if (players.get(i).getProgram()[cardNumber] == null) continue;
-            if (players.get(i).getProgram()[cardNumber].getPrio() > max) {
+            if (players.get(i).getProgram() == null || players.get(i).getProgram()[programRegister] == null) continue;
+            if (players.get(i).getProgram()[programRegister].getPrio() > max) {
                 if (!roundPriority.isEmpty() &&(Integer) roundPriority.peek() == i) continue;
                 max = i;
             }
-        }
+        } }
         if (max == Integer.MIN_VALUE) return 0;
         return max;
     }

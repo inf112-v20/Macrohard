@@ -100,7 +100,8 @@ public class GameScreen implements Screen {
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                lockInProgram(players.get(clientPlayerIndex), players.get(clientPlayerIndex).getHand().getDealtHand());
+                players.get(0).setProgram();
+                lockInProgram(players.get(0), players.get(0).getHand().getDealtHand());
             }
         });
         stage.addActor(button);
@@ -111,7 +112,6 @@ public class GameScreen implements Screen {
     }
 
     public void lockInProgram(Player player, Card[] cards){
-        player.setProgram();
         // Create program of selected cards from hand
         for (int j = 0; j<cards.length; j++) {
             if (cards[j].handIndex == 1) {
@@ -151,7 +151,10 @@ public class GameScreen implements Screen {
         board.execute(player, card);
         player.getGraphics().updatePlayerGraphic(card, dir);
         player.getGraphics().animate();
-
+        if (player.isNPC) {
+            System.out.println("NPC Played Card: " + player.getProgram()[cardNumber]
+            );
+        }
     }
 
     public void setAsInputProcessor() {

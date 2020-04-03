@@ -77,7 +77,6 @@ public class Player {
         return this.healthPoints;
     }
 
-
     public void setGraphic(PlayerGraphic playerGraphic) {
         this.playerGraphic = playerGraphic;
     }
@@ -85,8 +84,9 @@ public class Player {
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
     }
-    public boolean programHasNull() {
-        return hand.hasNull(getProgram());
+
+    public void clearHand() {
+        hand.clear();
     }
 
 }
