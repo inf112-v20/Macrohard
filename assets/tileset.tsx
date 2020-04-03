@@ -158,7 +158,7 @@
  </tile>
  <tile id="26">
   <properties>
-   <property name="Direction" value=""/>
+   <property name="Direction" value="NORTH"/>
    <property name="Type" value="CONVEYOR_EXPRESS"/>
   </properties>
  </tile>

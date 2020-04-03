@@ -20,13 +20,14 @@ public enum Direction {
         return directions[(this.ordinal() - 1) % directions.length];
     }
 
-    public static Direction fromString(String string) {
+    public static Direction fromString(String string) throws IllegalArgumentException {
         switch (string) {
             case "NORTH": return NORTH;
             case "EAST": return EAST;
             case "SOUTH": return SOUTH;
             case "WEST": return WEST;
-            default: throw new IllegalArgumentException();
+            default:
+                throw new IllegalArgumentException();
         }
     }
 

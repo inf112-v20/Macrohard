@@ -4,13 +4,12 @@ import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.cards.RotationType;
-import inf112.skeleton.app.managers.TiledMapManager;
 import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class BoardTest {
+public class BoardMovementTest {
 
     private Player player1;
     private Board board;

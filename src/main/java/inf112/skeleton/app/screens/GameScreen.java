@@ -77,8 +77,32 @@ public class GameScreen implements Screen {
         PlayerGraphic playerGraphic = new PlayerGraphic(player);
         stage.addActor(playerGraphic);
 
-        TextButton button = new TextButton("GO!", parent.getSkin());
-        button.setBounds(750, 200, 100, 50);
+        TextButton conveyor = new TextButton("CONVEYOR", parent.getSkin());
+        conveyor.setBounds(750, 452, 150, 50);
+        conveyor.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                board.rollConveyorBelts(false);
+                player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                player.getGraphics().animate();
+            }
+        });
+        stage.addActor(conveyor);
+
+        TextButton conveyorExpress = new TextButton("EXPRESS", parent.getSkin());
+        conveyorExpress.setBounds(750, 400, 150, 50);
+        conveyorExpress.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                board.rollConveyorBelts(true);
+                player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                player.getGraphics().animate();
+            }
+        });
+        stage.addActor(conveyorExpress);
+
+        TextButton button = new TextButton("PROGRAM", parent.getSkin());
+        button.setBounds(750, 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {

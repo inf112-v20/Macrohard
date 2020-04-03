@@ -47,6 +47,11 @@ public class Player {
         this.col = col;
     }
 
+    public void stepIn(Direction direction) {
+        setRow(row + direction.getRowTrajectory());
+        setCol(col + direction.getColumnTrajectory());
+    }
+
     public void setDirection(Direction direction) {
         this.direction = direction;
     }
@@ -90,6 +95,7 @@ public class Player {
     public void reSpawn() {
         setRow(spawnPoint.getRow());
         setCol(spawnPoint.getCol());
+        spawnPoint.setPlayer(this);
     }
 
     public int getNextRow(int directionScalar) {
