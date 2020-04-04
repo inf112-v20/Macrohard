@@ -144,4 +144,10 @@ public class CardGraphic extends Image {
 
     }
 
+    public void reset() {
+        statx = 100/2;
+        initiatedCards = 0;
+        indecies = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+    }
+
 }

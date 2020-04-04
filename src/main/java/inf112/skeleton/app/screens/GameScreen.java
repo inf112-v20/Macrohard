@@ -121,7 +121,7 @@ public class GameScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 board.rollConveyorBelts(true);
                 for (Player player : players) {
-                    player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                    player.getGraphics().animateMove(player.getCol(), player.getRow(), 2);
                     player.getGraphics().animate();
                 }
             }
@@ -217,7 +217,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Comment this out to disable GameLoop
-        //gameLoop.tick();
+        gameLoop.tick();
 
         renderer.setView(camera);
         renderer.render();
@@ -259,6 +259,7 @@ public class GameScreen implements Screen {
     }
     public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
         for (CardGraphic cardGraphic : cardsOnScreen) {
+            cardGraphic.reset();
             cardGraphic.remove();
         }
     }
