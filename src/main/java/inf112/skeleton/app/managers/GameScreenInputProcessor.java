@@ -27,33 +27,35 @@ public class GameScreenInputProcessor extends InputListener {
         super.keyDown(event, keycode);
 
         switch (keycode){
-
             case Input.Keys.ESCAPE:
                 parent.changeScreen(RoboRallyApplication.MAIN_MENU);
                 return super.keyDown(event, keycode);
             case Input.Keys.UP:
                 MovementCard movementCardUp = new MovementCard(0, MovementType.ONE_FORWARD);
                 board.execute(player, movementCardUp);
-                player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                parent.getGameScreen().updatePlayerGraphics();
+                //System.out.println(player);
                 break;
             case Input.Keys.DOWN:
                 MovementCard movementCardDown = new MovementCard(0, MovementType.ONE_BACKWARD);
                 board.execute(player, movementCardDown);
-                player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+                parent.getGameScreen().updatePlayerGraphics();
+                //System.out.println(player);
                 break;
             case Input.Keys.RIGHT:
                 Direction oldDirectionR = player.getDirection();
                 RotationCard rotationCardRight = new RotationCard(0, RotationType.CLOCKWISE);
                 board.execute(player, rotationCardRight);
                 player.getGraphics().animateRotation(oldDirectionR, player.getDirection());
+                //System.out.println(player);
                 break;
             case Input.Keys.LEFT:
                 Direction oldDirectionL = player.getDirection();
                 RotationCard rotationCardLeft = new RotationCard(0, RotationType.COUNTER_CLOCKWISE);
                 board.execute(player, rotationCardLeft);
                 player.getGraphics().animateRotation(oldDirectionL, player.getDirection());
+                //System.out.println(player);
                 break;
-
         }
 
         player.getGraphics().animate();

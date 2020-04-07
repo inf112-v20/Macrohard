@@ -8,6 +8,7 @@ public enum Direction {
     WEST;
 
     private static Direction[] directions = values();
+    private Object o;
 
     public Direction turnClockwise() {
         return directions[(this.ordinal() + 1) % directions.length];
@@ -57,4 +58,15 @@ public enum Direction {
     public int getColumnTrajectory() {
         return this.getMoveCoordinates()[1];
     }
+
+    public static float getDegreesBetween(Direction from, Direction to) {
+        if (from.opposite().equals(to)) {
+            return (float) 180.0;
+        } else if (from.turnClockwise().equals(to)) {
+            return (float) -90.0;
+        } else if (from.turnCounterClockwise().equals(to)) {
+            return (float) 90.0;
+        } else { return (float) 0.0; }
+    }
+
 }

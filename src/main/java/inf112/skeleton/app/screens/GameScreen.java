@@ -21,7 +21,6 @@ import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.ListIterator;
 import java.util.Random;
 
 public class GameScreen implements Screen {
@@ -46,37 +45,38 @@ public class GameScreen implements Screen {
 
     private Stage stage;
     private GameLoop gameLoop;
-    private ArrayList<Player> players;
+    private final ArrayList<Player> players;
     public int clientPlayerIndex = 0;
 
-    public GameScreen(RoboRallyApplication parent){
+    public GameScreen(final RoboRallyApplication parent){
 
         // ---- INITIALISATION ----
         stage = new Stage(new ScreenViewport());
         this.parent = parent;
 
         // Initialise players
-        Player player1 = new Player(3,3,Direction.NORTH,false);
-        Player player2 = new Player(1, 1, Direction.NORTH, false);
-        Player player3 = new Player(1, 2, Direction.NORTH, true);
-         final ArrayList<Player> players = new ArrayList<>(Arrays.asList(player2, player3));
+        Player player1 = new Player(1, 1, Direction.NORTH, false);
+        Player player2 = new Player(1, 2, Direction.NORTH, true);
+        Player player3 = new Player(1, 3, Direction.NORTH, true);
+        Player player4 = new Player(1, 4, Direction.NORTH, true);
+        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
 
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
-        board = new Board(players, handler,  12,12);
         map = handler.getMap();
+        board = new Board(players, handler,  12,12);
 
+        // Initialise board-view
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.translate(0, -tileSize*camera.zoom*2);
+        renderer = new OrthogonalTiledMapRenderer(map);
 
-
-        // ---- TILED ----
+        // Initialise tile-layers
         boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
-
         playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
 
-        // Place players on playerlayer
+        // Place players on Player-layer
         for (int i = 0; i < players.size(); i++) {
             TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
             if(i == clientPlayerIndex){
@@ -84,8 +84,6 @@ public class GameScreen implements Screen {
             }
             playerLayer.setCell(players.get(i).getRow(), players.get(i).getCol(), playerCell);
         }
-
-        renderer = new OrthogonalTiledMapRenderer(map);
 
         // ---- GRAPHICS ----
         for (Player player : players) {
@@ -95,8 +93,7 @@ public class GameScreen implements Screen {
         }
 
         // --- INPUT ----
-
-        inputProcessor = new GameScreenInputProcessor(parent, player2, board);
+        inputProcessor = new GameScreenInputProcessor(parent, player1, board);
         stage.addListener(inputProcessor);
 
         //Initialise buttons
@@ -106,10 +103,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 board.rollConveyorBelts(false);
-                for (Player player : players) {
-                    player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
-                    player.getGraphics().animate();
-                }
+                updatePlayerGraphics();
             }
         });
         stage.addActor(conveyor);
@@ -120,10 +114,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 board.rollConveyorBelts(true);
-                for (Player player : players) {
-                    player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
-                    player.getGraphics().animate();
-                }
+                updatePlayerGraphics();
             }
         });
         stage.addActor(conveyorExpress);
@@ -144,9 +135,7 @@ public class GameScreen implements Screen {
         changePlayer.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                System.out.println(players.indexOf(inputProcessor.getPlayer()));
                 int index = (players.indexOf(inputProcessor.getPlayer()) + 1) % players.size();
-                System.out.println(index);
                 inputProcessor.setPlayer(players.get(index));
             }
         });
@@ -156,25 +145,34 @@ public class GameScreen implements Screen {
 
     }
 
+    public void updatePlayerGraphics() {
+        for (Player player : players) {
+            player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
+            player.getGraphics().animateRotation(player.getGraphics().getDirection(), player.getDirection());
+            player.getGraphics().animate();
+        }
+    }
+
     public void lockInProgram(Player player, Card[] cards){
         // Create program of selected cards from hand
-        for (int j = 0; j<cards.length; j++) {
-            if (cards[j].handIndex == 1) {
-                player.getProgram()[0] = cards[j];
-            }else if (cards[j].handIndex == 2) {
-                player.getProgram()[1] = cards[j];
-            }else if (cards[j].handIndex == 3) {
-                player.getProgram()[2] = cards[j];
-            }else if (cards[j].handIndex == 4) {
-                player.getProgram()[3] = cards[j];
-            }else if (cards[j].handIndex == 5) {
-                player.getProgram()[4] = cards[j];
-            } else { continue;}
+        for (Card card : cards) {
+            if (card.handIndex == 1) {
+                player.getProgram()[0] = card;
+            } else if (card.handIndex == 2) {
+                player.getProgram()[1] = card;
+            } else if (card.handIndex == 3) {
+                player.getProgram()[2] = card;
+            } else if (card.handIndex == 4) {
+                player.getProgram()[3] = card;
+            } else if (card.handIndex == 5) {
+                player.getProgram()[4] = card;
+            }
         }
         player.hasChosenCards = true;
         System.out.println(Arrays.toString(player.getProgram()
         ));
     }
+
     public void lockRandomProgram(Player player) {
         player.setProgram();
         Random rand = new Random();
@@ -257,9 +255,11 @@ public class GameScreen implements Screen {
     public void addStageActor(Image actor) {
         stage.addActor(actor);
     }
+
     public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
         for (CardGraphic cardGraphic : cardsOnScreen) {
             cardGraphic.remove();
         }
     }
+
 }

@@ -18,29 +18,18 @@ public class Board {
     private final int width;
 
     private Tile[][] board;
-    private Player player;
     private ArrayList<Player> players;
 
     //Graphic-independent constructor for test-classes
-    public Board(Player player, int height, int width) {
-        this.player = player;
+    public Board(ArrayList<Player> players, int height, int width) {
+        this.players = players;
         this.height = height;
         this.width = width;
 
         initializeBoard(height, width);
-        set(player);
-    }
-
-    public Board(Player player, TiledMapManager mapManager) {
-        this.player = player;
-        this.height = 12;
-        this.width = 12;
-
-        initializeBoard(height, width);
-        installConveyorBelts(mapManager);
-        digHoles(mapManager);
-        erectWalls(mapManager);
-        set(player);
+        for (Player player : players) {
+            set(player);
+        }
     }
 
     //Constructor for multiple players
@@ -105,7 +94,7 @@ public class Board {
                     TiledMapTileLayer.Cell wall = manager.getCell("CONVEYOR_BELTS", row, col);
                     String value = (String) wall.getTile().getProperties().get("Direction");
                     Direction dir = Direction.fromString(value);
-                    boolean express = ((String) wall.getTile().getProperties().get("Type")).equals("CONVEYOR_EXPRESS");
+                    boolean express = (wall.getTile().getProperties().get("Type")).equals("CONVEYOR_EXPRESS");
                     board[row][col] = new ConveyorBelt(row, col, dir, express);
                 }
             }
@@ -131,44 +120,129 @@ public class Board {
         Direction direction = (card.getMoveID() == -1? player.getDirection().opposite() : player.getDirection());
 
         for (int i = 0; i < roof; i ++) {
-            if (stepOne(player, direction)) { continue; } else { break; }
+            if (legalStep(player, direction)) { stepOne(player, direction); } else { break; }
         }
     }
 
     public void rollConveyorBelts(boolean expressOnly) {
         ArrayList<ConveyorBelt> belts = new ArrayList<>();
+        ArrayList<Player> players = new ArrayList<>();
         for (int row = 0; row < height; row ++) {
             for (int col = 0; col < width; col ++) {
                 if (board[row][col] instanceof ConveyorBelt && board[row][col].isOccupied()) {
                     ConveyorBelt belt = (ConveyorBelt) board[row][col];
                     if (!expressOnly || belt.isExpress()) {
                         belts.add(belt);
+                        players.add(belt.getPlayer());
                     }
                 }
             }
         }
-        for (ConveyorBelt belt : belts) {
-            stepOne(belt.getPlayer(), belt.getDirection());
+        for (int i = 0; i < belts.size(); i ++) {
+            ConveyorBelt belt = belts.get(i);
+            Player beltPlayer = players.get(i);
+            if (legalRoll(belt, expressOnly, belt.getDirection())) {
+                roll(belt, beltPlayer, expressOnly);
+            }
         }
     }
 
-    public boolean stepOne(Player player, Direction direction) {
-        if (legalStep(player, direction)) {
-            board[player.getRow()][player.getCol()].setPlayer(null);
-            player.stepIn(direction);
-            if (board[player.getRow()][player.getCol()] instanceof Hole) {
-                player.reSpawn();
-                return false;
+    private void roll(ConveyorBelt belt, Player player, boolean express) {
+        Direction direction = belt.getDirection();
+        Tile toTile = getAdjacentTile(belt, direction);
+
+        //Move next player
+        if (toTile.isOccupied()) {
+            if (!(toTile instanceof ConveyorBelt)) {
+                stepOne(toTile.getPlayer(), direction);
             }
             else {
-                board[player.getRow()][player.getCol()].setPlayer(player);
-                return true;
+                ConveyorBelt nextBelt = (ConveyorBelt) toTile;
+                if (express && !nextBelt.isExpress()) {
+                    stepOne(toTile.getPlayer(), direction);
+                }
             }
-        } else { return false; }
+        }
+
+        //Respawn player if player is rolled into a hole, step if otherwise
+        if (toTile instanceof Hole) {
+            player.reSpawn();
+            toTile = player.getSpawnPoint();
+        }
+        else {
+            player.stepIn(direction);
+            //Rotate player if the conveyor belt swings either left or right
+            //Assumes that there are no two conveyor belts pointing into each other
+            if (getTile(player) instanceof ConveyorBelt) {
+                ConveyorBelt nextBelt = (ConveyorBelt) getTile(player);
+                if (!direction.equals(nextBelt.getDirection())) {
+                    if (direction.turnClockwise().equals(nextBelt.getDirection())) {
+                        player.turnClockwise();
+                    }
+                    else if (direction.turnCounterClockwise().equals(nextBelt.getDirection())) {
+                        player.turnCounterClockwise();
+                    }
+                }
+            }
+        }
+
+        if (belt.isOccupied() && belt.getPlayer().equals(player)) {
+            belt.setPlayer(null);
+        }
+        toTile.setPlayer(player);
     }
 
-    private boolean legalStep(Player player, Direction direction) {
-        return (!collision(player, direction) && !outOfBounds(player, direction));
+    public void stepOne(Player player, Direction direction) {
+        Tile fromTile = getTile(player);
+        Tile toTile = getAdjacentTile(fromTile, direction);
+        if (toTile.isOccupied()) {
+            stepOne(toTile.getPlayer(), direction);
+        }
+        if (toTile instanceof Hole) {
+            player.reSpawn();
+            toTile = player.getSpawnPoint();
+        }
+        else {
+            player.stepIn(direction);
+        }
+        if (fromTile.isOccupied() && fromTile.getPlayer().equals(player)) {
+            fromTile.setPlayer(null);
+        }
+        toTile.setPlayer(player);
+    }
+
+    public boolean legalStep(Player player, Direction direction) {
+        if (outOfBounds(player, direction)) {
+            return false;
+        }
+        Tile toTile = getAdjacentTile(getTile(player), direction);
+        if (!toTile.isOccupied()) {
+            return (!collision(player, direction));
+        }
+        else { return legalStep(toTile.getPlayer(), direction); }
+    }
+
+    public boolean legalRoll(ConveyorBelt belt, boolean expressOnly, Direction direction) {
+        Player player = belt.getPlayer();
+        if (outOfBounds(player, direction)) {
+            return false;
+        }
+        Tile toTile = getAdjacentTile(getTile(player), direction);
+        if (!toTile.isOccupied()) {
+            return (!collision(player, direction));
+        }
+        else if (toTile instanceof ConveyorBelt) {
+            ConveyorBelt toBelt = (ConveyorBelt) toTile;
+            if (!expressOnly || toBelt.isExpress()) {
+                return legalRoll(toBelt, expressOnly, toBelt.getDirection());
+            }
+            else {
+                return legalStep(toBelt.getPlayer(), direction);
+            }
+        }
+        else {
+            return legalStep(toTile.getPlayer(), direction);
+        }
     }
 
     private boolean outOfBounds(int row, int col) {
@@ -182,7 +256,7 @@ public class Board {
     }
 
     private boolean collision(Player player, Direction direction) {
-        return board[player.getRow()][player.getCol()].getWalls().contains(direction);
+        return getTile(player).getWalls().contains(direction);
     }
 
     public Tile[][] getBoard() {
@@ -191,6 +265,14 @@ public class Board {
 
     public Tile getTile(int row, int col){
         return board[row][col];
+    }
+
+    public Tile getTile(Player player) {
+        return getTile(player.getRow(), player.getCol());
+    }
+
+    public Tile getAdjacentTile(Tile tile, Direction direction) {
+        return board[tile.getRow() + direction.getRowTrajectory()][tile.getCol() + direction.getColumnTrajectory()];
     }
 
     public ArrayList<Player> getPlayers() {

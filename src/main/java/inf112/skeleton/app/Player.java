@@ -58,7 +58,6 @@ public class Player {
     public void reSpawn() {
         setRow(spawnPoint.getRow());
         setCol(spawnPoint.getCol());
-        spawnPoint.setPlayer(this);
     }
 
 
@@ -74,14 +73,6 @@ public class Player {
 
     public Direction getDirection () {
         return this.direction;
-    }
-
-    public int getRowTrajectory() {
-        return direction.getRowTrajectory();
-    }
-
-    public int getColumnTrajectory() {
-        return direction.getColumnTrajectory();
     }
 
     public PlayerHand getHand() {
@@ -109,4 +100,20 @@ public class Player {
         hand.clear();
     }
 
+    public void turnClockwise() {
+        setDirection(getDirection().turnClockwise());
+    }
+
+    public void turnCounterClockwise() {
+        setDirection(getDirection().turnCounterClockwise());
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "row=" + row +
+                ", col=" + col +
+                ", direction=" + direction +
+                '}';
+    }
 }

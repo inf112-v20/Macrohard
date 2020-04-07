@@ -29,7 +29,7 @@ public class BoardMovementTest {
     @Before
     public void setUp() {
         player = new Player(initRow, initCol, Direction.NORTH, true);
-        board = new Board(player,10, 10);
+        board = new Board(new ArrayList<>(Arrays.asList(player)),10, 10);
     }
 
     @Test
