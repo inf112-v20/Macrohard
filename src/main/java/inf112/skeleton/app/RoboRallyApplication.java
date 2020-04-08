@@ -43,7 +43,7 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     private void initializeMusic() {
         music = Gdx.audio.newMusic(Gdx.files.internal("data/test1.wav"));
         music.setLooping(true);
-        //music.play();
+        music.play();
     }
 
     public AppPreferences getPreferences(){
