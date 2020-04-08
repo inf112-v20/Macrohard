@@ -27,19 +27,19 @@ public class Board {
         this.height = height;
         this.width = width;
 
-        layTiles(height, width);
+        layTiles();
         for (Player player : players) {
             set(player);
         }
     }
 
     //Graphic-dependent constructor for multiple players
-    public Board(ArrayList<Player> players, TiledMapManager mapManager, int height, int width) {
+    public Board(ArrayList<Player> players, TiledMapManager mapManager) {
         this.players = players;
-        this.height = height;
-        this.width = width;
+        this.height = mapManager.getHeight();
+        this.width = mapManager.getWidth();
 
-        layTiles(mapManager, height, width);
+        layTiles(mapManager);
         erectWalls(mapManager);
 
         for (Player player : players) { set(player); }
@@ -51,7 +51,7 @@ public class Board {
     }
 
     //Fills the board with standard tiles
-    public void layTiles(int height, int width) {
+    public void layTiles() {
         board = new Tile[height][width];
         for (int i = 0; i < height; i ++){
             for (int j = 0; j < width; j ++) {
@@ -61,7 +61,7 @@ public class Board {
     }
 
     //Fills the board with tiles in accordance with the mapManager
-    public void layTiles(TiledMapManager mapManager, int height, int width) {
+    public void layTiles(TiledMapManager mapManager) {
         board = new Tile[height][width];
         for (int row = 0; row < height; row ++){
             for (int col = 0; col < width; col ++) {
