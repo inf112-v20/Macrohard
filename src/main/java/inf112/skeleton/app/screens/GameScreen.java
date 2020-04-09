@@ -58,8 +58,8 @@ public class GameScreen implements Screen {
         // Initialise players
         Player player1 = new Player(1, 1, Direction.NORTH, false);
         Player player2 = new Player(1, 2, Direction.NORTH, true);
-        Player player3 = new Player(1, 3, Direction.NORTH, true);
-        Player player4 = new Player(1, 4, Direction.NORTH, true);
+        Player player3 = new Player(1, 8, Direction.EAST, true);
+        Player player4 = new Player(1, 10, Direction.WEST, true);
         players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
 
         // Initialise board

@@ -131,6 +131,7 @@ public class Board {
 
     private ArrayList<Player> queueConveyorBelts(boolean expressOnly) {
         queuedConveyorBelts = new LinkedList<>();
+        ArrayList<Tile> targetTiles = new ArrayList<>();
         ArrayList<Player> players = new ArrayList<>();
         for (Tile[] row : board) {
             for (Tile tile : row) {
@@ -138,8 +139,18 @@ public class Board {
                     ConveyorBelt belt = (ConveyorBelt) tile;
                     if (!expressOnly || belt.isExpress()) {
                         if (legalRoll(belt, expressOnly, belt.getDirection())) {
-                            queuedConveyorBelts.add(belt);
-                            players.add(belt.getPlayer());
+                            Tile targetTile = getAdjacentTile(belt, belt.getDirection());
+                            int index = targetTiles.indexOf(targetTile);
+                            if (targetTiles.contains(targetTile)) {
+                                queuedConveyorBelts.remove(index);
+                                players.remove(index);
+                            }
+                            else {
+                                queuedConveyorBelts.add(belt);
+                                players.add(belt.getPlayer());
+                                targetTiles.add(targetTile);
+                            }
+
                         }
                     }
                 }
@@ -258,8 +269,8 @@ public class Board {
                 }
             }
         }
-        // Else check if next player can be legally pushed
-        return legalStep(toTile.getPlayer(), direction);
+        // Else, robot is not allowed to roll, since you can't push other robots when you roll
+        return false;
     }
 
     private boolean outOfBounds(int row, int col) {
