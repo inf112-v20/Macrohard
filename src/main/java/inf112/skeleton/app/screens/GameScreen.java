@@ -65,7 +65,7 @@ public class GameScreen implements Screen {
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
         map = handler.getMap();
-        board = new Board(players, handler,  12,12);
+        board = new Board(players, handler);
 
         // Initialise board-view
         camera = new OrthographicCamera();

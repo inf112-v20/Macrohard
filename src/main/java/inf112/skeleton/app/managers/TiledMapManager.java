@@ -1,5 +1,6 @@
 package inf112.skeleton.app.managers;
 
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -10,9 +11,15 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 public class TiledMapManager {
 
     private final TiledMap map;
+    private final MapProperties properties;
+    private final int height;
+    private final int width;
 
-    public TiledMapManager (String fileName){
+    public TiledMapManager (String fileName) {
         map = new TmxMapLoader().load(fileName);
+        properties = map.getProperties();
+        height = properties.get("height", Integer.class);
+        width = properties.get("width", Integer.class);
     }
 
     public TiledMap getMap (){
@@ -25,6 +32,14 @@ public class TiledMapManager {
 
     public TiledMapTileLayer.Cell getCell(String layerName, int row, int col) {
         return getLayer(layerName).getCell(col, row);
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public int getWidth() {
+        return width;
     }
 
 }
