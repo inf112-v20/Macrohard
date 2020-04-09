@@ -19,6 +19,7 @@ public class GameLoop {
     Deck deck;
     private int phase;
     private int programRegister = 0;
+    private int playersPlayed = 0;
 
     private boolean cardsShown;
     private boolean canClean;
@@ -78,28 +79,40 @@ public class GameLoop {
            case 3:
                // Execute program cards in order. If last player played his card on current programRegister, continue.
                if (canPlay && programRegister < 5 && !priority.isEmpty()) {
-                   for (int i = 0; i<priority.size(); i++) {
-                       gameScreen.runProgram(priority.get(i), programRegister);
-                   }
+                       gameScreen.runProgram(priority.get(playersPlayed), programRegister);
+                       phase ++;
+                       break;
+               }
+               break;
+
+           case 4:
+               if (playersPlayed < priority.size()-1) {
+                   playersPlayed++;
+                   phase --;
+                   break;
+
+               } else {
                    priority.clear();
                    canPlay = false;
                    phase++;
                    break;
                }
 
-           case 4:
+           case 5:
                // Board elements move
                if(priority.isEmpty() && !canPlay) {
                    board.rollConveyorBelts(false);
                    gameScreen.updatePlayerGraphics();
                    board.rollConveyorBelts(true);
                    gameScreen.updatePlayerGraphics();
+                   gameScreen.mapHandler.getLayer("LASERS").setVisible(true);
+                   board.fireLasers();
                canClean = true;
                phase ++;
                break; } break;
 
 
-           case 5:
+           case 6:
                // Increment programRegister and reset gameLoop values.
                // if on last programRegister, do full round cleanup
                    if (programRegister == 4) {
@@ -108,16 +121,18 @@ public class GameLoop {
                        break;
                    } else {
                    programRegister++;
+                   playersPlayed = 0;
                    phase = 2;
                    canClean = false;
                    break;
                }
 
-           case 6:
+           case 7:
         if (canClean && roundOver) {
             for (Player player : players) {
                 player.clearHand();
             }
+            playersPlayed = 0;
             deck = null;
             gameScreen.clearCards(cardImages);
             cardsShown = false;

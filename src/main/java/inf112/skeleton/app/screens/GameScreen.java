@@ -30,7 +30,7 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer.Cell playerCell;
     private RoboRallyApplication parent;
 
-    private TiledMapManager mapHandler;
+    public TiledMapManager mapHandler;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
@@ -38,7 +38,7 @@ public class GameScreen implements Screen {
     private int tileSize = 60;
     private int gridSize = 12;
     private float timeInSeconds = 0f;
-    private float period = 0.5f;
+    private float period = 1f;
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
@@ -198,7 +198,7 @@ public class GameScreen implements Screen {
     public void lockRandomProgram(Player player) {
         player.setProgram();
         Random rand = new Random();
-        int[] ranval =new int[player.getHealthPoints()];
+        int[] ranval =new int[9-player.getDamageTokens()];
         for (int j = 0; j < ranval.length; j++) ranval[j] = j;
         for (int i = ranval.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
@@ -207,7 +207,11 @@ public class GameScreen implements Screen {
             ranval[index] = temp;
         }
         for (int i = 0; i<5; i++) {
-                player.getProgram()[i] = player.getHand().getHand()[i];
+                if (player.getHand().getHand()[i] != null) {
+                    player.getProgram()[i] = player.getHand().getHand()[i];
+                } else {
+                    player.getProgram()[i] = null;
+                }
         }
     }
 
