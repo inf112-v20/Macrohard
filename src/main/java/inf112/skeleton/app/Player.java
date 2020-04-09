@@ -110,7 +110,11 @@ public class Player {
         return "Player{" +
                 "row=" + row +
                 ", col=" + col +
-                ", direction=" + direction +
+                ", damage=" + damageTokens +
                 '}';
+    }
+
+    public void applyDamage(int damage) {
+        this.damageTokens += damage;
     }
 }

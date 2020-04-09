@@ -17,6 +17,7 @@ public class TiledMapManager {
 
     public TiledMapManager (String fileName) {
         map = new TmxMapLoader().load(fileName);
+        map.getLayers().get("LASERS").setVisible(false);
         properties = map.getProperties();
         height = properties.get("height", Integer.class);
         width = properties.get("width", Integer.class);

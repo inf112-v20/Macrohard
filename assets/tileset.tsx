@@ -219,13 +219,17 @@
  <tile id="36">
   <properties>
    <property name="Direction" value="SOUTH"/>
-   <property name="Type" value="WALL_LASER"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="NORTH"/>
+   <property name="LaserDamage" value="1"/>
   </properties>
  </tile>
  <tile id="37">
   <properties>
    <property name="Direction" value="WEST"/>
-   <property name="Type" value="WALL_LASER"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="EAST"/>
+   <property name="LaserDamage" value="1"/>
   </properties>
  </tile>
  <tile id="38">
@@ -269,13 +273,17 @@
  <tile id="44">
   <properties>
    <property name="Direction" value="NORTH"/>
-   <property name="Type" value="WALL_LASER"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="SOUTH"/>
+   <property name="LaserDamage" value="1"/>
   </properties>
  </tile>
  <tile id="45">
   <properties>
    <property name="Direction" value="EAST"/>
-   <property name="Type" value="WALL_LASER"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="WEST"/>
+   <property name="LaserDamage" value="1"/>
   </properties>
  </tile>
  <tile id="46">
@@ -492,25 +500,33 @@
  <tile id="86">
   <properties>
    <property name="Direction" value="SOUTH"/>
-   <property name="Type" value="WALL_LASER_DOUBLE"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="NORTH"/>
+   <property name="LaserDamage" value="2"/>
   </properties>
  </tile>
  <tile id="92">
   <properties>
    <property name="Direction" value="WEST"/>
-   <property name="Type" value="WALL_LASER_DOUBLE"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="EAST"/>
+   <property name="LaserDamage" value="2"/>
   </properties>
  </tile>
  <tile id="93">
   <properties>
    <property name="Direction" value="NORTH"/>
-   <property name="Type" value="WALL_LASER_DOUBLE"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="SOUTH"/>
+      <property name="LaserDamage" value="2"/>
   </properties>
  </tile>
  <tile id="94">
   <properties>
    <property name="Direction" value="EAST"/>
-   <property name="Type" value="WALL_LASER_DOUBLE"/>
+   <property name="Type" value="WALL"/>
+   <property name="LaserDirection" value="WEST"/>
+   <property name="LaserDamage" value="2"/>
   </properties>
  </tile>
  <tile id="100">

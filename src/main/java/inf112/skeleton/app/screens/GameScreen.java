@@ -30,6 +30,7 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer.Cell playerCell;
     private RoboRallyApplication parent;
 
+    private TiledMapManager mapHandler;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
@@ -64,6 +65,7 @@ public class GameScreen implements Screen {
 
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
+        mapHandler = handler;
         map = handler.getMap();
         board = new Board(players, handler);
 
@@ -74,8 +76,8 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialise tile-layers
-        boardLayer = (TiledMapTileLayer) map.getLayers().get("Board");
-        playerLayer = (TiledMapTileLayer) map.getLayers().get("Player");
+        boardLayer = mapHandler.getLayer("Board");
+        playerLayer = mapHandler.getLayer("Player");
 
         // Place players on Player-layer
         for (int i = 0; i < players.size(); i++) {
@@ -98,6 +100,24 @@ public class GameScreen implements Screen {
         stage.addListener(inputProcessor);
 
         //Initialise buttons
+        TextButton laserOn = new TextButton("LASER ON/OFF", parent.getSkin());
+        laserOn.setBounds(750, 600, 200, 50);
+        laserOn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                boolean on = !mapHandler.getLayer("LASERS").isVisible();
+                mapHandler.getLayer("LASERS").setVisible(on);
+                if (on) {
+                    board.fireLasers();
+                }
+                for (Player player : players) {
+                    System.out.println(player);
+                }
+
+            }
+        });
+        stage.addActor(laserOn);
+
         TextButton conveyor = new TextButton("CONVEYOR", parent.getSkin());
         conveyor.setBounds(750, 452, 150, 50);
         conveyor.addListener(new ChangeListener() {
