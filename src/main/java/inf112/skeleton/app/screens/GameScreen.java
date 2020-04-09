@@ -35,7 +35,8 @@ public class GameScreen implements Screen {
 
     private int tileSize = 60;
     private int gridSize = 12;
-
+    private float timeInSeconds = 0f;
+    private float period = 0.5f;
     private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
@@ -141,7 +142,7 @@ public class GameScreen implements Screen {
         });
         stage.addActor(changePlayer);
 
-        gameLoop = new GameLoop(board, clientPlayerIndex, this);
+        gameLoop = new GameLoop(board, this);
 
     }
 
@@ -176,7 +177,8 @@ public class GameScreen implements Screen {
     public void lockRandomProgram(Player player) {
         player.setProgram();
         Random rand = new Random();
-        int[] ranval ={0,1,2,3,4,5,6,7,8,9};
+        int[] ranval =new int[player.getHealthPoints()];
+        for (int j = 0; j < ranval.length; j++) ranval[j] = j;
         for (int i = ranval.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
             int temp = ranval[i];
@@ -194,10 +196,10 @@ public class GameScreen implements Screen {
         board.execute(player, card);
         player.getGraphics().updatePlayerGraphic(card, dir);
         player.getGraphics().animate();
-        if (player.isNPC) {
+       /* if (player.isNPC) {
             System.out.println("NPC Played Card: " + player.getProgram()[cardNumber]
             );
-        }
+        }*/
     }
 
     public void setAsInputProcessor() {
@@ -215,7 +217,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Comment this out to disable GameLoop
-        gameLoop.tick();
+        timeInSeconds += Gdx.graphics.getRawDeltaTime();
+        if (timeInSeconds > period) {
+            timeInSeconds -= period;
+            gameLoop.tick();
+        }
 
         renderer.setView(camera);
         renderer.render();

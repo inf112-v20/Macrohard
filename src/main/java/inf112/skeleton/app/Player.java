@@ -16,6 +16,7 @@ public class Player {
     public PlayerHand hand;
     private int healthPoints;
     private PlayerGraphic playerGraphic;
+    public int programRegister = 0;
 
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
@@ -106,6 +107,18 @@ public class Player {
 
     public void turnCounterClockwise() {
         setDirection(getDirection().turnCounterClockwise());
+    }
+
+    public int getPriorityOfCardOnCurrentProgramRegister(){
+        if (getProgram() != null && programRegister < 5) {
+            if (getProgram()[programRegister] != null) {
+                return getProgram()[programRegister].getPrio();
+            } else {
+                getGraphics().animate();
+                return -1;
+            }
+        }
+        return -1;
     }
 
     @Override

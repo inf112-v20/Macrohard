@@ -53,13 +53,13 @@ public class Deck {
         p.setPossibleHand(cardChoices);
         player.hand = p;
         deckSize -= choiceSize;
-        resize(deck, choiceSize);
+        deck = resize(deck, choiceSize);
     }
 
     public Card[] resize (Card[] oldDeck, int sizeDifference) {
         Card[] newDeck = new Card[deckSize];
         for (int i = 0; i < deckSize; i ++) {
-            newDeck[i] = oldDeck[8+i];
+            newDeck[i] = oldDeck[sizeDifference+i];
         }
         return newDeck;
     }
