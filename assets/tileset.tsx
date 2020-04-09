@@ -537,49 +537,49 @@
  <tile id="120">
   <properties>
    <property name="Number" value="1"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="121">
   <properties>
    <property name="Number" value="2"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="122">
   <properties>
    <property name="Number" value="3"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="123">
   <properties>
    <property name="Number" value="4"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="128">
   <properties>
    <property name="Number" value="5"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="129">
   <properties>
    <property name="Number" value="6"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="130">
   <properties>
    <property name="Number" value="7"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
  <tile id="131">
   <properties>
    <property name="Number" value="8"/>
-   <property name="Type" value="START"/>
+   <property name="Type" value="DOCK"/>
   </properties>
  </tile>
 </tileset>
