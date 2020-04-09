@@ -2,66 +2,55 @@ package inf112.skeleton.app.cards;
 
 import inf112.skeleton.app.Player;
 
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.Collections;
 
 public class Deck {
 
     private int deckSize = 84;
-    private Card[] deck;
+    private ArrayList<Card> deck;
 
     public Deck() {
-        deck = new Card[deckSize];
+        deck = new ArrayList<>();
         for (int numCards = 0; numCards < 84; numCards++){
+            Card card;
             if (numCards < 18) {
-                deck[numCards] = new MovementCard(numCards, MovementType.ONE_FORWARD);
+                card = new MovementCard(numCards, MovementType.ONE_FORWARD);
             } else if (numCards < 30) {
-                deck[numCards] = new MovementCard(numCards, MovementType.TWO_FORWARD);
+                card = new MovementCard(numCards, MovementType.TWO_FORWARD);
             } else if (numCards < 36) {
-                deck[numCards] = new MovementCard(numCards, MovementType.THREE_FORWARD);
+                card = new MovementCard(numCards, MovementType.THREE_FORWARD);
             } else if (numCards < 42) {
-                deck[numCards] = new MovementCard(numCards, MovementType.ONE_BACKWARD);
+                card = new MovementCard(numCards, MovementType.ONE_BACKWARD);
             } else if (numCards < 60) {
-                deck[numCards] = new RotationCard(numCards, RotationType.CLOCKWISE);
+                card = new RotationCard(numCards, RotationType.CLOCKWISE);
             } else if (numCards < 78) {
-                deck[numCards] = new RotationCard(numCards, RotationType.COUNTER_CLOCKWISE);
+                card = new RotationCard(numCards, RotationType.COUNTER_CLOCKWISE);
             } else {
-                deck[numCards] = new RotationCard(numCards, RotationType.U_TURN);
+                card = new RotationCard(numCards, RotationType.U_TURN);
             }
+            deck.add(card);
         }
     }
 
-    //Implementing Fisher–Yates / Knuth shuffle
     public void shuffle() {
-        Random rand = new Random();
-        int length = deck.length;
-        for (int i = length - 1; i > 0; i--) {
-            int index = rand.nextInt(i + 1);
-            Card temp = deck[i];
-            deck[i] = deck[index];
-            deck[index] = temp;
-
-        }
+        Collections.shuffle(deck);
     }
 
     public void dealHand(Player player) {
-        int choiceSize = player.getHealthPoints();
-        Card[] cardChoices = new Card[choiceSize];
-        for (int i = 0; i < choiceSize; i++) {
-            cardChoices[i] = deck[i];
+        int handSize = 9 - player.getDamageTokens();
+        Card[] playerHand = new Card[handSize];
+        for (int i = 0; i < handSize; i++) {
+            playerHand[i] = deck.remove(i);
         }
-        PlayerHand p = new PlayerHand();
-        p.setPossibleHand(cardChoices);
-        player.hand = p;
-        deckSize -= choiceSize;
-        resize(deck, choiceSize);
+        PlayerHand hand = new PlayerHand();
+        hand.setHand(playerHand);
+        player.hand = hand;
+        deckSize -= handSize;
     }
 
-    public Card[] resize (Card[] oldDeck, int sizeDifference) {
-        Card[] newDeck = new Card[deckSize];
-        for (int i = 0; i < deckSize; i ++) {
-            newDeck[i] = oldDeck[8+i];
-        }
-        return newDeck;
+    public ArrayList<Card> getDeck() {
+        return deck;
     }
 
     @Override

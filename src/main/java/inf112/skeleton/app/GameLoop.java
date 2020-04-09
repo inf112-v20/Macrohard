@@ -45,8 +45,8 @@ public class GameLoop {
            case 1:
             // Draw cards on screen and lock in program for NPC's
                if (!cardsShown) {
-                for(int i = 0; i < players.get(0).getHand().getDealtHand().length; i++){
-                    CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getDealtHand()[i]);
+                for(int i = 0; i < players.get(0).getHand().getHand().length; i++){
+                    CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getHand()[i]);
                     gameScreen.addStageActor(cardGraphic);
                     cardImages.add(cardGraphic);
                     cardsShown = true;
@@ -119,7 +119,7 @@ public class GameLoop {
         if (phase == 2) {
         for (int i = 0; i<players.size(); i++) {
             if (players.get(i).getProgram() == null || players.get(i).getProgram()[programRegister] == null) continue;
-            if (players.get(i).getProgram()[programRegister].getPrio() > max) {
+            if (players.get(i).getProgram()[programRegister].getPriority() > max) {
                 if (!roundPriority.isEmpty() &&(Integer) roundPriority.peek() == i) continue;
                 max = i;
             }

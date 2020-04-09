@@ -1,6 +1,6 @@
 package inf112.skeleton.app.cards;
 
-public abstract class Card {
+public abstract class Card implements Comparable<Card> {
 
     protected final int priority;
     public boolean selected = false;
@@ -17,7 +17,14 @@ public abstract class Card {
     }
 
 
-    public int getPrio() {
-        return this.priority;}
+    public int getPriority() {
+        return this.priority;
+    }
+
+    //Sorts cards by priority, so that the highest priority-cards place first
+    @Override
+    public int compareTo(Card card) {
+        return card.getPriority() - this.getPriority();
+    }
 
 }

@@ -21,6 +21,7 @@ import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Random;
 
 public class GameScreen implements Screen {
@@ -125,7 +126,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 players.get(0).setProgram();
-                lockInProgram(players.get(0), players.get(0).getHand().getDealtHand());
+                lockInProgram(players.get(0), players.get(0).getHand().getHand());
             }
         });
         stage.addActor(button);
@@ -184,7 +185,7 @@ public class GameScreen implements Screen {
             ranval[index] = temp;
         }
         for (int i = 0; i<5; i++) {
-                player.getProgram()[i] = player.getHand().getDealtHand()[i];
+                player.getProgram()[i] = player.getHand().getHand()[i];
         }
     }
 

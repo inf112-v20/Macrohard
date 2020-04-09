@@ -14,7 +14,8 @@ public class Player {
     private Tile spawnPoint;
     private Direction direction;
     public PlayerHand hand;
-    private int healthPoints;
+
+    private int damageTokens;
     private PlayerGraphic playerGraphic;
 
 
@@ -23,7 +24,7 @@ public class Player {
         this.col = col;
         this.direction = direction;
         this.isNPC = isNPC;
-        this.healthPoints = 9;
+        this.damageTokens = 0;
     }
 
     public Tile getSpawnPoint() {
@@ -60,19 +61,12 @@ public class Player {
         setCol(spawnPoint.getCol());
     }
 
+    public Direction getDirection () {
+        return this.direction;
+    }
 
     public void setDirection(Direction direction) {
         this.direction = direction;
-    }
-
-    public void setProgram() {
-        hand.setProgram();
-    }
-
-    public void setHealthPoints (int hp) { this.healthPoints = hp;}
-
-    public Direction getDirection () {
-        return this.direction;
     }
 
     public PlayerHand getHand() {
@@ -83,17 +77,20 @@ public class Player {
         return hand.getProgram();
     }
 
-    public int getHealthPoints() {
-        return this.healthPoints;
+    public void setProgram() {
+        hand.setProgram();
     }
 
-
-    public void setGraphic(PlayerGraphic playerGraphic) {
-        this.playerGraphic = playerGraphic;
+    public int getDamageTokens() {
+        return damageTokens;
     }
 
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
+    }
+
+    public void setGraphic(PlayerGraphic playerGraphic) {
+        this.playerGraphic = playerGraphic;
     }
 
     public void clearHand() {
