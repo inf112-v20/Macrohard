@@ -28,14 +28,14 @@ public class GameScreen implements Screen {
     private final GameScreenInputProcessor inputProcessor;
     private RoboRallyApplication parent;
 
-    private TiledMapManager mapHandler;
+    public TiledMapManager mapHandler;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
 
     public final static int TILE_SIZE = 60;
     private float timeInSeconds = 0f;
-    private float period = 0.5f;
+    private float period = 1f;
     private TiledMapTileLayer playerLayer;
 
     private ArrayList<PlayerGraphic> playerGraphics = new ArrayList<>();
@@ -59,8 +59,8 @@ public class GameScreen implements Screen {
         Player player4 = new Player(4, 2, Direction.EAST, true);
         players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
 
-
-        TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
+        // Initialise board
+        TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
         mapHandler = handler;
         map = handler.getMap();
         board = new Board(players, handler);
@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
         // Initialise board-view
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        //camera.translate(0, -tileSize*camera.zoom*2);
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialise tile-layers
@@ -205,7 +205,11 @@ public class GameScreen implements Screen {
             ranval[index] = temp;
         }
         for (int i = 0; i<5; i++) {
-                player.getProgram()[i] = player.getHand().getHand()[i];
+                if (player.getHand().getHand()[i] != null) {
+                    player.getProgram()[i] = player.getHand().getHand()[i];
+                } else {
+                    player.getProgram()[i] = null;
+                }
         }
     }
 
