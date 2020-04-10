@@ -94,4 +94,7 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
         this.hasGame = hasGame;
     }
 
+    public void setGameScreen(GameScreen gameScreen) {
+        this.gameScreen = gameScreen;
+    }
 }

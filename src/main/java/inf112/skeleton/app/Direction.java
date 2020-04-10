@@ -28,7 +28,19 @@ public enum Direction {
             case "SOUTH": return SOUTH;
             case "WEST": return WEST;
             default:
-                throw new IllegalArgumentException();
+                throw new IllegalArgumentException(string + " is no direction.");
+        }
+    }
+
+    @Override
+    public String toString() {
+        switch (this) {
+            case WEST: return "WEST";
+            case EAST: return "EAST";
+            case NORTH: return "NORTH";
+            case SOUTH: return "SOUTH";
+            default:
+                return "";
         }
     }
 

@@ -109,7 +109,7 @@ public class Player {
     public int getPriorityOfCardOnCurrentProgramRegister(){
         if (getProgram() != null && programRegister < 5) {
             if (getProgram()[programRegister] != null) {
-                return getProgram()[programRegister].getPrio();
+                return getProgram()[programRegister].getPriority();
             } else {
                 getGraphics().animate();
                 return -1;

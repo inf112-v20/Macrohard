@@ -74,11 +74,12 @@ public class Board {
         board = new Tile[height][width];
         for (int row = 0; row < height; row ++){
             for (int col = 0; col < width; col ++) {
+                TiledMapTile tile = mapManager.getCell("TILES", row, col).getTile();
                 Tile currentTile;
-                if (mapManager.getCell("HOLES", row, col) != null) {
+                if ((tile.getProperties().get("Type").equals("HOLE"))) {
                     currentTile = new Hole(row, col);
                 }
-                else if (mapManager.getCell("CONVEYOR_BELTS", row, col) != null) {
+                else if ((tile.getProperties().get("Type").equals("CONVEYOR_BELT"))) {
                     currentTile = installConveyorBelt(mapManager, row, col);
                 }
                 else {
@@ -94,32 +95,38 @@ public class Board {
             for (int col = 0; col < width; col ++) {
                 if (manager.getCell("WALLS", row, col) != null) {
                     TiledMapTile wall = manager.getCell("WALLS", row, col).getTile();
-                    String value = (String) wall.getProperties().get("Direction");
-                    Direction dir = Direction.fromString(value);
-                    board[row][col].getWalls().add(dir);
-                    if (!outOfBounds(row + dir.getRowTrajectory(), col + dir.getColumnTrajectory())) {
-                        Tile tile = board[row + dir.getRowTrajectory()][col + dir.getColumnTrajectory()];
-                        if (tile != null)  { ArrayList<Direction> walls = tile.getWalls(); walls.add(dir.opposite()); }
+                    String[] directions = ((String) wall.getProperties().get("Directions")).split(",");
+                    for (String direction : directions) {
+                        Direction dir = Direction.fromString(direction);
+                        board[row][col].getWalls().add(dir);
+                        if (!outOfBounds(row + dir.getRowTrajectory(), col + dir.getColumnTrajectory())) {
+                            Tile tile = board[row + dir.getRowTrajectory()][col + dir.getColumnTrajectory()];
+                            if (tile != null) {
+                                ArrayList<Direction> walls = tile.getWalls();
+                                walls.add(dir.opposite());
+                            }
+                        }
+                        int nrOfLasers = (Integer) wall.getProperties().get("NrOfLasers");
+                        if(nrOfLasers > 0) {
+                            installLaser(nrOfLasers, dir.opposite(), row, col);
                     }
-                    if(wall.getProperties().containsKey("LaserDirection")) {
-                        installLaser(wall, row, col);
+
                     }
                 }
             }
         }
     }
 
-    private void installLaser(TiledMapTile tile, int row, int col) {
-        Direction direction = Direction.fromString((String) tile.getProperties().get("LaserDirection"));
-        int damage = Integer.parseInt((String) tile.getProperties().get("LaserDamage"));
+    private void installLaser(int nrOfLasers, Direction direction, int row, int col) {
+        int damage = nrOfLasers;
         lasers.add(new Laser(row, col, damage, direction));
     }
 
     private ConveyorBelt installConveyorBelt(TiledMapManager mapManager, int row, int col) {
-        TiledMapTileLayer.Cell wall = mapManager.getCell("CONVEYOR_BELTS", row, col);
-        String value = (String) wall.getTile().getProperties().get("Direction");
+        TiledMapTileLayer.Cell belt = mapManager.getCell("TILES", row, col);
+        String value = (String) belt.getTile().getProperties().get("Direction");
         Direction dir = Direction.fromString(value);
-        boolean express = (wall.getTile().getProperties().get("Type")).equals("CONVEYOR_EXPRESS");
+        boolean express =  (boolean) belt.getTile().getProperties().get("Express");
         return new ConveyorBelt(row, col, dir, express);
 
     }
@@ -319,10 +326,6 @@ public class Board {
 
     private boolean noWallCollision(Tile tile,Direction direction) {
         return !tile.getWalls().contains(direction);
-    }
-
-    private boolean noWallCollision(Player player, Direction direction) {
-        return !getTile(player).getWalls().contains(direction);
     }
 
     public Tile getTile(int row, int col){

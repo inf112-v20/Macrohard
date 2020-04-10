@@ -1,6 +1,5 @@
 package inf112.skeleton.app.graphics;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
@@ -10,27 +9,25 @@ import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.screens.GameScreen;
 
 public class PlayerGraphic extends Image {
 
-    final float PLAYER_WIDTH = 60;
-    final float PLAYER_HEIGHT = 60;
+    final float PLAYER_WIDTH = GameScreen.TILE_SIZE;
+    final float PLAYER_HEIGHT = GameScreen.TILE_SIZE;
     private final Player player;
     private Direction direction;
 
     SequenceAction sequenceAction = new SequenceAction();
 
     public PlayerGraphic(Player player){
-        super(new Texture("./assets/robots/robot2.png"));
+        super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
 
         this.player = player;
         player.setGraphic(this);
         direction = player.getDirection();
 
-        setBounds(PLAYER_WIDTH*player.getCol(),
-                (PLAYER_HEIGHT*player.getRow())+(PLAYER_HEIGHT*2),
-                PLAYER_WIDTH,
-                PLAYER_HEIGHT);
+        setBounds(PLAYER_WIDTH*player.getCol(), PLAYER_HEIGHT*player.getRow(), PLAYER_WIDTH, PLAYER_HEIGHT);
         setOrigin(Align.center);
     }
 
@@ -49,11 +46,11 @@ public class PlayerGraphic extends Image {
 
 
     public void animateMoveDelayed(int newCol, int newRow, int moves) {
-        sequenceAction.addAction(Actions.delay(1, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves))));
+        sequenceAction.addAction(Actions.delay(1, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow, 0.3f*Math.abs(moves))));
     }
 
     public void animateMove(int newCol, int newRow, int moves) {
-        sequenceAction.addAction(Actions.delay(0, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow + PLAYER_HEIGHT*2, 0.3f*Math.abs(moves))));
+        sequenceAction.addAction(Actions.delay(0, Actions.moveTo(PLAYER_WIDTH*newCol, PLAYER_HEIGHT*newRow, 0.3f*Math.abs(moves))));
     }
 
     public void animateRotationDelayed(Direction direction, Direction newDir) {

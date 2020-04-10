@@ -37,14 +37,14 @@ public class GameLoop {
     public void tick() {
        switch (phase) {
             case 0:
-            // Deal hand to all players.
-            for(Player player : players){
                 deck = new Deck();
                 deck.shuffle();
-                deck.dealHand(player);
-            }
-            phase ++;
-            break;
+                // Deal hand to all players.
+                for(Player player : players){
+                    deck.dealHand(player);
+                }
+                phase ++;
+                break;
 
            case 1:
             // Draw cards on screen and lock in program for NPC's

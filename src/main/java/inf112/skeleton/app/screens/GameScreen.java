@@ -21,13 +21,11 @@ import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Random;
 
 public class GameScreen implements Screen {
 
     private final GameScreenInputProcessor inputProcessor;
-    private TiledMapTileLayer.Cell playerCell;
     private RoboRallyApplication parent;
 
     private TiledMapManager mapHandler;
@@ -35,11 +33,9 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
 
-    private int tileSize = 60;
-    private int gridSize = 12;
+    public final static int TILE_SIZE = 60;
     private float timeInSeconds = 0f;
     private float period = 0.5f;
-    private TiledMapTileLayer boardLayer;
     private TiledMapTileLayer playerLayer;
 
     private ArrayList<PlayerGraphic> playerGraphics = new ArrayList<>();
@@ -49,7 +45,6 @@ public class GameScreen implements Screen {
     private Stage stage;
     private GameLoop gameLoop;
     private final ArrayList<Player> players;
-    public int clientPlayerIndex = 0;
 
     public GameScreen(final RoboRallyApplication parent){
 
@@ -58,34 +53,36 @@ public class GameScreen implements Screen {
         this.parent = parent;
 
         // Initialise players
-        Player player1 = new Player(1, 1, Direction.NORTH, false);
-        Player player2 = new Player(1, 2, Direction.NORTH, true);
-        Player player3 = new Player(1, 8, Direction.EAST, true);
-        Player player4 = new Player(1, 10, Direction.WEST, true);
+        Player player1 = new Player(7, 1, Direction.EAST, false);
+        Player player2 = new Player(6, 1, Direction.EAST, true);
+        Player player3 = new Player(9, 2, Direction.EAST, true);
+        Player player4 = new Player(4, 2, Direction.EAST, true);
         players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
 
-        // Initialise board
-        TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
+
+        TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
         mapHandler = handler;
         map = handler.getMap();
         board = new Board(players, handler);
 
+        // Initialise board
+       /* TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
+        mapHandler = handler;
+        map = handler.getMap();
+        board = new Board(players, handler);*/
+
         // Initialise board-view
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera.translate(0, -tileSize*camera.zoom*2);
+
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialise tile-layers
-        boardLayer = mapHandler.getLayer("Board");
-        playerLayer = mapHandler.getLayer("Player");
+        playerLayer = mapHandler.getLayer("PLAYERS");
 
         // Place players on Player-layer
         for (int i = 0; i < players.size(); i++) {
             TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
-            if(i == clientPlayerIndex){
-                this.playerCell = playerCell;
-            }
             playerLayer.setCell(players.get(i).getRow(), players.get(i).getCol(), playerCell);
         }
 
@@ -101,13 +98,14 @@ public class GameScreen implements Screen {
         stage.addListener(inputProcessor);
 
         //Initialise buttons
+        int buttonX = ((Integer) map.getProperties().get("width") * TILE_SIZE) + 5;
         TextButton laserOn = new TextButton("LASER ON/OFF", parent.getSkin());
-        laserOn.setBounds(750, 600, 200, 50);
+        laserOn.setBounds(buttonX, 600, 200, 50);
         laserOn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                boolean on = !mapHandler.getLayer("LASERS").isVisible();
-                mapHandler.getLayer("LASERS").setVisible(on);
+                boolean on = !mapHandler.getLayer("LASERBEAMS").isVisible();
+                mapHandler.getLayer("LASERBEAMS").setVisible(on);
                 if (on) {
                     board.fireLasers();
                 }
@@ -120,7 +118,7 @@ public class GameScreen implements Screen {
         stage.addActor(laserOn);
 
         TextButton conveyor = new TextButton("CONVEYOR", parent.getSkin());
-        conveyor.setBounds(750, 452, 150, 50);
+        conveyor.setBounds(buttonX, 452, 150, 50);
         conveyor.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -131,7 +129,7 @@ public class GameScreen implements Screen {
         stage.addActor(conveyor);
 
         TextButton conveyorExpress = new TextButton("EXPRESS", parent.getSkin());
-        conveyorExpress.setBounds(750, 400, 150, 50);
+        conveyorExpress.setBounds(buttonX, 400, 150, 50);
         conveyorExpress.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -142,7 +140,7 @@ public class GameScreen implements Screen {
         stage.addActor(conveyorExpress);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(750, 348, 150, 50);
+        button.setBounds(buttonX, 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -153,7 +151,7 @@ public class GameScreen implements Screen {
         stage.addActor(button);
 
         TextButton changePlayer = new TextButton("CHANGE", parent.getSkin());
-        changePlayer.setBounds(750, 296, 150, 50);
+        changePlayer.setBounds(buttonX, 296, 150, 50);
         changePlayer.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -198,7 +196,7 @@ public class GameScreen implements Screen {
     public void lockRandomProgram(Player player) {
         player.setProgram();
         Random rand = new Random();
-        int[] ranval =new int[player.getHealthPoints()];
+        int[] ranval =new int[9 - player.getDamageTokens()];
         for (int j = 0; j < ranval.length; j++) ranval[j] = j;
         for (int i = ranval.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
@@ -238,11 +236,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Comment this out to disable GameLoop
-        timeInSeconds += Gdx.graphics.getRawDeltaTime();
+        /*timeInSeconds += Gdx.graphics.getRawDeltaTime();
         if (timeInSeconds > period) {
             timeInSeconds -= period;
             gameLoop.tick();
-        }
+        }*/
 
         renderer.setView(camera);
         renderer.render();

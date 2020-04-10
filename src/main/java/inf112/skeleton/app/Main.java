@@ -9,8 +9,8 @@ public class Main extends InputAdapter {
     public static void main(String[] args) {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         cfg.title = "RoboRallyApplication";
-        cfg.width = 1200;
-        cfg.height = 840;
+        cfg.width = 1800;
+        cfg.height = 1200;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
 
