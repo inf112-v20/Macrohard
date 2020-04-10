@@ -104,12 +104,6 @@ public class BoardMovementTest {
     }
 
     @Test
-    public void setPlayerTest() {
-        board.set(player);
-        assertTrue(board.getTile(player.getRow(),player.getCol()).isOccupied());
-    }
-
-    @Test
     public void movingForwardDoesNotAffectDirectionOfPlayer() {
         board.execute(player, move2);
 

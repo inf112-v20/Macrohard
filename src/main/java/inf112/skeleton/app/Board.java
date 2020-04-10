@@ -6,12 +6,10 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.managers.TiledMapManager;
-import inf112.skeleton.app.tiles.ConveyorBelt;
-import inf112.skeleton.app.tiles.Hole;
-import inf112.skeleton.app.tiles.Laser;
-import inf112.skeleton.app.tiles.Tile;
+import inf112.skeleton.app.tiles.*;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedList;
 
 public class Board {
@@ -20,6 +18,7 @@ public class Board {
     private final int width;
 
     private Tile[][] board;
+    private ArrayList<Dock> docks;
     private ArrayList<Player> players;
     private ArrayList<Laser> lasers;
     private LinkedList<ConveyorBelt> queuedConveyorBelts;
@@ -27,11 +26,13 @@ public class Board {
     //Graphic-independent constructor for test-classes
     public Board(ArrayList<Player> players, int height, int width) {
         this.players = players;
+        this.docks = new ArrayList<>();
         this.lasers = new ArrayList<>();
         this.height = height;
         this.width = width;
 
         layTiles();
+
         for (Player player : players) {
             set(player);
         }
@@ -40,23 +41,30 @@ public class Board {
     //Graphic-dependent constructor for multiple players
     public Board(ArrayList<Player> players, TiledMapManager mapManager) {
         this.players = players;
+        this.docks = new ArrayList<>();
         this.lasers = new ArrayList<>();
         this.height = mapManager.getHeight();
         this.width = mapManager.getWidth();
 
         layTiles(mapManager);
         erectWalls(mapManager);
-
-        for (Player player : players) { set(player); }
-
-        for (Laser laser : lasers) {
-            System.out.println(laser);
-        }
+        dockPlayers(players);
     }
 
-    public void set(Player player) {
-        board[player.getRow()][player.getCol()].setPlayer(player);
-        player.setSpawnPoint(board[player.getRow()][player.getCol()]);
+    private void set(Player player) {
+        getTile(player).setPlayer(player);
+    }
+
+    public void dockPlayers(ArrayList<Player> players) {
+        int playerIndex = 0;
+        while (playerIndex < Math.min(players.size(), docks.size())) {
+            Player player = players.get(playerIndex);
+            Dock dock = docks.get(playerIndex);
+            dock.setPlayer(player);
+            player.setSpawnPoint(dock);
+            player.reSpawn();
+            playerIndex ++;
+        }
     }
 
     //Fills the board with standard tiles
@@ -75,18 +83,30 @@ public class Board {
         for (int row = 0; row < height; row ++){
             for (int col = 0; col < width; col ++) {
                 TiledMapTile tile = mapManager.getCell("TILES", row, col).getTile();
+                String tileType = (String) tile.getProperties().get("Type");
                 Tile currentTile;
-                if ((tile.getProperties().get("Type").equals("HOLE"))) {
-                    currentTile = new Hole(row, col);
-                }
-                else if ((tile.getProperties().get("Type").equals("CONVEYOR_BELT"))) {
-                    currentTile = installConveyorBelt(mapManager, row, col);
-                }
-                else {
-                    currentTile = new Tile(row, col);
+                switch (tileType) {
+                    case "HOLE":
+                        currentTile = new Hole(row, col);
+                        break;
+                    case "DOCK":
+                        int number = (Integer) tile.getProperties().get("Number");
+                        currentTile = new Dock(number, row, col);
+                        docks.add((Dock) currentTile);
+                        break;
+                    case "CONVEYOR_BELT":
+                        currentTile = installConveyorBelt(mapManager, row, col);
+                        break;
+                    default:
+                        currentTile = new Tile(row, col);
+                        break;
                 }
                 layTile(currentTile);
             }
+        }
+        Collections.sort(docks);
+        for (Dock dock : docks) {
+            System.out.println(dock.getNumber());
         }
     }
 
@@ -118,8 +138,7 @@ public class Board {
     }
 
     private void installLaser(int nrOfLasers, Direction direction, int row, int col) {
-        int damage = nrOfLasers;
-        lasers.add(new Laser(row, col, damage, direction));
+        lasers.add(new Laser(row, col, nrOfLasers, direction));
     }
 
     private ConveyorBelt installConveyorBelt(TiledMapManager mapManager, int row, int col) {

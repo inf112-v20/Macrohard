@@ -53,23 +53,18 @@ public class GameScreen implements Screen {
         this.parent = parent;
 
         // Initialise players
-        Player player1 = new Player(7, 1, Direction.EAST, false);
-        Player player2 = new Player(6, 1, Direction.EAST, true);
-        Player player3 = new Player(9, 2, Direction.EAST, true);
-        Player player4 = new Player(4, 2, Direction.EAST, true);
-        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
+        Player player1 = new Player(0, 1, Direction.EAST, false);
+        Player player2 = new Player(0, 1, Direction.EAST, true);
+        Player player3 = new Player(0, 2, Direction.EAST, true);
+        Player player4 = new Player(0, 2, Direction.EAST, true);
+        Player player5 = new Player(0, 2, Direction.EAST, true);
+        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4, player5));
 
         // Initialise board
-        TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
+        TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
         mapHandler = handler;
         map = handler.getMap();
         board = new Board(players, handler);
-
-        // Initialise board
-       /* TiledMapManager handler = new TiledMapManager("assets/plsWork.tmx");
-        mapHandler = handler;
-        map = handler.getMap();
-        board = new Board(players, handler);*/
 
         // Initialise board-view
         camera = new OrthographicCamera();
@@ -81,9 +76,9 @@ public class GameScreen implements Screen {
         playerLayer = mapHandler.getLayer("PLAYERS");
 
         // Place players on Player-layer
-        for (int i = 0; i < players.size(); i++) {
+        for (Player value : players) {
             TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
-            playerLayer.setCell(players.get(i).getRow(), players.get(i).getCol(), playerCell);
+            playerLayer.setCell(value.getRow(), value.getCol(), playerCell);
         }
 
         // ---- GRAPHICS ----

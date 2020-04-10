@@ -13,12 +13,10 @@ public class Tile {
     private final int row;
     private final int col;
     private ArrayList<Direction> walls = new ArrayList<>();
-    private boolean isHole;
 
     public Tile(int row, int col) {
         this.row = row;
         this.col = col;
-        this.isHole = false;
     }
 
     public ArrayList<Direction> getWalls() {
@@ -35,14 +33,6 @@ public class Tile {
 
     public boolean isOccupied() {
         return player != null;
-    }
-
-    public void setHole(boolean isHole) {
-        this.isHole = isHole;
-    }
-
-    public boolean isHole() {
-        return isHole;
     }
 
     public int getRow() {
