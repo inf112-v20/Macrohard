@@ -26,7 +26,6 @@ import java.util.Random;
 public class GameScreen implements Screen {
 
     private final GameScreenInputProcessor inputProcessor;
-    private RoboRallyApplication parent;
 
     public TiledMapManager mapHandler;
     private TiledMap map;
@@ -35,7 +34,7 @@ public class GameScreen implements Screen {
 
     public final static int TILE_SIZE = 50;
     private float timeInSeconds = 0f;
-    private float period = 1f;
+    private float period = 0.8f;
     private TiledMapTileLayer playerLayer;
 
     private ArrayList<PlayerGraphic> playerGraphics = new ArrayList<>();
@@ -50,7 +49,6 @@ public class GameScreen implements Screen {
 
         // ---- INITIALISATION ----
         stage = new Stage(new ScreenViewport());
-        this.parent = parent;
 
         // Initialise players
         Player player1 = new Player(0, 1, Direction.EAST, false);
@@ -208,16 +206,10 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void runProgram(Player player, int cardNumber) {
-        Card card = player.getProgram()[cardNumber];
-        Direction dir = player.getDirection();
+    public void runProgram(Player player, int programIndex) {
+        Card card = player.getProgram()[programIndex];
         board.execute(player, card);
-        player.getGraphics().updatePlayerGraphic(card, dir);
-        player.getGraphics().animate();
-       /* if (player.isNPC) {
-            System.out.println("NPC Played Card: " + player.getProgram()[cardNumber]
-            );
-        }*/
+        updatePlayerGraphics();
     }
 
     public void setAsInputProcessor() {

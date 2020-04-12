@@ -1,6 +1,7 @@
 package inf112.skeleton.app;
 
 
+import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
@@ -31,6 +32,7 @@ public class GameLoop {
         this.board = board;
         this.players = board.getPlayers();
         this.cardImages = new ArrayList<>(9);
+        this.deck = new Deck(true);
         phase = 0;
     }
 
@@ -39,8 +41,14 @@ public class GameLoop {
        switch (phase) {
 
             case 0:
-                deck = new Deck();
-                deck.shuffle();
+                int cardsNeeded = 0;
+                for (Player player : players) {
+                    cardsNeeded += player.getHandSize();
+                }
+                if (deck.getDeckSize() < cardsNeeded) {
+                    deck = new Deck(true);
+                }
+
                 // Deal hand to all players.
                 for(Player player : players){
                     deck.dealHand(player);
@@ -51,8 +59,8 @@ public class GameLoop {
            case 1:
                // Draw cards on screen and lock in program for NPC's
                if (!cardsShown) {
-                   for (int i = 0; i < players.get(0).getHand().getHand().length; i++) {
-                       CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getHand()[i]);
+                   for (Card card : players.get(0).getHand().getHand()) {
+                       CardGraphic cardGraphic = new CardGraphic(card);
                        gameScreen.addStageActor(cardGraphic);
                        cardImages.add(cardGraphic);
                    }
@@ -116,17 +124,17 @@ public class GameLoop {
            case 6:
                // Increment programRegister and reset gameLoop values.
                // if on last programRegister, do full round cleanup
-                   if (programRegister == 4) {
-                       roundOver = true;
-                       phase ++;
-                       break;
-                   } else {
+               if (programRegister == 4) {
+                   roundOver = true;
+                   phase++;
+               } else {
                    programRegister++;
                    playersPlayed = 0;
                    phase = 2;
                    canClean = false;
-                   break;
                }
+               gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
+               break;
 
            case 7:
         if (canClean && roundOver) {
@@ -134,7 +142,6 @@ public class GameLoop {
                 player.clearHand();
             }
             playersPlayed = 0;
-            deck = null;
             gameScreen.clearCards(cardImages);
             cardsShown = false;
             programRegister = 0;

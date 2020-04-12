@@ -10,7 +10,7 @@ public class Deck {
     private int deckSize = 84;
     private ArrayList<Card> deck;
 
-    public Deck() {
+    public Deck(boolean shuffled) {
         deck = new ArrayList<>();
         for (int numCards = 0; numCards < 84; numCards++){
             Card card;
@@ -30,6 +30,9 @@ public class Deck {
                 card = new RotationCard(numCards, RotationType.U_TURN);
             }
             deck.add(card);
+        }
+        if (shuffled) {
+            shuffle();
         }
     }
 
@@ -51,6 +54,10 @@ public class Deck {
 
     public ArrayList<Card> getDeck() {
         return deck;
+    }
+
+    public int getDeckSize() {
+        return getDeck().size();
     }
 
     @Override

@@ -86,6 +86,8 @@ public class Player {
         return damageTokens;
     }
 
+    public int getHandSize() { return 9 - damageTokens; }
+
     public PlayerGraphic getGraphics() {
         return this.playerGraphic;
     }
