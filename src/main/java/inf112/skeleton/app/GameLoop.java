@@ -30,13 +30,14 @@ public class GameLoop {
         this.gameScreen = gameScreen;
         this.board = board;
         this.players = board.getPlayers();
-        this.cardImages = new ArrayList<CardGraphic>(9);
+        this.cardImages = new ArrayList<>(9);
         phase = 0;
     }
 
     // Assumes the non-NPC player is always the first element of the players ArrayList
     public void tick() {
        switch (phase) {
+
             case 0:
                 deck = new Deck();
                 deck.shuffle();
@@ -48,28 +49,28 @@ public class GameLoop {
                 break;
 
            case 1:
-            // Draw cards on screen and lock in program for NPC's
+               // Draw cards on screen and lock in program for NPC's
                if (!cardsShown) {
-                for(int i = 0; i < players.get(0).getHand().getHand().length; i++){
-                    CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getHand()[i]);
-                    gameScreen.addStageActor(cardGraphic);
-                    cardImages.add(cardGraphic);
-                    cardsShown = true;
-                    }
-               for (int j = 1; j<players.size(); j++) {
-                    gameScreen.lockRandomProgram((players.get(j)));
-                    }
+                   for (int i = 0; i < players.get(0).getHand().getHand().length; i++) {
+                       CardGraphic cardGraphic = new CardGraphic(players.get(0).getHand().getHand()[i]);
+                       gameScreen.addStageActor(cardGraphic);
+                       cardImages.add(cardGraphic);
+                   }
+                   cardsShown = true;
+                   for (int j = 1; j < players.size(); j++) {
+                       gameScreen.lockRandomProgram((players.get(j)));
+                   }
                }
-            if (players.get(0).hasChosenCards) {
-                phase++;
-                break;
-            }
-            break;
+               if (players.get(0).hasChosenCards) {
+                   phase++;
+                   break;
+               }
+               break;
 
             case 2:
                 // Decide the order in which program cards will be played
                 if (players.get(0).getProgram() != null && programRegister <5) {
-                   priority = priorityHandler();
+                    priority = priorityHandler();
                     canPlay = true;
                     phase ++;
                     break;
@@ -105,7 +106,7 @@ public class GameLoop {
                    gameScreen.updatePlayerGraphics();
                    board.rollConveyorBelts(true);
                    gameScreen.updatePlayerGraphics();
-                   gameScreen.mapHandler.getLayer("LASERS").setVisible(true);
+                   gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                    board.fireLasers();
                canClean = true;
                phase ++;
@@ -151,7 +152,7 @@ public class GameLoop {
 
     // returns an ArrayList with Players sorted in descending order by cardpriority in current programregister
     // Player associated with Card that has highest priority goes first.
-    public ArrayList priorityHandler() {
+    public ArrayList<Player> priorityHandler() {
         for (Player player : players) {
             player.programRegister = programRegister;
         }
