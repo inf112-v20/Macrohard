@@ -33,7 +33,7 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
 
-    public final static int TILE_SIZE = 60;
+    public final static int TILE_SIZE = 50;
     private float timeInSeconds = 0f;
     private float period = 1f;
     private TiledMapTileLayer playerLayer;
@@ -68,8 +68,8 @@ public class GameScreen implements Screen {
 
         // Initialise board-view
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //camera.translate(0, -tileSize*camera.zoom*2);
+        camera.zoom += 0.19;
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 300);
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialise tile-layers
@@ -93,7 +93,7 @@ public class GameScreen implements Screen {
         stage.addListener(inputProcessor);
 
         //Initialise buttons
-        int buttonX = ((Integer) map.getProperties().get("width") * TILE_SIZE) + 5;
+        int buttonX = ((Integer) map.getProperties().get("width") * TILE_SIZE) + 250;
         TextButton laserOn = new TextButton("LASER ON/OFF", parent.getSkin());
         laserOn.setBounds(buttonX, 600, 200, 50);
         laserOn.addListener(new ChangeListener() {
@@ -171,15 +171,15 @@ public class GameScreen implements Screen {
     public void lockInProgram(Player player, Card[] cards){
         // Create program of selected cards from hand
         for (Card card : cards) {
-            if (card.handIndex == 1) {
+            if (card.programIndex == 1) {
                 player.getProgram()[0] = card;
-            } else if (card.handIndex == 2) {
+            } else if (card.programIndex == 2) {
                 player.getProgram()[1] = card;
-            } else if (card.handIndex == 3) {
+            } else if (card.programIndex == 3) {
                 player.getProgram()[2] = card;
-            } else if (card.handIndex == 4) {
+            } else if (card.programIndex == 4) {
                 player.getProgram()[3] = card;
-            } else if (card.handIndex == 5) {
+            } else if (card.programIndex == 5) {
                 player.getProgram()[4] = card;
             }
         }
@@ -235,11 +235,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Comment this out to disable GameLoop
-        /*timeInSeconds += Gdx.graphics.getRawDeltaTime();
+        timeInSeconds += Gdx.graphics.getRawDeltaTime();
         if (timeInSeconds > period) {
             timeInSeconds -= period;
             gameLoop.tick();
-        }*/
+        }
 
         renderer.setView(camera);
         renderer.render();
