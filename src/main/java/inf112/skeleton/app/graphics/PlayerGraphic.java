@@ -28,6 +28,7 @@ public class PlayerGraphic extends Image {
         this.player = player;
         player.setGraphic(this);
         direction = player.getDirection();
+        degrees = 0f;
 
         setBounds(PLAYER_WIDTH*player.getCol(), START_Y_AXIS + PLAYER_HEIGHT*player.getRow(), PLAYER_WIDTH, PLAYER_HEIGHT);
         setOrigin(Align.center);
@@ -57,20 +58,14 @@ public class PlayerGraphic extends Image {
 
     public void animateRotationDelayed(Direction direction, Direction newDir) {
         this.direction = newDir;
-        float degrees = (direction.ordinal() - newDir.ordinal())*90;
-        if(degrees == 270){
-            degrees = -90;
-        }
-        else if(degrees == -270){
-            degrees = 90;
-        }
-        sequenceAction.addAction(Actions.delay(1, Actions.rotateBy(degrees, 0.5f)));
+        degrees += Direction.getDegreesBetween(direction, newDir);
+        sequenceAction.addAction(Actions.delay(1, Actions.rotateTo(degrees, 0.5f)));
     }
 
     public void animateRotation(Direction direction, Direction newDir) {
         this.direction = newDir;
-        float degrees = Direction.getDegreesBetween(direction, newDir);
-        sequenceAction.addAction(Actions.delay(0, Actions.rotateBy(degrees, 0.5f)));
+        degrees += Direction.getDegreesBetween(direction, newDir);
+        sequenceAction.addAction(Actions.delay(0, Actions.rotateTo(degrees, 0.5f)));
     }
 
     public void animate(){
