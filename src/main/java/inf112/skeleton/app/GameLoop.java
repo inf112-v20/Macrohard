@@ -1,6 +1,8 @@
 package inf112.skeleton.app;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
@@ -14,6 +16,7 @@ public class GameLoop {
 
     private final GameScreen gameScreen;
     private Board board;
+    private Sound laserSound;
     ArrayList<Player> players;
     ArrayList<CardGraphic> cardImages;
     ArrayList<Player> priority;
@@ -30,6 +33,7 @@ public class GameLoop {
     public GameLoop(Board board, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         this.board = board;
+        this.laserSound = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/laserbeam.wav"));
         this.players = board.getPlayers();
         this.cardImages = new ArrayList<>(9);
         this.deck = new Deck(true);
@@ -112,16 +116,28 @@ public class GameLoop {
                if(priority.isEmpty() && !canPlay) {
                    board.rollConveyorBelts(false);
                    gameScreen.updatePlayerGraphics();
-                   board.rollConveyorBelts(true);
-                   gameScreen.updatePlayerGraphics();
-                   gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
-                   board.fireLasers();
+                   phase ++;
+               }
+               break;
+           case 6:
+               board.rollConveyorBelts(true);
+               gameScreen.updatePlayerGraphics();
+               phase ++;
+               break;
+           case 7:
+               board.rotateGears();
+               gameScreen.updatePlayerGraphics();
+               phase ++;
+               break;
+           case 8:
+               gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
+               board.fireLasers();
+               laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
                canClean = true;
                phase ++;
-               break; } break;
+               break;
 
-
-           case 6:
+           case 9:
                // Increment programRegister and reset gameLoop values.
                // if on last programRegister, do full round cleanup
                if (programRegister == 4) {
@@ -136,11 +152,15 @@ public class GameLoop {
                gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
                break;
 
-           case 7:
+           case 10:
         if (canClean && roundOver) {
             for (Player player : players) {
                 player.clearHand();
+                if (player.hasQueuedRespawn) {
+                    player.reSpawn(player.getDirection());
+                }
             }
+            gameScreen.updatePlayerGraphics();
             playersPlayed = 0;
             gameScreen.clearCards(cardImages);
             cardsShown = false;

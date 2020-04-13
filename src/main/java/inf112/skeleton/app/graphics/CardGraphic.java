@@ -3,6 +3,7 @@ package inf112.skeleton.app.graphics;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import inf112.skeleton.app.cards.Card;
+import inf112.skeleton.app.screens.GameScreen;
 
 import java.io.File;
 import java.util.Arrays;

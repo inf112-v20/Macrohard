@@ -28,6 +28,7 @@ import java.util.Random;
 
 public class GameScreen implements Screen {
 
+    public final RoboRallyApplication parent;
     private final GameScreenInputProcessor inputProcessor;
 
     public TiledMapManager mapHandler;
@@ -49,7 +50,7 @@ public class GameScreen implements Screen {
     private final ArrayList<Player> players;
 
     public GameScreen(final RoboRallyApplication parent){
-
+    this.parent = parent;
         // ---- INITIALISATION ----
         stage = new Stage(new ScreenViewport());
 
