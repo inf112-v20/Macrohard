@@ -10,181 +10,159 @@ import inf112.skeleton.app.screens.GameScreen;
 
 import java.util.*;
 
-import static java.util.Comparator.comparing;
-
 public class GameLoop {
 
+    private final Sound laserSound = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/laserbeam.wav"));
     private final GameScreen gameScreen;
-    private Board board;
-    private Sound laserSound;
-    ArrayList<Player> players;
-    ArrayList<CardGraphic> cardImages;
-    ArrayList<Player> priority;
-    Deck deck;
-    private int phase;
-    private int programRegister = 0;
-    private int playersPlayed = 0;
+    private final Board board;
 
-    private boolean cardsShown;
-    private boolean canClean;
-    private boolean canPlay;
-    private boolean roundOver;
+    private ArrayList<Player> players;
+    private Player client;
+    private ArrayList<CardGraphic> cardGraphics;
+    private PriorityQueue<Player> movementPriority;
+    private Deck deck;
+
+    private int phase = 0;
+    private int currentProgramRegister = 0;
+
+    private boolean cardsDisplayed = false;
+    private boolean canClean = false;
+    private boolean canPlay = false;
+    private boolean roundOver = false;
 
     public GameLoop(Board board, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         this.board = board;
-        this.laserSound = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/laserbeam.wav"));
+
         this.players = board.getPlayers();
-        this.cardImages = new ArrayList<>(9);
+        this.client = players.get(0);
+        this.movementPriority = new PriorityQueue<>();
+        this.cardGraphics = new ArrayList<>(9);
         this.deck = new Deck(true);
-        phase = 0;
     }
 
     // Assumes the non-NPC player is always the first element of the players ArrayList
     public void tick() {
-       switch (phase) {
-
+        switch (phase) {
             case 0:
-                int cardsNeeded = 0;
+                // Check if new deck is needed
+                int cardsNeededInDeck = 0;
                 for (Player player : players) {
-                    cardsNeeded += player.getHandSize();
+                    cardsNeededInDeck += player.getHandSize();
                 }
-                if (deck.getDeckSize() < cardsNeeded) {
+                if (deck.getDeckSize() < cardsNeededInDeck) {
                     deck = new Deck(true);
                 }
 
                 // Deal hand to all players.
-                for(Player player : players){
+                for (Player player : players) {
                     deck.dealHand(player);
                 }
-                phase ++;
+                phase++;
                 break;
 
-           case 1:
-               // Draw cards on screen and lock in program for NPC's
-               if (!cardsShown) {
-                   for (Card card : players.get(0).getHand().getHand()) {
-                       CardGraphic cardGraphic = new CardGraphic(card);
-                       gameScreen.addStageActor(cardGraphic);
-                       cardImages.add(cardGraphic);
-                   }
-                   cardsShown = true;
-                   for (int j = 1; j < players.size(); j++) {
-                       gameScreen.lockRandomProgram((players.get(j)));
-                   }
-               }
-               if (players.get(0).hasChosenCards) {
-                   phase++;
-                   break;
-               }
-               break;
+            case 1:
+                // Draw cards on screen and lock in the programs for all NPC's
+                if (!cardsDisplayed) {
+                    for (Card card : client.getHand().getHand()) {
+                        CardGraphic cardGraphic = new CardGraphic(card);
+                        gameScreen.addStageActor(cardGraphic);
+                        cardGraphics.add(cardGraphic);
+                    }
+                    cardsDisplayed = true;
+                    for (Player player : players.subList(1, players.size())) {
+                        gameScreen.lockRandomProgram(player);
+                    }
+                }
+                if (client.hasLockedInProgram()) {
+                    phase++;
+                }
+                break;
 
             case 2:
                 // Decide the order in which program cards will be played
-                if (players.get(0).getProgram() != null && programRegister <5) {
-                    priority = priorityHandler();
+                if (currentProgramRegister < 5) {
+                    movementPriority.addAll(players);
                     canPlay = true;
-                    phase ++;
+                    phase++;
                     break;
                 }
                 break;
 
-           case 3:
-               // Execute program cards in order. If last player played his card on current programRegister, continue.
-               if (canPlay && programRegister < 5 && !priority.isEmpty()) {
-                       gameScreen.runProgram(priority.get(playersPlayed), programRegister);
-                       phase ++;
-                       break;
-               }
-               break;
-
-           case 4:
-               if (playersPlayed < priority.size()-1) {
-                   playersPlayed++;
-                   phase --;
-                   break;
-
-               } else {
-                   priority.clear();
-                   canPlay = false;
-                   phase++;
-                   break;
-               }
-
-           case 5:
-               // Board elements move
-               if(priority.isEmpty() && !canPlay) {
-                   board.rollConveyorBelts(false);
-                   gameScreen.updatePlayerGraphics();
-                   phase ++;
-               }
-               break;
-           case 6:
-               board.rollConveyorBelts(true);
-               gameScreen.updatePlayerGraphics();
-               phase ++;
-               break;
-           case 7:
-               board.rotateGears();
-               gameScreen.updatePlayerGraphics();
-               phase ++;
-               break;
-           case 8:
-               gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
-               board.fireLasers();
-               laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
-               canClean = true;
-               phase ++;
-               break;
-
-           case 9:
-               // Increment programRegister and reset gameLoop values.
-               // if on last programRegister, do full round cleanup
-               if (programRegister == 4) {
-                   roundOver = true;
-                   phase++;
-               } else {
-                   programRegister++;
-                   playersPlayed = 0;
-                   phase = 2;
-                   canClean = false;
-               }
-               gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
-               break;
-
-           case 10:
-        if (canClean && roundOver) {
-            for (Player player : players) {
-                player.clearHand();
-                if (player.hasQueuedRespawn) {
-                    player.reSpawn(player.getDirection());
+            case 3:
+                // Execute program cards in order. If last player played his card on current programRegister, continue.
+                if (canPlay && currentProgramRegister < 5 && !movementPriority.isEmpty()) {
+                    Player player = movementPriority.poll();
+                    gameScreen.runProgram(player, currentProgramRegister);
+                    if (movementPriority.isEmpty()) {
+                        canPlay = false;
+                        phase++;
+                    }
                 }
-            }
-            gameScreen.updatePlayerGraphics();
-            playersPlayed = 0;
-            gameScreen.clearCards(cardImages);
-            cardsShown = false;
-            programRegister = 0;
-            canClean = false;
-            players.get(0).hasChosenCards = false;
-            phase = 0;
-            break;
-        }
-           default:
-               System.out.println("phase index did an oopsie :)");
-        }
-        }
+                break;
 
+            case 4:
+                // Board elements move, starting with all conveyor belts
+                if (movementPriority.isEmpty() && !canPlay) {
+                    board.rollConveyorBelts(false);
+                    gameScreen.updatePlayerGraphics();
+                    phase++;
+                }
+                break;
+            case 5:
+                // Express belts move
+                board.rollConveyorBelts(true);
+                gameScreen.updatePlayerGraphics();
+                phase++;
+                break;
+            case 6:
+                // Gears rotate
+                board.rotateGears();
+                gameScreen.updatePlayerGraphics();
+                phase++;
+                break;
+            case 7:
+                // Board lasers fire
+                gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
+                board.fireLasers();
+                laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
+                canClean = true;
+                phase++;
+                break;
+            case 8:
+                // Clean up
+                // Increment programRegister and reset gameLoop values.
+                // if on last programRegister, do full round cleanup
+                if (currentProgramRegister == 4) {
+                    roundOver = true;
+                    phase++;
+                } else {
+                    currentProgramRegister++;
+                    phase = 2;
+                    canClean = false;
+                }
+                gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
+                break;
 
-
-    // returns an ArrayList with Players sorted in descending order by cardpriority in current programregister
-    // Player associated with Card that has highest priority goes first.
-    public ArrayList<Player> priorityHandler() {
-        for (Player player : players) {
-            player.programRegister = programRegister;
+            case 9:
+                if (canClean && roundOver) {
+                    for (Player player : players) {
+                        player.clearHand();
+                        if (player.hasQueuedRespawn) {
+                            player.reSpawn(player.getDirection());
+                        }
+                    }
+                    gameScreen.updatePlayerGraphics();
+                    gameScreen.clearCards(cardGraphics);
+                    cardsDisplayed = false;
+                    currentProgramRegister = 0;
+                    canClean = false;
+                    phase = 0;
+                    break;
+                }
+            default:
+                System.out.println("phase index did an oopsie :)");
         }
-        ArrayList<Player> playersCopy = new ArrayList<>(players);
-        Collections.sort(playersCopy, comparing(Player::getPriorityOfCardOnCurrentProgramRegister));
-        return playersCopy;
     }
+
 }

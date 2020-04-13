@@ -4,10 +4,10 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.tiles.Tile;
+import org.jetbrains.annotations.NotNull;
 
-public class Player {
+public class Player implements Comparable<Player> {
 
-    public boolean hasChosenCards;
     public boolean isNPC;
     private int row;
     private int col;
@@ -90,6 +90,8 @@ public class Player {
         return hand.getProgram();
     }
 
+    public boolean hasLockedInProgram() { return getProgram() != null; }
+
     public void setProgram() {
         hand.setProgram();
     }
@@ -157,5 +159,10 @@ public class Player {
         if (lifeTokens > 0) {
             this.hasQueuedRespawn = true;
         }
+    }
+
+    @Override
+    public int compareTo(@NotNull Player otherPlayer) {
+        return getProgram()[programRegister].compareTo(otherPlayer.getProgram()[programRegister]);
     }
 }

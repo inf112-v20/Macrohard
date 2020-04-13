@@ -203,9 +203,6 @@ public class GameScreen implements Screen {
                 player.getProgram()[4] = card;
             }
         }
-        player.hasChosenCards = true;
-        System.out.println(Arrays.toString(player.getProgram()
-        ));
     }
 
     public void lockRandomProgram(Player player) {
@@ -240,7 +237,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        RoboRallyApplication.music.play();
+        //RoboRallyApplication.music.play();
     }
 
     @Override
