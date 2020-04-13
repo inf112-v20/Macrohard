@@ -100,11 +100,11 @@ public class Player {
         hand.clear();
     }
 
-    public void turnClockwise() {
+    public void rotateClockwise() {
         setDirection(getDirection().turnClockwise());
     }
 
-    public void turnCounterClockwise() {
+    public void rotateCounterClockwise() {
         setDirection(getDirection().turnCounterClockwise());
     }
 

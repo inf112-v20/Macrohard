@@ -86,6 +86,10 @@ public class Board {
                 String tileType = (String) tile.getProperties().get("Type");
                 Tile currentTile;
                 switch (tileType) {
+                    case "GEAR":
+                        boolean clockwise = (boolean) tile.getProperties().get("Clockwise");
+                        currentTile = new Gear(row, col, clockwise);
+                        break;
                     case "HOLE":
                         currentTile = new Hole(row, col);
                         break;
@@ -179,6 +183,23 @@ public class Board {
             if (targetTile.isOccupied()) {
                 Player damagedPlayer = targetTile.getPlayer();
                 damagedPlayer.applyDamage(laser.getDamage());
+            }
+        }
+    }
+
+    public void rotateGears() {
+        for (Tile[] row : board) {
+            for (Tile tile : row) {
+                if (tile instanceof Gear && tile.isOccupied()) {
+                    Gear gear = (Gear) tile;
+                    Player player = gear.getPlayer();
+                    if (gear.rotatesClockwise()) {
+                       player.rotateClockwise();
+                    }
+                    else {
+                        player.rotateCounterClockwise();
+                    }
+                }
             }
         }
     }
