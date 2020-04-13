@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -19,6 +20,8 @@ import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
+import inf112.skeleton.app.tiles.Hole;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -154,6 +157,21 @@ public class GameScreen implements Screen {
         });
         stage.addActor(changePlayer);
 
+        TextButton respawn = new TextButton("RESPAWN", parent.getSkin());
+        respawn.setBounds(buttonX, 244, 150, 50);
+        respawn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                for (Player player : players) {
+                    if (player.hasQueuedRespawn) {
+                        player.reSpawn(Direction.EAST);
+                    }
+                }
+                updatePlayerGraphics();
+            }
+        });
+        stage.addActor(respawn);
+
         gameLoop = new GameLoop(board, this);
 
     }
@@ -162,6 +180,9 @@ public class GameScreen implements Screen {
         for (Player player : players) {
             player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
             player.getGraphics().animateRotation(player.getGraphics().getDirection(), player.getDirection());
+            if (board.getTile(player) instanceof Hole) {
+                player.getGraphics().addAction(Actions.scaleTo(0.01f, 0.01f, 1f));
+            }
             player.getGraphics().animate();
         }
     }

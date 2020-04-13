@@ -61,8 +61,9 @@ public class Board {
             Player player = players.get(playerIndex);
             Dock dock = docks.get(playerIndex);
             dock.setPlayer(player);
-            player.setSpawnPoint(dock);
-            player.reSpawn();
+            player.setArchiveMarker(dock);
+            player.setRow(dock.getRow());
+            player.setCol(dock.getCol());
             playerIndex ++;
         }
     }
@@ -259,28 +260,30 @@ public class Board {
     private void roll(ConveyorBelt belt, Player player) {
         Direction direction = belt.getDirection();
         Tile toTile = getAdjacentTile(belt, direction);
+        player.stepIn(direction);
 
-        //Respawn rolling player if player is rolled into a hole
+        //Queue respawn for rolling player if player has rolled into a hole
         if (toTile instanceof Hole) {
-            player.reSpawn();
-            toTile = player.getSpawnPoint();
+            player.looseLife();
+            player.queueRespawn();
+            toTile.setPlayer(null);
+
         }
-        //Step one in direction of belt if otherwise
         else {
-            player.stepIn(direction);
             //Rotate player if the conveyor belt swings either left or right
             //Assumes that there are no two conveyor belts pointing into each other
             if (getTile(player) instanceof ConveyorBelt) {
                 ConveyorBelt nextBelt = (ConveyorBelt) getTile(player);
                 if (!direction.equals(nextBelt.getDirection())) {
                     if (direction.turnClockwise().equals(nextBelt.getDirection())) {
-                        player.turnClockwise();
+                        player.rotateClockwise();
                     }
                     else if (direction.turnCounterClockwise().equals(nextBelt.getDirection())) {
-                        player.turnCounterClockwise();
+                        player.rotateCounterClockwise();
                     }
                 }
             }
+            toTile.setPlayer(player);
         }
 
         //Update the Tile->Player-relation now that player is moved
@@ -291,7 +294,6 @@ public class Board {
                 belt.setPlayer(null);
             }
         }
-        toTile.setPlayer(player);
     }
 
     public void stepOne(Player player, Direction direction) {
@@ -302,23 +304,26 @@ public class Board {
             stepOne(toTile.getPlayer(), direction);
         }
 
+        player.stepIn(direction);
+
         if (toTile instanceof Hole) {
-            player.reSpawn();
-            toTile = player.getSpawnPoint();
+            player.looseLife();
+            player.queueRespawn();
+            toTile.setPlayer(null);
         }
         else {
-            player.stepIn(direction);
+            toTile.setPlayer(player);
         }
 
         if (fromTile.isOccupied() && fromTile.getPlayer().equals(player)) {
             fromTile.setPlayer(null);
         }
-        toTile.setPlayer(player);
+
     }
 
     public boolean legalStep(Player player, Direction direction) {
         Tile fromTile = getTile(player);
-        if (outOfBounds(fromTile, direction)) {
+        if (fromTile instanceof Hole || outOfBounds(fromTile, direction)) {
             return false;
         }
         Tile toTile = getAdjacentTile(fromTile, direction);
@@ -327,7 +332,8 @@ public class Board {
         }
         // Else check recursively if player on target tile can
         // legally be pushed in same direction
-        else { return legalStep(toTile.getPlayer(), direction); }
+        else {
+            return legalStep(toTile.getPlayer(), direction); }
     }
 
     public boolean legalRoll(ConveyorBelt belt, boolean expressOnly, Direction direction) {

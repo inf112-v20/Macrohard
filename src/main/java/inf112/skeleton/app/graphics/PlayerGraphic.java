@@ -75,4 +75,10 @@ public class PlayerGraphic extends Image {
     public Direction getDirection() {
         return direction;
     }
+
+    public void respawn() {
+        setBounds(PLAYER_WIDTH*player.getCol(), START_Y_AXIS + PLAYER_HEIGHT*player.getRow(), PLAYER_WIDTH, PLAYER_HEIGHT);
+        setOrigin(Align.center);
+        sequenceAction.addAction(Actions.scaleTo(1, 1, 0.5f));
+    }
 }

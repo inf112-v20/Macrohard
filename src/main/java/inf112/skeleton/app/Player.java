@@ -11,13 +11,16 @@ public class Player {
     public boolean isNPC;
     private int row;
     private int col;
-    private Tile spawnPoint;
+    private Tile archiveMarker;
     private Direction direction;
     public PlayerHand hand;
 
     private int damageTokens;
+    private int lifeTokens;
+
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
+    public boolean hasQueuedRespawn = false;
 
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
@@ -26,14 +29,15 @@ public class Player {
         this.direction = direction;
         this.isNPC = isNPC;
         this.damageTokens = 0;
+        this.lifeTokens = 3;
     }
 
-    public Tile getSpawnPoint() {
-        return spawnPoint;
+    public Tile getArchiveMarker() {
+        return archiveMarker;
     }
 
-    public void setSpawnPoint(Tile spawnPoint) {
-        this.spawnPoint = spawnPoint;
+    public void setArchiveMarker(Tile archiveMarker) {
+        this.archiveMarker = archiveMarker;
     }
 
     public int getRow() {
@@ -57,9 +61,17 @@ public class Player {
         setCol(col + direction.getColumnTrajectory());
     }
 
-    public void reSpawn() {
-        setRow(spawnPoint.getRow());
-        setCol(spawnPoint.getCol());
+    private void reSpawn() {
+        setRow(archiveMarker.getRow());
+        setCol(archiveMarker.getCol());
+    }
+
+    public void reSpawn(Direction direction) {
+        reSpawn();
+        setDirection(direction);
+        hasQueuedRespawn = false;
+
+        playerGraphic.respawn();
     }
 
     public Direction getDirection () {
@@ -131,5 +143,19 @@ public class Player {
 
     public void applyDamage(int damage) {
         this.damageTokens += damage;
+        if (this.damageTokens > 9) {
+            looseLife();
+            this.damageTokens = 0;
+        }
+    }
+
+    public void looseLife() {
+        lifeTokens --;
+    }
+
+    public void queueRespawn() {
+        if (lifeTokens > 0) {
+            this.hasQueuedRespawn = true;
+        }
     }
 }
