@@ -225,7 +225,7 @@ public class Board {
                 if (tile instanceof ConveyorBelt && tile.isOccupied()) {
                     ConveyorBelt belt = (ConveyorBelt) tile;
                     if (!expressOnly || belt.isExpress()) {
-                        if (legalRoll(belt, expressOnly, belt.getDirection())) {
+                        if (legalRoll(belt, belt.getDirection(), expressOnly)) {
                             Tile targetTile = getAdjacentTile(belt, belt.getDirection());
                             int index = targetTiles.indexOf(targetTile);
                             if (targetTiles.contains(targetTile)) {
@@ -336,8 +336,8 @@ public class Board {
             return legalStep(toTile.getPlayer(), direction); }
     }
 
-    public boolean legalRoll(ConveyorBelt belt, boolean expressOnly, Direction direction) {
-        Player player = belt.getPlayer();
+    public boolean legalRoll(Tile tile, Direction direction, boolean expressOnly) {
+        Player player = tile.getPlayer();
         Tile fromTile = getTile(player);
         if (outOfBounds(fromTile, direction)) {
             return false;
@@ -353,7 +353,7 @@ public class Board {
             ConveyorBelt toBelt = (ConveyorBelt) toTile;
             if (!expressOnly || toBelt.isExpress()) {
                 // This recursive call will result in an infinite loop in very rare circumstances
-                return legalRoll(toBelt, expressOnly, toBelt.getDirection());
+                return legalRoll(toBelt, toBelt.getDirection(), expressOnly);
             }
         }
         // Else, robot is not allowed to roll, since you can't push other robots when you roll
@@ -383,6 +383,12 @@ public class Board {
     }
 
     public void layTile(Tile tile) {
+        Tile temp = board[tile.getRow()][tile.getCol()];
+        if (temp != null) {
+            if (temp.isOccupied()) {
+                tile.setPlayer(temp.getPlayer());
+            }
+        }
         board[tile.getRow()][tile.getCol()] = tile;
     }
 
