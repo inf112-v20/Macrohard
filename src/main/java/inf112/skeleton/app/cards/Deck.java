@@ -1,5 +1,6 @@
 package inf112.skeleton.app.cards;
 
+//import com.sun.scenario.effect.impl.sw.sse.SSEBlend_SRC_OUTPeer;
 import inf112.skeleton.app.Player;
 
 import java.util.ArrayList;
@@ -10,9 +11,11 @@ public class Deck {
     private int deckSize = 84;
     private ArrayList<Card> deck;
 
-    public Deck(boolean shuffled) {
+/*    public Deck(boolean shuffled) {
         deck = new ArrayList<>();
+        int priority = 0;
         for (int numCards = 0; numCards < 84; numCards++){
+
             Card card;
             if (numCards < 18) {
                 card = new MovementCard(numCards, MovementType.ONE_FORWARD);
@@ -30,6 +33,41 @@ public class Deck {
                 card = new RotationCard(numCards, RotationType.U_TURN);
             }
             deck.add(card);
+        }
+        if (shuffled) {
+            shuffle();
+        }
+    }*/
+
+    public Deck(boolean shuffled) {
+        deck = new ArrayList<>();
+        int priority = 10;
+
+        for (int numCards = 0; numCards < 84; numCards++){
+            Card card;
+            if (numCards < 6) {
+                card = new RotationCard(priority, RotationType.U_TURN);
+            } else if (numCards < 24) {
+                card = new RotationCard(priority, RotationType.COUNTER_CLOCKWISE);
+                priority+=10;
+
+            } else if (numCards < 42){
+                if (priority == 430){
+                    priority = 70;
+                }
+                priority+=10;
+                card = new RotationCard(priority, RotationType.CLOCKWISE);
+            } else if (numCards < 48) {
+                card = new MovementCard(priority, MovementType.ONE_BACKWARD);
+            } else if (numCards < 66) {
+                card = new MovementCard(priority, MovementType.ONE_FORWARD);
+            } else if (numCards < 78) {
+                card = new MovementCard(priority, MovementType.TWO_FORWARD);
+            } else {
+                card = new MovementCard(priority, MovementType.THREE_FORWARD);
+            }
+            deck.add(card);
+            priority+=10;
         }
         if (shuffled) {
             shuffle();
@@ -59,12 +97,21 @@ public class Deck {
     public int getDeckSize() {
         return getDeck().size();
     }
+//
+//    @Override
+//    public String toString(){
+//        String result = "";
+//        for (Card i : deck){
+//            result += (i.toString() + "\n");
+//        }
+//        return result;
+//    }
 
     @Override
     public String toString(){
         String result = "";
         for (Card i : deck){
-            result += (i.toString() + "\n");
+            result+= (i.toString()+"\n");
         }
         return result;
     }

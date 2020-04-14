@@ -38,7 +38,11 @@ public class GameLoop {
         this.client = players.get(0);
         this.movementPriority = new PriorityQueue<>();
         this.cardGraphics = new ArrayList<>(9);
-        this.deck = new Deck(true);
+        //this.deck = new Deck(true);
+        this.deck = new Deck(false);
+        System.out.println(this.deck);
+        this.deck.shuffle();
+
     }
 
     // Assumes the non-NPC player is always the first element of the players ArrayList
