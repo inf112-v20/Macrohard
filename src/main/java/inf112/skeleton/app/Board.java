@@ -9,6 +9,7 @@ import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.tiles.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -24,8 +25,8 @@ public class Board {
     private LinkedList<ConveyorBelt> queuedConveyorBelts;
 
     //Graphic-independent constructor for test-classes
-    public Board(ArrayList<Player> players, int height, int width) {
-        this.players = players;
+    public Board(int height, int width, Player... players) {
+        this.players = new ArrayList<>(Arrays.asList(players));
         this.docks = new ArrayList<>();
         this.lasers = new ArrayList<>();
         this.height = height;
@@ -46,9 +47,11 @@ public class Board {
         this.height = mapManager.getHeight();
         this.width = mapManager.getWidth();
 
+
         layTiles(mapManager);
         erectWalls(mapManager);
         dockPlayers(players);
+        placeFlags(mapManager);
     }
 
     private void set(Player player) {
@@ -66,6 +69,16 @@ public class Board {
             player.setCol(dock.getCol());
             playerIndex ++;
         }
+    }
+
+    public void layTile(Tile tile) {
+        Tile temp = board[tile.getRow()][tile.getCol()];
+        if (temp != null) {
+            if (temp.isOccupied()) {
+                tile.setPlayer(temp.getPlayer());
+            }
+        }
+        board[tile.getRow()][tile.getCol()] = tile;
     }
 
     //Fills the board with standard tiles
@@ -102,6 +115,11 @@ public class Board {
                     case "CONVEYOR_BELT":
                         currentTile = installConveyorBelt(mapManager, row, col);
                         break;
+
+                    case "FLAG":
+                        int numberFlag = (Integer) tile.getProperties().get("Number");
+                        currentTile = new Flag(numberFlag, row, col);
+                        break;
                     default:
                         currentTile = new Tile(row, col);
                         break;
@@ -135,7 +153,6 @@ public class Board {
                         if(nrOfLasers > 0) {
                             installLaser(nrOfLasers, dir.opposite(), row, col);
                     }
-
                     }
                 }
             }
@@ -152,7 +169,18 @@ public class Board {
         Direction dir = Direction.fromString(value);
         boolean express =  (boolean) belt.getTile().getProperties().get("Express");
         return new ConveyorBelt(row, col, dir, express);
+    }
 
+    private void placeFlags(TiledMapManager manager){
+        for (int row = 0; row < height; row ++) {
+            for (int col = 0; col < width; col++) {
+                if (manager.getCell("FLAGS", row, col) != null) {
+                    int number = (Integer)manager.getCell("FLAGS", row, col).getTile().getProperties().get("Number");
+                    Flag flag = new Flag(number, row, col);
+                    layTile(flag);
+                }
+            }
+        }
     }
 
     public void execute(Player player, Card card) {
@@ -205,7 +233,7 @@ public class Board {
         }
     }
 
-    private Tile getTile(Laser laser) {
+    public Tile getTile(Laser laser) {
         return getTile(laser.getRow(), laser.getCol());
     }
 
@@ -213,7 +241,9 @@ public class Board {
         if (!isOccupied(tile) && noWallCollision(tile, direction) && !outOfBounds(tile, direction)) {
             return getLaserTarget(getAdjacentTile(tile, direction), direction);
         }
-        else { return tile; }
+        else {
+            return tile;
+        }
     }
 
     private ArrayList<Player> queueConveyorBelts(boolean expressOnly) {
@@ -299,6 +329,7 @@ public class Board {
     public void stepOne(Player player, Direction direction) {
         Tile fromTile = getTile(player);
         Tile toTile = getAdjacentTile(fromTile, direction);
+        System.out.println("FROM: " + fromTile + " -> TO: " + toTile);
 
         if (toTile.isOccupied()) {
             stepOne(toTile.getPlayer(), direction);
@@ -323,12 +354,12 @@ public class Board {
 
     public boolean legalStep(Player player, Direction direction) {
         Tile fromTile = getTile(player);
-        if (fromTile instanceof Hole || outOfBounds(fromTile, direction)) {
+        if (fromTile instanceof Hole || outOfBounds(fromTile, direction) || !noWallCollision(getTile(player), direction)) {
             return false;
         }
         Tile toTile = getAdjacentTile(fromTile, direction);
         if (!toTile.isOccupied()) {
-            return (noWallCollision(getTile(player), direction));
+            return true;
         }
         // Else check recursively if player on target tile can
         // legally be pushed in same direction
@@ -382,22 +413,16 @@ public class Board {
         return getTile(player.getRow(), player.getCol());
     }
 
-    public void layTile(Tile tile) {
-        Tile temp = board[tile.getRow()][tile.getCol()];
-        if (temp != null) {
-            if (temp.isOccupied()) {
-                tile.setPlayer(temp.getPlayer());
-            }
-        }
-        board[tile.getRow()][tile.getCol()] = tile;
-    }
-
     public Tile getAdjacentTile(Tile tile, Direction direction) {
         return board[tile.getRow() + direction.getRowTrajectory()][tile.getCol() + direction.getColumnTrajectory()];
     }
 
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public ArrayList<Laser> getLasers() {
+        return lasers;
     }
 
     public boolean isOccupied(Tile tile){

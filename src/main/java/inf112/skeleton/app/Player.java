@@ -2,7 +2,6 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import inf112.skeleton.app.cards.Card;
-import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.tiles.Tile;
@@ -15,7 +14,9 @@ public class Player implements Comparable<Player> {
     private int col;
     private Tile archiveMarker;
     private Direction direction;
-    public PlayerHand hand;
+    //public PlayerHand hand;
+    public Card[] program;
+    public Card[] hand;
 
     private int damageTokens;
     private int lifeTokens;
@@ -25,6 +26,15 @@ public class Player implements Comparable<Player> {
     public boolean hasQueuedRespawn = false;
     private PlayerInfoGraphic playerInfoGraphic;
 
+
+    public Player(int row, int col, Direction direction) {
+        this.row = row;
+        this.col = col;
+        this.direction = direction;
+        this.isNPC = false;
+        this.damageTokens = 0;
+        this.lifeTokens = 3;
+    }
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
         this.row = row;
@@ -87,19 +97,7 @@ public class Player implements Comparable<Player> {
         this.direction = direction;
     }
 
-    public PlayerHand getHand() {
-        return this.hand;
-    }
-
-    public Card[] getProgram() {
-        return hand.getProgram();
-    }
-
     public boolean hasLockedInProgram() { return getProgram() != null; }
-
-    public void setProgram() {
-        hand.setProgram();
-    }
 
     public int getDamageTokens() {
         return damageTokens;
@@ -115,9 +113,6 @@ public class Player implements Comparable<Player> {
         this.playerGraphic = playerGraphic;
     }
 
-    public void clearHand() {
-        hand.clear();
-    }
 
     public void rotateClockwise() {
         setDirection(getDirection().turnClockwise());
@@ -127,17 +122,24 @@ public class Player implements Comparable<Player> {
         setDirection(getDirection().turnCounterClockwise());
     }
 
-    public int getPriorityOfCardOnCurrentProgramRegister(){
-        if (getProgram() != null && programRegister < 5) {
-            if (getProgram()[programRegister] != null) {
-                return getProgram()[programRegister].getPriority();
-            } else {
-                getGraphics().animate();
-                return -1;
-            }
-        }
-        return -1;
+    public void setHand(Card[] hand) {
+        this.hand = hand;
     }
+
+    public Card[] getHand() {
+        return hand;
+    }
+
+    public Card[] getProgram() { return program;}
+
+    public void setProgram() {
+        this.program = new Card[5];
+    }
+    public void clearHand() {
+        program = null;
+        hand = null;
+    }
+
 
     @Override
     public String toString() {

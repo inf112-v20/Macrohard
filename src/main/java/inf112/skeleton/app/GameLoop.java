@@ -7,6 +7,8 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
+import inf112.skeleton.app.tiles.Flag;
+import inf112.skeleton.app.tiles.Tile;
 
 import java.util.*;
 
@@ -68,7 +70,7 @@ public class GameLoop {
             case 1:
                 // Draw cards on screen and lock in the programs for all NPC's
                 if (!cardsDisplayed) {
-                    for (Card card : client.getHand().getHand()) {
+                    for (Card card : client.getHand()) {
                         CardGraphic cardGraphic = new CardGraphic(card);
                         gameScreen.addStageActor(cardGraphic);
                         cardGraphics.add(cardGraphic);
@@ -151,6 +153,10 @@ public class GameLoop {
             case 9:
                 if (canClean && roundOver) {
                     for (Player player : players) {
+                        Tile tile = board.getTile(player);
+                        if (tile instanceof Flag) {
+                            player.setArchiveMarker(tile);
+                        }
                         player.clearHand();
                         if (player.hasQueuedRespawn) {
                             player.reSpawn(player.getDirection());

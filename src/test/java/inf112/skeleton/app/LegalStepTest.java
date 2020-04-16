@@ -16,18 +16,16 @@ public class LegalStepTest {
 
     private void createPlayerInMiddleOfBoard() {
         player = new Player(4,4, Direction.NORTH, false);
-        board = new Board(new ArrayList<>(Arrays.asList(player)), 12, 12);
+        board = new Board( 12, 12, player);
     }
 
     private void createPlayerInMiddleOfBoardSurroundedByFourPlayers() {
-        ArrayList<Player> players = new ArrayList<>();
         player = new Player(4,4, Direction.NORTH, false);
-        players.add(player);
-        players.add(new Player(5, 4, Direction.NORTH, true));
-        players.add(new Player(3, 4, Direction.NORTH, true));
-        players.add(new Player(4, 3, Direction.NORTH, true));
-        players.add(new Player(4, 5, Direction.NORTH, true));
-        board = new Board(players, 12, 12);
+        Player dummy1 = new Player(5, 4, Direction.NORTH, true);
+        Player dummy2 = new Player(3, 4, Direction.NORTH, true);
+        Player dummy3 = new Player(4, 3, Direction.NORTH, true);
+        Player dummy4 = new Player(4, 5, Direction.NORTH, true);
+        board = new Board( 12, 12, player, dummy1, dummy2, dummy3, dummy4);
     }
 
     @Test
