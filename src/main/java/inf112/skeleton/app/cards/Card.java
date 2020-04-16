@@ -4,7 +4,7 @@ public abstract class Card implements Comparable<Card> {
 
     protected final int priority;
     public boolean selected = false;
-    public int handIndex = -1;
+    public int programIndex = -1;
     protected final CardType cardType;
 
     public Card(int priority, CardType cardType) {
@@ -27,4 +27,10 @@ public abstract class Card implements Comparable<Card> {
         return card.getPriority() - this.getPriority();
     }
 
+    public void setProgramIndex(int programIndex) { this.programIndex = programIndex; }
+
+    @Override
+    public String toString(){
+       return ("TYPE: " + this.cardType + "PRIORITY: " + this.priority);
+    }
 }

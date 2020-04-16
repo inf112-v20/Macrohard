@@ -10,8 +10,6 @@ import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 import inf112.skeleton.app.screens.PreferenceScreen;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class RoboRallyApplication extends com.badlogic.gdx.Game {
 

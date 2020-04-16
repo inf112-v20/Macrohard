@@ -11,7 +11,8 @@ public class LegalStepTest {
 
     private Player player;
     private Board board;
-    private final ArrayList<Direction> directions = new ArrayList<>(Arrays.asList(Direction.NORTH, Direction.EAST, Direction.SOUTH, Direction.WEST));
+    private final ArrayList<Direction> directions = new ArrayList<>(Arrays.asList(Direction.NORTH,
+            Direction.EAST, Direction.SOUTH, Direction.WEST));
 
     private void createPlayerInMiddleOfBoard() {
         player = new Player(4,4, Direction.NORTH, false);

@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -19,23 +20,25 @@ import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
+import inf112.skeleton.app.tiles.Hole;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
 
 public class GameScreen implements Screen {
 
+    public final RoboRallyApplication parent;
     private final GameScreenInputProcessor inputProcessor;
-    private RoboRallyApplication parent;
 
     public TiledMapManager mapHandler;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
 
-    public final static int TILE_SIZE = 60;
+    public final static int TILE_SIZE = 50;
     private float timeInSeconds = 0f;
-    private float period = 1f;
+    private float period = 0.8f;
     private TiledMapTileLayer playerLayer;
 
     private ArrayList<PlayerGraphic> playerGraphics = new ArrayList<>();
@@ -47,10 +50,9 @@ public class GameScreen implements Screen {
     private final ArrayList<Player> players;
 
     public GameScreen(final RoboRallyApplication parent){
-
+    this.parent = parent;
         // ---- INITIALISATION ----
         stage = new Stage(new ScreenViewport());
-        this.parent = parent;
 
         // Initialise players
         Player player1 = new Player(0, 1, Direction.EAST, false);
@@ -68,8 +70,8 @@ public class GameScreen implements Screen {
 
         // Initialise board-view
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        //camera.translate(0, -tileSize*camera.zoom*2);
+        camera.zoom += 0.19;
+        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 300);
         renderer = new OrthogonalTiledMapRenderer(map);
 
         // Initialise tile-layers
@@ -93,7 +95,7 @@ public class GameScreen implements Screen {
         stage.addListener(inputProcessor);
 
         //Initialise buttons
-        int buttonX = ((Integer) map.getProperties().get("width") * TILE_SIZE) + 5;
+        int buttonX = ((Integer) map.getProperties().get("width") * TILE_SIZE) + 250;
         TextButton laserOn = new TextButton("LASER ON/OFF", parent.getSkin());
         laserOn.setBounds(buttonX, 600, 200, 50);
         laserOn.addListener(new ChangeListener() {
@@ -156,6 +158,21 @@ public class GameScreen implements Screen {
         });
         stage.addActor(changePlayer);
 
+        TextButton respawn = new TextButton("RESPAWN", parent.getSkin());
+        respawn.setBounds(buttonX, 244, 150, 50);
+        respawn.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                for (Player player : players) {
+                    if (player.hasQueuedRespawn) {
+                        player.reSpawn(Direction.EAST);
+                    }
+                }
+                updatePlayerGraphics();
+            }
+        });
+        stage.addActor(respawn);
+
         gameLoop = new GameLoop(board, this);
 
     }
@@ -164,6 +181,9 @@ public class GameScreen implements Screen {
         for (Player player : players) {
             player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
             player.getGraphics().animateRotation(player.getGraphics().getDirection(), player.getDirection());
+            if (board.getTile(player) instanceof Hole) {
+                player.getGraphics().addAction(Actions.scaleTo(0.01f, 0.01f, 1f));
+            }
             player.getGraphics().animate();
         }
     }
@@ -171,21 +191,18 @@ public class GameScreen implements Screen {
     public void lockInProgram(Player player, Card[] cards){
         // Create program of selected cards from hand
         for (Card card : cards) {
-            if (card.handIndex == 1) {
+            if (card.programIndex == 1) {
                 player.getProgram()[0] = card;
-            } else if (card.handIndex == 2) {
+            } else if (card.programIndex == 2) {
                 player.getProgram()[1] = card;
-            } else if (card.handIndex == 3) {
+            } else if (card.programIndex == 3) {
                 player.getProgram()[2] = card;
-            } else if (card.handIndex == 4) {
+            } else if (card.programIndex == 4) {
                 player.getProgram()[3] = card;
-            } else if (card.handIndex == 5) {
+            } else if (card.programIndex == 5) {
                 player.getProgram()[4] = card;
             }
         }
-        player.hasChosenCards = true;
-        System.out.println(Arrays.toString(player.getProgram()
-        ));
     }
 
     public void lockRandomProgram(Player player) {
@@ -208,16 +225,10 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void runProgram(Player player, int cardNumber) {
-        Card card = player.getProgram()[cardNumber];
-        Direction dir = player.getDirection();
+    public void runProgram(Player player, int programIndex) {
+        Card card = player.getProgram()[programIndex];
         board.execute(player, card);
-        player.getGraphics().updatePlayerGraphic(card, dir);
-        player.getGraphics().animate();
-       /* if (player.isNPC) {
-            System.out.println("NPC Played Card: " + player.getProgram()[cardNumber]
-            );
-        }*/
+        updatePlayerGraphics();
     }
 
     public void setAsInputProcessor() {
@@ -226,7 +237,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        RoboRallyApplication.music.play();
+        //RoboRallyApplication.music.play();
     }
 
     @Override
@@ -235,11 +246,11 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         // Comment this out to disable GameLoop
-        /*timeInSeconds += Gdx.graphics.getRawDeltaTime();
+        timeInSeconds += Gdx.graphics.getRawDeltaTime();
         if (timeInSeconds > period) {
             timeInSeconds -= period;
             gameLoop.tick();
-        }*/
+        }
 
         renderer.setView(camera);
         renderer.render();
