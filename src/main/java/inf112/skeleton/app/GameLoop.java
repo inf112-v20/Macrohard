@@ -158,11 +158,13 @@ public class GameLoop {
                         if (tile instanceof Flag) {
                             player.setArchiveMarker(tile);
                         }
-                        player.clearHand();
-                        if (player.hasQueuedRespawn) {
+                        else if (player.hasQueuedRespawn) {
                             player.reSpawn(player.getDirection());
+
                         }
+                        player.clearHand();
                     }
+
                     gameScreen.updatePlayerGraphics();
                     gameScreen.clearCards(cardGraphics);
                     cardsDisplayed = false;
