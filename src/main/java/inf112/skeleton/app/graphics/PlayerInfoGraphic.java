@@ -19,10 +19,10 @@ public class PlayerInfoGraphic extends Image {
 
     static int initiatedPlayers = -1;
     private final int playerNumber;
-    private final File file;
+    private File file;
     private Pixmap fontPixmap;
-    private final Pixmap pixmap;
-    private final BitmapFont.BitmapFontData fontData;
+    private Pixmap pixmap;
+    private BitmapFont.BitmapFontData fontData;
 
     public PlayerInfoGraphic(Player player){
         super(new Texture("./assets/PlayerInfoBackground.png"));
@@ -31,8 +31,13 @@ public class PlayerInfoGraphic extends Image {
 
         this.player = player;
         player.setInfoGraphic(this);
-        this.file = new File("./assets/PlayerInfoBackground.png");
         setBounds(10 + (initiatedPlayers * 130), 870, 120, 160);
+        resetPixmaps();
+        updateValues();
+    }
+
+    public void resetPixmaps(){
+        this.file = new File("./assets/PlayerInfoBackground.png");
         this.pixmap = new Pixmap(new FileHandle(file));
 
         // ### FONT INIT ###
@@ -40,12 +45,6 @@ public class PlayerInfoGraphic extends Image {
                 Files.FileType.Internal);
         BitmapFont font = new BitmapFont(handle);
         this.fontData = font.getData();
-        this.fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
-
-        updateValues();
-    }
-
-    public void resetFontPixmap(){
         this.fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
     }
 
@@ -73,7 +72,7 @@ public class PlayerInfoGraphic extends Image {
     }
 
     public void updateValues(){
-        resetFontPixmap();
+        resetPixmaps();
         drawName();
         drawDamage();
         draw();
