@@ -25,6 +25,8 @@ public class CardGraphicListener extends ClickListener {
     private Texture texture;
     private Pixmap pixmap;
     private int cardIndex;
+    private Pixmap fontPixmap;
+    private BitmapFont.BitmapFontData fontData;
 
     public CardGraphicListener(CardGraphic graphic) {
         super();
@@ -32,6 +34,13 @@ public class CardGraphicListener extends ClickListener {
         this.fileHandle = new FileHandle(graphic.getFile());
         this.pixmap = new Pixmap(fileHandle);
         this.texture = new Texture(pixmap);
+
+        // FONT
+        FileHandle handle = Gdx.files.getFileHandle("./assets/fonts/arial.fnt",
+                Files.FileType.Internal);
+        BitmapFont font = new BitmapFont(handle);
+        this.fontData = font.getData();
+        this.fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
     }
 
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -46,14 +55,7 @@ public class CardGraphicListener extends ClickListener {
             cardIndex = CardGraphic.programIndices.peek();
             graphic.setSelected(true);
 
-            FileHandle handle = Gdx.files.getFileHandle("./assets/fonts/arial.fnt",
-                    Files.FileType.Internal);
-            BitmapFont font = new BitmapFont(handle);
-
-            // get the glyph info
-            BitmapFont.BitmapFontData data = font.getData();
-            Pixmap fontPixmap = new Pixmap(Gdx.files.internal(data.imagePaths[0]));
-            BitmapFont.Glyph glyph = data.getGlyph(("" + cardIndex).charAt(0));
+            BitmapFont.Glyph glyph = fontData.getGlyph(("" + cardIndex).charAt(0));
 
             // Draw the character onto our base pixel-map, with a padding of 10
             pixmap.drawPixmap(fontPixmap, 10, 10,
@@ -62,8 +64,19 @@ public class CardGraphicListener extends ClickListener {
             // Draw highlight
             pixmap.setColor(new Color(0.1f, 0.7f, 0.9f, 0.3f));
             pixmap.fillRectangle(0, 0, 320, 350);
-            texture = new Texture(pixmap);
         }
+        // ### PRIORITY ###
+        int priority = graphic.getCard().getPriority();
+        String priorityAsString = Integer.toString(priority);
+
+        for(int i = 0; i<priorityAsString.length(); i++) {
+            BitmapFont.Glyph partialPriorityGlyph = this.fontData.getGlyph(priorityAsString.charAt(i));
+            pixmap.drawPixmap(fontPixmap, 120 + (i * 25), 30,
+                    partialPriorityGlyph.srcX, partialPriorityGlyph.srcY, partialPriorityGlyph.width, partialPriorityGlyph.height);
+        }
+        texture = new Texture(pixmap);
+
+        // DRAW
         graphic.setDrawable(new SpriteDrawable(new Sprite(texture)));
         return true;
     }
