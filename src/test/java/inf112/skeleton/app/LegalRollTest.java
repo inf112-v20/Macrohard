@@ -1,6 +1,8 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.tiles.ConveyorBelt;
 import inf112.skeleton.app.tiles.Tile;
+import org.junit.Before;
 import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -9,45 +11,79 @@ import static org.junit.Assert.*;
 
 public class LegalRollTest {
 
-    private Player player;
     private Board board;
-    private Tile playerTile;
-    private final ArrayList<Direction> directions = new ArrayList<>(Arrays.asList(Direction.NORTH, Direction.EAST,
-            Direction.SOUTH, Direction.WEST));
-    private final int playerRow = 4;
-    private final int playerCol = 4;
 
-    private void initializePlayerAt(int row, int col) {
-        player = new Player(row, col, Direction.NORTH, false);
-        board = new Board(new ArrayList<>(Arrays.asList(player)), 12, 12);
+    private final int midRow = 4;
+    private final int midCol = 4;
+
+    private Direction wall = Direction.SOUTH;
+    private Direction unOccupiedTileDirection = Direction.WEST;
+
+    private Tile playerTile;
+    private ConveyorBelt northwardExpressBelt = new ConveyorBelt(midRow + Direction.NORTH.getRowTrajectory(), midCol + Direction.NORTH.getColumnTrajectory(), Direction.NORTH,true);
+    private ConveyorBelt eastwardBelt = new ConveyorBelt(midRow + Direction.EAST.getRowTrajectory(), midCol + Direction.EAST.getColumnTrajectory(), Direction.EAST,false);
+
+    @Before
+    public void setUp() {
+        Player player = new Player(midRow, midCol, Direction.NORTH, false);
+        Player dummy1 = new Player(eastwardBelt.getRow(), eastwardBelt.getCol(), Direction.EAST);
+        Player dummy2 = new Player(northwardExpressBelt.getRow(), northwardExpressBelt.getCol(), Direction.NORTH);
+
+        board = new Board(10, 10, player, dummy1, dummy2);
+
         playerTile = board.getTile(player);
+        playerTile.getWalls().add(wall);
+
+        board.layTile(eastwardBelt);
     }
 
     @Test
-    public void legalRollInEveryDirection() {
-        initializePlayerAt(playerRow, playerCol);
-
-        for (Direction direction : directions) {
-            assertTrue(board.legalRoll(board.getTile(player), direction, false));
-        }
+    public void legalRollInDirectionOfUnoccupiedTile() {
+        assertTrue(board.legalRoll(playerTile, unOccupiedTileDirection, false));
     }
 
     @Test
     public void illegalRollInDirectionOfWall() {
-        initializePlayerAt(playerRow, playerCol);
-        playerTile.getWalls().add(Direction.NORTH);
-
-        assertFalse(board.legalRoll(playerTile, Direction.NORTH, false));
+        assertFalse(board.legalRoll(playerTile, wall, false));
     }
 
     @Test
     public void illegalRollInDirectionOfOccupiedNonBeltTile() {
-        initializePlayerAt(playerRow, playerCol);
-        Tile nextTile = board.getAdjacentTile(playerTile, Direction.SOUTH);
-        Player dummy = new Player(nextTile.getRow(), nextTile.getCol(), Direction.SOUTH, true);
-        nextTile.setPlayer(dummy);
+        assertFalse(board.legalRoll(playerTile, Direction.NORTH, false));
+    }
 
-        assertFalse(board.legalRoll(playerTile, Direction.SOUTH, false));
+    @Test
+    public void legalConveyorRollInDirectionOfOccupiedConveyorBelt() {
+        assertTrue(board.legalRoll(playerTile, Direction.EAST, false));
+    }
+
+    @Test
+    public void illegalExpressRollInDirectionOfOccupiedNonExpressBelt() {
+        assertFalse(board.legalRoll(playerTile, Direction.EAST, true));
+    }
+
+    @Test
+    public void legalExpressRollInDirectionOfOccupiedExpressBelt() {
+        board.layTile(northwardExpressBelt);
+
+        assertTrue(board.legalRoll(playerTile, Direction.NORTH, true));
+    }
+
+    @Test
+    public void illegalRollInDirectionOfOccupiedBeltFacingOccupiedNonBeltTile() {
+        Player dummy1 = board.getPlayers().get(1);
+        int[] xyCoordinate = new int[]{dummy1.getRow() + Direction.EAST.getRowTrajectory(), dummy1.getCol() + Direction.EAST.getColumnTrajectory()};
+        Player dummy3 = new Player(xyCoordinate[0], xyCoordinate[1], Direction.EAST);
+        board.getTile(dummy3).setPlayer(dummy3);
+
+        assertFalse(board.legalRoll(playerTile, Direction.EAST, false));
+    }
+
+    @Test
+    public void illegalRollInDirectionOfOccupiedBeltFacingWall() {
+        eastwardBelt.getWalls().add(eastwardBelt.getDirection());
+
+        assertFalse(board.legalRoll(playerTile, Direction.EAST, false));
     }
 
 
