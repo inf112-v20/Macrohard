@@ -84,9 +84,7 @@ public class Deck {
         for (int i = 0; i < handSize; i++) {
             playerHand[i] = deck.remove(i);
         }
-        PlayerHand hand = new PlayerHand();
-        hand.setHand(playerHand);
-        player.hand = hand;
+        player.setHand(playerHand);
         deckSize -= handSize;
     }
 

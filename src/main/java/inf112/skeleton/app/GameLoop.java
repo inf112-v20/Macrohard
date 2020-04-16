@@ -68,7 +68,7 @@ public class GameLoop {
             case 1:
                 // Draw cards on screen and lock in the programs for all NPC's
                 if (!cardsDisplayed) {
-                    for (Card card : client.getHand().getHand()) {
+                    for (Card card : client.getHand()) {
                         CardGraphic cardGraphic = new CardGraphic(card);
                         gameScreen.addStageActor(cardGraphic);
                         cardGraphics.add(cardGraphic);

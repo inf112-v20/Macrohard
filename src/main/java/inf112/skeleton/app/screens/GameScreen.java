@@ -142,7 +142,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 players.get(0).setProgram();
-                lockInProgram(players.get(0), players.get(0).getHand().getHand());
+                lockInProgram(players.get(0), players.get(0).getHand());
             }
         });
         stage.addActor(button);
@@ -217,8 +217,8 @@ public class GameScreen implements Screen {
             ranval[index] = temp;
         }
         for (int i = 0; i<5; i++) {
-                if (player.getHand().getHand()[i] != null) {
-                    player.getProgram()[i] = player.getHand().getHand()[i];
+                if (player.getHand()[i] != null) {
+                    player.getProgram()[i] = player.getHand()[i];
                 } else {
                     player.getProgram()[i] = null;
                 }
