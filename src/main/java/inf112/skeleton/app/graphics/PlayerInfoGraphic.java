@@ -40,7 +40,7 @@ public class PlayerInfoGraphic extends Image {
         this.file = new File("./assets/PlayerInfoBackground.png");
         this.pixmap = new Pixmap(new FileHandle(file));
 
-        // ### FONT INIT ###
+        //FONT INIT
         FileHandle handle = Gdx.files.getFileHandle("./assets/fonts/ArialFull.fnt",
                 Files.FileType.Internal);
         BitmapFont font = new BitmapFont(handle);
