@@ -29,8 +29,14 @@ public abstract class Card implements Comparable<Card> {
 
     public void setProgramIndex(int programIndex) { this.programIndex = programIndex; }
 
+    public boolean isInProgramRegister() {
+        return programIndex != -1;
+    }
+
     @Override
     public String toString(){
        return ("TYPE: " + this.cardType + "PRIORITY: " + this.priority);
     }
+
+
 }

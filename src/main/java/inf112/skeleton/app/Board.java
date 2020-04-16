@@ -9,6 +9,7 @@ import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.tiles.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
 
@@ -24,8 +25,8 @@ public class Board {
     private LinkedList<ConveyorBelt> queuedConveyorBelts;
 
     //Graphic-independent constructor for test-classes
-    public Board(ArrayList<Player> players, int height, int width) {
-        this.players = players;
+    public Board(int height, int width, Player... players) {
+        this.players = new ArrayList<>(Arrays.asList(players));
         this.docks = new ArrayList<>();
         this.lasers = new ArrayList<>();
         this.height = height;
@@ -205,7 +206,7 @@ public class Board {
         }
     }
 
-    private Tile getTile(Laser laser) {
+    public Tile getTile(Laser laser) {
         return getTile(laser.getRow(), laser.getCol());
     }
 
@@ -213,7 +214,9 @@ public class Board {
         if (!isOccupied(tile) && noWallCollision(tile, direction) && !outOfBounds(tile, direction)) {
             return getLaserTarget(getAdjacentTile(tile, direction), direction);
         }
-        else { return tile; }
+        else {
+            return tile;
+        }
     }
 
     private ArrayList<Player> queueConveyorBelts(boolean expressOnly) {
@@ -323,12 +326,12 @@ public class Board {
 
     public boolean legalStep(Player player, Direction direction) {
         Tile fromTile = getTile(player);
-        if (fromTile instanceof Hole || outOfBounds(fromTile, direction)) {
+        if (fromTile instanceof Hole || outOfBounds(fromTile, direction) || !noWallCollision(getTile(player), direction)) {
             return false;
         }
         Tile toTile = getAdjacentTile(fromTile, direction);
         if (!toTile.isOccupied()) {
-            return (noWallCollision(getTile(player), direction));
+            return true;
         }
         // Else check recursively if player on target tile can
         // legally be pushed in same direction
@@ -398,6 +401,10 @@ public class Board {
 
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public ArrayList<Laser> getLasers() {
+        return lasers;
     }
 
     public boolean isOccupied(Tile tile){

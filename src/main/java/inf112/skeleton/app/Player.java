@@ -24,6 +24,15 @@ public class Player implements Comparable<Player> {
     public boolean hasQueuedRespawn = false;
 
 
+    public Player(int row, int col, Direction direction) {
+        this.row = row;
+        this.col = col;
+        this.direction = direction;
+        this.isNPC = false;
+        this.damageTokens = 0;
+        this.lifeTokens = 3;
+    }
+
     public Player(int row, int col, Direction direction, boolean isNPC) {
         this.row = row;
         this.col = col;
