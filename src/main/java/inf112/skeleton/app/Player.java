@@ -1,8 +1,10 @@
 package inf112.skeleton.app;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.PlayerHand;
 import inf112.skeleton.app.graphics.PlayerGraphic;
+import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
@@ -21,6 +23,7 @@ public class Player implements Comparable<Player> {
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
     public boolean hasQueuedRespawn = false;
+    private PlayerInfoGraphic playerInfoGraphic;
 
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
@@ -30,6 +33,8 @@ public class Player implements Comparable<Player> {
         this.isNPC = isNPC;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+
+        PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(this);
     }
 
     public Tile getArchiveMarker() {
@@ -165,4 +170,13 @@ public class Player implements Comparable<Player> {
     public int compareTo(@NotNull Player otherPlayer) {
         return getProgram()[programRegister].compareTo(otherPlayer.getProgram()[programRegister]);
     }
+
+    public void setInfoGraphic(PlayerInfoGraphic playerInfoGraphic) {
+        this.playerInfoGraphic = playerInfoGraphic;
+    }
+
+    public PlayerInfoGraphic getPlayerInfoGraphic(){
+        return this.playerInfoGraphic;
+    }
+
 }

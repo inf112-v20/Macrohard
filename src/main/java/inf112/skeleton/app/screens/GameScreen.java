@@ -88,6 +88,7 @@ public class GameScreen implements Screen {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
             playerGraphics.add(playerGraphic);
             stage.addActor(playerGraphic);
+            stage.addActor(player.getPlayerInfoGraphic());
         }
 
         // --- INPUT ----

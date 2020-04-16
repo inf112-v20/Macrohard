@@ -63,6 +63,10 @@ public class CardGraphic extends Image {
         int priority = card.getPriority();
         String priorityAsString = Integer.toString(priority);
 
+        if(priorityAsString.length() == 2){
+            priorityAsString = "0" + priorityAsString;
+        }
+
         for(int i = 0; i<priorityAsString.length(); i++){
             BitmapFont.Glyph partialPriorityGlyph = data.getGlyph(priorityAsString.charAt(i));
             pixmap.drawPixmap(fontPixmap, 120+(i*25), 30,
