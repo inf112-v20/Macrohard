@@ -6,6 +6,7 @@ import com.badlogic.gdx.audio.Sound;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
+import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.Tile;

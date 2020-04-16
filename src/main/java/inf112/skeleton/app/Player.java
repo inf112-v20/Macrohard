@@ -14,7 +14,6 @@ public class Player implements Comparable<Player> {
     private int col;
     private Tile archiveMarker;
     private Direction direction;
-    //public PlayerHand hand;
     public Card[] program;
     public Card[] hand;
 

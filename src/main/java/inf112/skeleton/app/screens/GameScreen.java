@@ -163,7 +163,7 @@ public class GameScreen implements Screen {
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 for (Player player : players) {
                     if (player.hasQueuedRespawn) {
-                        player.reSpawn(Direction.EAST);
+                        player.reSpawn(player.getDirection());
                     }
                 }
                 updatePlayerGraphics();
