@@ -46,19 +46,19 @@ public class GameScreenInputProcessor extends InputListener {
                 Direction oldDirectionR = player.getDirection();
                 RotationCard rotationCardRight = new RotationCard(0, RotationType.CLOCKWISE);
                 board.execute(player, rotationCardRight);
-                player.getGraphics().animateRotation(oldDirectionR, player.getDirection());
+                //player.getGraphics().animateRotation(oldDirectionR, player.getDirection());
+                parent.getGameScreen().updatePlayerGraphics();
                 //System.out.println(player);
                 break;
             case Input.Keys.LEFT:
                 Direction oldDirectionL = player.getDirection();
                 RotationCard rotationCardLeft = new RotationCard(0, RotationType.COUNTER_CLOCKWISE);
                 board.execute(player, rotationCardLeft);
-                player.getGraphics().animateRotation(oldDirectionL, player.getDirection());
+                //player.getGraphics().animateRotation(oldDirectionL, player.getDirection());
+                parent.getGameScreen().updatePlayerGraphics();
                 //System.out.println(player);
                 break;
         }
-
-        player.getGraphics().animate();
 
         return true;
     }

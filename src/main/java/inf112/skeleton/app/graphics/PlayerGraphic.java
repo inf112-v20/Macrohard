@@ -17,6 +17,7 @@ public class PlayerGraphic extends Image {
     final float PLAYER_HEIGHT = GameScreen.TILE_SIZE;
     private final Player player;
     private Direction direction;
+    private int rotation;
 
     SequenceAction sequenceAction = new SequenceAction();
 
@@ -25,6 +26,7 @@ public class PlayerGraphic extends Image {
 
         this.player = player;
         player.setGraphic(this);
+        this.rotation = 0;
         direction = player.getDirection();
 
         setBounds(PLAYER_WIDTH*player.getCol(), PLAYER_HEIGHT*player.getRow(), PLAYER_WIDTH, PLAYER_HEIGHT);
@@ -62,13 +64,16 @@ public class PlayerGraphic extends Image {
         else if(degrees == -270){
             degrees = 90;
         }
-        sequenceAction.addAction(Actions.delay(1, Actions.rotateBy(degrees, 0.5f)));
+
+        this.rotation += degrees;
+        sequenceAction.addAction(Actions.delay(1, Actions.rotateTo(this.rotation, 0.5f)));
     }
 
     public void animateRotation(Direction direction, Direction newDir) {
         this.direction = newDir;
         float degrees = Direction.getDegreesBetween(direction, newDir);
-        sequenceAction.addAction(Actions.delay(0, Actions.rotateBy(degrees, 0.5f)));
+        this.rotation += degrees;
+        sequenceAction.addAction(Actions.delay(1, Actions.rotateTo(this.rotation, 0.5f)));
     }
 
     public void animate(){

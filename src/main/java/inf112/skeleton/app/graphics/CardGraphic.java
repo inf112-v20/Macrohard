@@ -99,14 +99,24 @@ public class CardGraphic extends Image {
                             Files.FileType.Internal);
                     BitmapFont font = new BitmapFont(handle);
 
-                    // get the glypth info
+                    // get the glyph info
                     BitmapFont.BitmapFontData data = font.getData();
                     Pixmap fontPixmap = new Pixmap(Gdx.files.internal(data.imagePaths[0]));
-                    BitmapFont.Glyph glyph = data.getGlyph(("" + cardIndex).charAt(0));
+                    BitmapFont.Glyph indexGlyph = data.getGlyph(("" + cardIndex).charAt(0));
 
                     // Draw the character onto our base pixmap, with a padding of 10
                     pixmap.drawPixmap(fontPixmap, 10, 10,
-                            glyph.srcX, glyph.srcY, glyph.width, glyph.height);
+                            indexGlyph.srcX, indexGlyph.srcY, indexGlyph.width, indexGlyph.height);
+
+                    // Draw the priority onto our base pixmap
+                    int priority = card.getPriority();
+                    String priorityAsString = Integer.toString(priority);
+
+                    for(int i = 0; i<priorityAsString.length(); i++){
+                        BitmapFont.Glyph partialPriorityGlyph = data.getGlyph(priorityAsString.charAt(i));
+                        pixmap.drawPixmap(fontPixmap, 30, 10,
+                                partialPriorityGlyph.srcX, partialPriorityGlyph.srcY, partialPriorityGlyph.width, partialPriorityGlyph.height);
+                    }
 
                     // Draw highlight
                     pixmap.setColor(new Color(0.1f, 0.7f, 0.9f, 0.3f));
