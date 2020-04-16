@@ -1,7 +1,14 @@
 package inf112.skeleton.app.graphics;
 
+import com.badlogic.gdx.Files;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.screens.GameScreen;
 
@@ -42,6 +49,29 @@ public class CardGraphic extends Image {
         addListener(new CardGraphicListener(this));
 
         xStartPosition += CARD_WIDTH + X_PADDING;
+
+        FileHandle handle = Gdx.files.getFileHandle("./assets/fonts/arial.fnt",
+                Files.FileType.Internal);
+        BitmapFont font = new BitmapFont(handle);
+
+        // ### PRIORITY ###
+        BitmapFont.BitmapFontData data = font.getData();
+        Pixmap fontPixmap = new Pixmap(Gdx.files.internal(data.imagePaths[0]));
+
+        Pixmap pixmap = new Pixmap(new FileHandle(file));
+
+        int priority = card.getPriority();
+        String priorityAsString = Integer.toString(priority);
+
+        for(int i = 0; i<priorityAsString.length(); i++){
+            BitmapFont.Glyph partialPriorityGlyph = data.getGlyph(priorityAsString.charAt(i));
+            pixmap.drawPixmap(fontPixmap, 120+(i*25), 30,
+                    partialPriorityGlyph.srcX, partialPriorityGlyph.srcY, partialPriorityGlyph.width, partialPriorityGlyph.height);
+        }
+
+        Texture texture = new Texture(pixmap);
+        setDrawable(new SpriteDrawable(new Sprite(texture)));
+
     }
 
     public Card getCard() {
