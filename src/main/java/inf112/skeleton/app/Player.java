@@ -103,6 +103,10 @@ public class Player implements Comparable<Player> {
         return damageTokens;
     }
 
+    public int getLifeTokens(){
+        return lifeTokens;
+    }
+
     public int getHandSize() { return 9 - damageTokens; }
 
     public PlayerGraphic getGraphics() {
@@ -160,7 +164,8 @@ public class Player implements Comparable<Player> {
     }
 
     public void looseLife() {
-        lifeTokens --;
+        lifeTokens--;
+        playerInfoGraphic.updateValues();
     }
 
     public void queueRespawn() {

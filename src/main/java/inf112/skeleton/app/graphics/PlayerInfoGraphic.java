@@ -66,6 +66,15 @@ public class PlayerInfoGraphic extends Image {
         }
     }
 
+    public void drawLifeTokens(){
+        String life = "LIFE " + player.getLifeTokens();
+        for(int i = 0; i<life.length(); i++){
+            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
+            pixmap.drawPixmap(fontPixmap, 10 + 35*i, 150,
+                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
+        }
+    }
+
     public void draw(){
         Texture texture = new Texture(pixmap);
         setDrawable(new SpriteDrawable(new Sprite(texture)));
@@ -75,6 +84,7 @@ public class PlayerInfoGraphic extends Image {
         resetPixmaps();
         drawName();
         drawDamage();
+        drawLifeTokens();
         draw();
     }
 }
