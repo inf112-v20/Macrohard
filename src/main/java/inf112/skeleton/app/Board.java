@@ -47,9 +47,11 @@ public class Board {
         this.height = mapManager.getHeight();
         this.width = mapManager.getWidth();
 
+
         layTiles(mapManager);
         erectWalls(mapManager);
         dockPlayers(players);
+        placeFlags(mapManager);
     }
 
     private void set(Player player) {
@@ -67,6 +69,16 @@ public class Board {
             player.setCol(dock.getCol());
             playerIndex ++;
         }
+    }
+
+    public void layTile(Tile tile) {
+        Tile temp = board[tile.getRow()][tile.getCol()];
+        if (temp != null) {
+            if (temp.isOccupied()) {
+                tile.setPlayer(temp.getPlayer());
+            }
+        }
+        board[tile.getRow()][tile.getCol()] = tile;
     }
 
     //Fills the board with standard tiles
@@ -103,6 +115,11 @@ public class Board {
                     case "CONVEYOR_BELT":
                         currentTile = installConveyorBelt(mapManager, row, col);
                         break;
+
+                    case "FLAG":
+                        int numberFlag = (Integer) tile.getProperties().get("Number");
+                        currentTile = new Flag(numberFlag, row, col);
+                        break;
                     default:
                         currentTile = new Tile(row, col);
                         break;
@@ -136,7 +153,6 @@ public class Board {
                         if(nrOfLasers > 0) {
                             installLaser(nrOfLasers, dir.opposite(), row, col);
                     }
-
                     }
                 }
             }
@@ -153,7 +169,18 @@ public class Board {
         Direction dir = Direction.fromString(value);
         boolean express =  (boolean) belt.getTile().getProperties().get("Express");
         return new ConveyorBelt(row, col, dir, express);
+    }
 
+    private void placeFlags(TiledMapManager manager){
+        for (int row = 0; row < height; row ++) {
+            for (int col = 0; col < width; col++) {
+                if (manager.getCell("FLAGS", row, col) != null) {
+                    int number = (Integer)manager.getCell("FLAGS", row, col).getTile().getProperties().get("Number");
+                    Flag flag = new Flag(number, row, col);
+                    layTile(flag);
+                }
+            }
+        }
     }
 
     public void execute(Player player, Card card) {
@@ -302,6 +329,7 @@ public class Board {
     public void stepOne(Player player, Direction direction) {
         Tile fromTile = getTile(player);
         Tile toTile = getAdjacentTile(fromTile, direction);
+        System.out.println("FROM: " + fromTile + " -> TO: " + toTile);
 
         if (toTile.isOccupied()) {
             stepOne(toTile.getPlayer(), direction);
@@ -383,16 +411,6 @@ public class Board {
 
     public Tile getTile(Player player) {
         return getTile(player.getRow(), player.getCol());
-    }
-
-    public void layTile(Tile tile) {
-        Tile temp = board[tile.getRow()][tile.getCol()];
-        if (temp != null) {
-            if (temp.isOccupied()) {
-                tile.setPlayer(temp.getPlayer());
-            }
-        }
-        board[tile.getRow()][tile.getCol()] = tile;
     }
 
     public Tile getAdjacentTile(Tile tile, Direction direction) {
