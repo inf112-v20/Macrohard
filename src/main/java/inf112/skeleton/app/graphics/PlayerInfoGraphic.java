@@ -38,7 +38,7 @@ public class PlayerInfoGraphic extends Image {
         BitmapFont.BitmapFontData data = font.getData();
         Pixmap fontPixmap = new Pixmap(Gdx.files.internal(data.imagePaths[0]));
 
-        String playerName = "PLAYER " + playerNumber;
+        String playerName = "PLAYER " + (playerNumber+1);
         for(int i = 0; i<playerName.length(); i++){
             BitmapFont.Glyph partialStringGlyph = data.getGlyph(playerName.charAt(i));
             pixmap.drawPixmap(fontPixmap, 10 + 35*i, 10,
