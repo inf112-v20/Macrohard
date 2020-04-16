@@ -206,7 +206,7 @@ public class Board {
         }
     }
 
-    private Tile getTile(Laser laser) {
+    public Tile getTile(Laser laser) {
         return getTile(laser.getRow(), laser.getCol());
     }
 
@@ -214,7 +214,9 @@ public class Board {
         if (!isOccupied(tile) && noWallCollision(tile, direction) && !outOfBounds(tile, direction)) {
             return getLaserTarget(getAdjacentTile(tile, direction), direction);
         }
-        else { return tile; }
+        else {
+            return tile;
+        }
     }
 
     private ArrayList<Player> queueConveyorBelts(boolean expressOnly) {

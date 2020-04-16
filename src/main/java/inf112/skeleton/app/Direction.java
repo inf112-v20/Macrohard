@@ -1,5 +1,7 @@
 package inf112.skeleton.app;
 
+import java.util.Random;
+
 public enum Direction {
 
     NORTH,
@@ -8,7 +10,11 @@ public enum Direction {
     WEST;
 
     private static Direction[] directions = values();
-    private Object o;
+
+    public static Direction any() {
+        Random random = new Random();
+        return directions[random.nextInt(4)];
+    }
 
     public Direction turnClockwise() {
         return directions[(this.ordinal() + 1) % directions.length];

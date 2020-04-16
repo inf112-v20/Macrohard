@@ -106,9 +106,6 @@ public class GameScreen implements Screen {
                 if (on) {
                     board.fireLasers();
                 }
-                for (Player player : players) {
-                    System.out.println(player);
-                }
 
             }
         });
@@ -191,16 +188,8 @@ public class GameScreen implements Screen {
     public void lockInProgram(Player player, Card[] cards){
         // Create program of selected cards from hand
         for (Card card : cards) {
-            if (card.programIndex == 1) {
-                player.getProgram()[0] = card;
-            } else if (card.programIndex == 2) {
-                player.getProgram()[1] = card;
-            } else if (card.programIndex == 3) {
-                player.getProgram()[2] = card;
-            } else if (card.programIndex == 4) {
-                player.getProgram()[3] = card;
-            } else if (card.programIndex == 5) {
-                player.getProgram()[4] = card;
+            if (card.isInProgramRegister()) {
+                player.getProgram()[card.programIndex - 1] = card;
             }
         }
     }
@@ -208,7 +197,7 @@ public class GameScreen implements Screen {
     public void lockRandomProgram(Player player) {
         player.setProgram();
         Random rand = new Random();
-        int[] ranval =new int[9 - player.getDamageTokens()];
+        int[] ranval = new int[9 - player.getDamageTokens()];
         for (int j = 0; j < ranval.length; j++) ranval[j] = j;
         for (int i = ranval.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
