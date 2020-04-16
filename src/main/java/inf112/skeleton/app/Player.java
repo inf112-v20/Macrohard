@@ -156,6 +156,7 @@ public class Player implements Comparable<Player> {
             looseLife();
             this.damageTokens = 0;
         }
+        this.playerInfoGraphic.updateValues();
     }
 
     public void looseLife() {
