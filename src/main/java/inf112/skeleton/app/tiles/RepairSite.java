@@ -8,6 +8,6 @@ public class RepairSite extends Tile {
 
     @Override
     public String toString(){
-        return "TYPE: REPAIR_SITE";
+        return "TYPE: REPAIR_SITE   ROW: " + this.getRow() + "  COL: "+ this.getCol();
     }
 }

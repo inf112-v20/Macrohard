@@ -57,7 +57,7 @@ public class GameLoop {
                 for (Player player : players) {
                     cardsNeededInDeck += player.getHandSize();
                 }
-                if (deck.getDeckSize() < cardsNeededInDeck) {
+                if (deck.getDeckSize() <= cardsNeededInDeck) {
                     deck = new Deck(true);
                 }
 
@@ -133,10 +133,26 @@ public class GameLoop {
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                 board.fireLasers();
                 laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
-                canClean = true;
                 phase++;
                 break;
             case 8:
+                for (Player player : players) {
+                    Tile tile = board.getTile(player);
+                    if (tile instanceof Flag) {
+                        player.setArchiveMarker(tile);
+                    }
+                    if (tile instanceof RepairSite) {
+                        player.setArchiveMarker(tile);
+                        if (player.getDamageTokens() > 0) {
+                            player.setDamageTokens(player.getDamageTokens()-1);
+                        }
+                    }
+                    player.getPlayerInfoGraphic().updateValues();
+                }
+                canClean = true;
+                phase++;
+                break;
+            case 9:
                 // Clean up
                 // Increment programRegister and reset gameLoop values.
                 // if on last programRegister, do full round cleanup
@@ -151,19 +167,9 @@ public class GameLoop {
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
                 break;
 
-            case 9:
+            case 10:
                 if (canClean && roundOver) {
                     for (Player player : players) {
-                        Tile tile = board.getTile(player);
-                        if (tile instanceof Flag) {
-                            player.setArchiveMarker(tile);
-                        }
-                        if (tile instanceof RepairSite) {
-                            player.setArchiveMarker(tile);
-                            if (player.getDamageTokens() > 0) {
-                                player.setDamageTokens(player.getDamageTokens()-1);
-                            }
-                        }
                         player.clearHand();
                         if (player.hasQueuedRespawn) {
                             player.reSpawn(player.getDirection());
