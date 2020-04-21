@@ -8,6 +8,7 @@ import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.tiles.Flag;
+import inf112.skeleton.app.tiles.RepairSite;
 import inf112.skeleton.app.tiles.Tile;
 
 import java.util.*;
@@ -156,6 +157,12 @@ public class GameLoop {
                         Tile tile = board.getTile(player);
                         if (tile instanceof Flag) {
                             player.setArchiveMarker(tile);
+                        }
+                        if (tile instanceof RepairSite) {
+                            player.setArchiveMarker(tile);
+                            if (player.getDamageTokens() > 0) {
+                                player.setDamageTokens(player.getDamageTokens()-1);
+                            }
                         }
                         player.clearHand();
                         if (player.hasQueuedRespawn) {

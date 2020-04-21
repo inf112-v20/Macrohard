@@ -14,7 +14,6 @@ public class Player implements Comparable<Player> {
     private int col;
     private Tile archiveMarker;
     private Direction direction;
-    //public PlayerHand hand;
     public Card[] program;
     public Card[] hand;
 
@@ -187,4 +186,8 @@ public class Player implements Comparable<Player> {
         return this.playerInfoGraphic;
     }
 
+    public void setDamageTokens(int newDamageTokens) {
+        damageTokens = newDamageTokens;
+        playerInfoGraphic.updateValues();
+    }
 }
