@@ -22,10 +22,10 @@ public class CardGraphic extends Image {
     public final static float CARD_ASPECT = 1.5f;
     public final static float CARD_MAX_SCALE = 1.2f;
     public final static int X_PADDING = 0;
-    public final static int Y_PADDING = 2;
-    public final static int VERTICAL_PROGRAM_ALIGNMENT = 905;
-    public final static int HORIZONTAL_PROGRAM_ALIGNMENT = 692;
-    public final static int VERTICAL_HAND_MARGIN = 2;
+    public final static int Y_PADDING = - 150;
+    public final static int VERTICAL_PROGRAM_ALIGNMENT = - 80;
+    public final static int HORIZONTAL_PROGRAM_ALIGNMENT = 450;
+    public final static int VERTICAL_HAND_MARGIN = 75;
 
     public static PriorityQueue<Integer> programIndices = new PriorityQueue<>(Arrays.asList(1, 2, 3, 4, 5));
     private static int xStartPosition = VERTICAL_HAND_MARGIN;
