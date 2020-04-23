@@ -51,7 +51,7 @@ public class Board {
         layTiles(mapManager);
         erectWalls(mapManager);
         dockPlayers(players);
-        placeFlags(mapManager);
+        placeFlagsAndRepairSites(mapManager);
     }
 
     private void set(Player player) {
@@ -120,6 +120,8 @@ public class Board {
                         int numberFlag = (Integer) tile.getProperties().get("Number");
                         currentTile = new Flag(numberFlag, row, col);
                         break;
+                    case "REPAIR_SITE":
+                        currentTile = new RepairSite(row,col);
                     default:
                         currentTile = new Tile(row, col);
                         break;
@@ -171,13 +173,17 @@ public class Board {
         return new ConveyorBelt(row, col, dir, express);
     }
 
-    private void placeFlags(TiledMapManager manager){
+    private void placeFlagsAndRepairSites(TiledMapManager manager){
         for (int row = 0; row < height; row ++) {
             for (int col = 0; col < width; col++) {
                 if (manager.getCell("FLAGS", row, col) != null) {
                     int number = (Integer)manager.getCell("FLAGS", row, col).getTile().getProperties().get("Number");
                     Flag flag = new Flag(number, row, col);
                     layTile(flag);
+                }
+                if (manager.getCell("REPAIR_SITE", row, col) != null) {
+                    RepairSite repairSite = new RepairSite(row,col);
+                    layTile(repairSite);
                 }
             }
         }

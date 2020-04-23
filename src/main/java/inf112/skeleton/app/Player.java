@@ -186,4 +186,7 @@ public class Player implements Comparable<Player> {
         return this.playerInfoGraphic;
     }
 
+    public void setDamageTokens(int newDamageTokens) {
+        damageTokens = newDamageTokens;
+    }
 }

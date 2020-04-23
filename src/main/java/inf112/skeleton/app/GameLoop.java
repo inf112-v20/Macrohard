@@ -9,6 +9,7 @@ import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.tiles.Flag;
+import inf112.skeleton.app.tiles.RepairSite;
 import inf112.skeleton.app.tiles.Tile;
 
 import java.util.*;
@@ -130,10 +131,26 @@ public class GameLoop {
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                 board.fireLasers();
                 laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
-                canClean = true;
                 phase++;
                 break;
             case 8:
+                for (Player player : players) {
+                    Tile tile = board.getTile(player);
+                    if (tile instanceof Flag) {
+                        player.setArchiveMarker(tile);
+                    }
+                    if (tile instanceof RepairSite) {
+                        player.setArchiveMarker(tile);
+                        if (player.getDamageTokens() > 0) {
+                            player.setDamageTokens(player.getDamageTokens()-1);
+                        }
+                    }
+                    player.getPlayerInfoGraphic().updateValues();
+                }
+                canClean = true;
+                phase++;
+                break;
+            case 9:
                 // Clean up
                 // Increment programRegister and reset gameLoop values.
                 // if on last programRegister, do full round cleanup
@@ -148,20 +165,14 @@ public class GameLoop {
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
                 break;
 
-            case 9:
+            case 10:
                 if (canClean && roundOver) {
                     for (Player player : players) {
-                        Tile tile = board.getTile(player);
-                        if (tile instanceof Flag) {
-                            player.setArchiveMarker(tile);
-                        }
-                        else if (player.hasQueuedRespawn) {
-                            player.reSpawn(player.getDirection());
-
-                        }
                         player.clearHand();
+                        if (player.hasQueuedRespawn) {
+                            player.reSpawn(player.getDirection());
+                        }
                     }
-
                     gameScreen.updatePlayerGraphics();
                     gameScreen.clearCards(cardGraphics);
                     cardsDisplayed = false;
