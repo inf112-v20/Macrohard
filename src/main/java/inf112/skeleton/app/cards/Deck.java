@@ -95,15 +95,6 @@ public class Deck {
     public int getDeckSize() {
         return getDeck().size();
     }
-//
-//    @Override
-//    public String toString(){
-//        String result = "";
-//        for (Card i : deck){
-//            result += (i.toString() + "\n");
-//        }
-//        return result;
-//    }
 
     @Override
     public String toString(){

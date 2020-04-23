@@ -41,10 +41,7 @@ public class GameLoop {
         this.client = players.get(0);
         this.movementPriority = new PriorityQueue<>();
         this.cardGraphics = new ArrayList<>(9);
-        //this.deck = new Deck(true);
-        this.deck = new Deck(false);
-        System.out.println(this.deck);
-        this.deck.shuffle();
+        this.deck = new Deck(true);
 
     }
 
@@ -59,10 +56,10 @@ public class GameLoop {
                 for (Player player : players) {
                     cardsNeededInDeck += player.getHandSize();
                 }
-                /*if (deck.getDeckSize() <= cardsNeededInDeck) {
+                if (deck.getDeckSize() < cardsNeededInDeck) {
                     deck = new Deck(true);
-                }*/
-                deck = new Deck(true);
+                }
+
                 // Deal hand to all players or discard all damageTokens if in Power Down
                 for (Player player : players) {
                     if (!player.inPowerDown) {

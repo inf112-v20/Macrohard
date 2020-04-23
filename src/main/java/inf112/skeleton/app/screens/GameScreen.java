@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -13,7 +14,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
@@ -28,15 +30,21 @@ import java.util.Random;
 
 public class GameScreen implements Screen {
 
+    private static final int CARD_GRAPHIC_HEIGHT =  150;
+
     public final RoboRallyApplication parent;
+    public final int width, height;
+
     private final GameScreenInputProcessor inputProcessor;
+    private final Viewport gamePort;
+    private final OrthographicCamera gameCamera;
 
     public TiledMapManager mapHandler;
     private TiledMap map;
     private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
 
-    public final static int TILE_SIZE = 50;
+    public final static int TILE_SIZE = 60;
     private float timeInSeconds = 0f;
     private float period = 0.8f;
     private TiledMapTileLayer playerLayer;
@@ -45,14 +53,16 @@ public class GameScreen implements Screen {
 
     private Board board;
 
-    private Stage stage;
+    private Stage gameStage;
     private GameLoop gameLoop;
     private final ArrayList<Player> players;
 
-    public GameScreen(final RoboRallyApplication parent){
-    this.parent = parent;
+    public GameScreen(final RoboRallyApplication parent, int width, int height){
+        this.parent = parent;
+        this.width = width;
+        this.height = height;
+
         // ---- INITIALISATION ----
-        stage = new Stage(new ScreenViewport());
 
         // Initialise players
         Player player1 = new Player(0, 1, Direction.EAST, false);
@@ -66,76 +76,35 @@ public class GameScreen implements Screen {
         TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
         mapHandler = handler;
         map = handler.getMap();
+        renderer = new OrthogonalTiledMapRenderer(map);
         board = new Board(players, handler);
 
         // Initialise board-view
-        camera = new OrthographicCamera();
-        camera.zoom += 0.19;
-        camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight() - 300);
-        renderer = new OrthogonalTiledMapRenderer(map);
+        gameCamera = new OrthographicCamera();
+        renderer.setView(gameCamera);
 
-        // Initialise tile-layers
-        playerLayer = mapHandler.getLayer("PLAYERS");
+        MapProperties properties = map.getProperties();
+        int tileSize = (Integer) properties.get("tilewidth");
+        int boardHeight = (Integer) properties.get("height");
 
-        // Place players on Player-layer
-        for (Player value : players) {
-            TiledMapTileLayer.Cell playerCell = new TiledMapTileLayer.Cell();
-            playerLayer.setCell(value.getRow(), value.getCol(), playerCell);
-        }
+        gamePort = new FitViewport(width, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+
+        gameStage = new Stage(gamePort);
 
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
             playerGraphics.add(playerGraphic);
-            stage.addActor(playerGraphic);
-            stage.addActor(player.getPlayerInfoGraphic());
+            gameStage.addActor(playerGraphic);
+            gameStage.addActor(player.getPlayerInfoGraphic());
         }
 
         // --- INPUT ----
         inputProcessor = new GameScreenInputProcessor(parent, player1, board);
-        stage.addListener(inputProcessor);
-
-        //Initialise buttons
-        int buttonX = ((Integer) map.getProperties().get("width") * TILE_SIZE) + 250;
-        TextButton laserOn = new TextButton("LASER ON/OFF", parent.getSkin());
-        laserOn.setBounds(buttonX, 600, 200, 50);
-        laserOn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                boolean on = !mapHandler.getLayer("LASERBEAMS").isVisible();
-                mapHandler.getLayer("LASERBEAMS").setVisible(on);
-                if (on) {
-                    board.fireLasers();
-                }
-
-            }
-        });
-        stage.addActor(laserOn);
-
-        TextButton conveyor = new TextButton("CONVEYOR", parent.getSkin());
-        conveyor.setBounds(buttonX, 452, 150, 50);
-        conveyor.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                board.rollConveyorBelts(false);
-                updatePlayerGraphics();
-            }
-        });
-        stage.addActor(conveyor);
-
-        TextButton conveyorExpress = new TextButton("EXPRESS", parent.getSkin());
-        conveyorExpress.setBounds(buttonX, 400, 150, 50);
-        conveyorExpress.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                board.rollConveyorBelts(true);
-                updatePlayerGraphics();
-            }
-        });
-        stage.addActor(conveyorExpress);
+        gameStage.addListener(inputProcessor);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(buttonX, 348, 150, 50);
+        button.setBounds(width - (width / 4), 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -143,33 +112,7 @@ public class GameScreen implements Screen {
                 lockInProgram(players.get(0), players.get(0).getHand());
             }
         });
-        stage.addActor(button);
-
-        TextButton changePlayer = new TextButton("CHANGE", parent.getSkin());
-        changePlayer.setBounds(buttonX, 296, 150, 50);
-        changePlayer.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                int index = (players.indexOf(inputProcessor.getPlayer()) + 1) % players.size();
-                inputProcessor.setPlayer(players.get(index));
-            }
-        });
-        stage.addActor(changePlayer);
-
-        TextButton respawn = new TextButton("RESPAWN", parent.getSkin());
-        respawn.setBounds(buttonX, 244, 150, 50);
-        respawn.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                for (Player player : players) {
-                    if (player.hasQueuedRespawn) {
-                        player.reSpawn(Direction.EAST);
-                    }
-                }
-                updatePlayerGraphics();
-            }
-        });
-        stage.addActor(respawn);
+        gameStage.addActor(button);
 
         gameLoop = new GameLoop(board, this, buttonX);
 
@@ -222,7 +165,7 @@ public class GameScreen implements Screen {
     }
 
     public void setAsInputProcessor() {
-        Gdx.input.setInputProcessor(stage);
+        Gdx.input.setInputProcessor(gameStage);
     }
 
     @Override
@@ -242,18 +185,17 @@ public class GameScreen implements Screen {
             gameLoop.tick();
         }
 
-        renderer.setView(camera);
+        gameCamera.position.set(width / 2 - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
+        renderer.setView(gameCamera);
         renderer.render();
 
-        stage.act();
-        stage.draw();
+        gameStage.act();
+        gameStage.draw();
     }
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width;
-        camera.viewportHeight = height;
-        camera.update();
+        gamePort.update(width, height);
     }
 
     @Override
@@ -278,7 +220,7 @@ public class GameScreen implements Screen {
     }
 
     public void addStageActor(Image actor) {
-        stage.addActor(actor);
+        gameStage.addActor(actor);
     }
 
     public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {

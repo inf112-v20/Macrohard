@@ -335,7 +335,6 @@ public class Board {
     public void stepOne(Player player, Direction direction) {
         Tile fromTile = getTile(player);
         Tile toTile = getAdjacentTile(fromTile, direction);
-        System.out.println("FROM: " + fromTile + " -> TO: " + toTile);
 
         if (toTile.isOccupied()) {
             stepOne(toTile.getPlayer(), direction);

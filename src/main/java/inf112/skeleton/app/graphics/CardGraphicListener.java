@@ -92,7 +92,7 @@ public class CardGraphicListener extends ClickListener {
     @Override
     public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
         if(!graphic.isSelected()) {
-            graphic.addAction(Actions.moveTo(graphic.getInitialX(), 0, 0.1f));
+            graphic.addAction(Actions.moveTo(graphic.getInitialX(), Y_PADDING, 0.1f));
             graphic.addAction(Actions.scaleTo(1f, 1f, 0.1f));
         }
         else{

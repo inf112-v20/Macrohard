@@ -1,8 +1,11 @@
 package inf112.skeleton.app;
 
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.preferences.AppPreferences;
 import inf112.skeleton.app.screens.LoadingScreen;
@@ -10,8 +13,10 @@ import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 import inf112.skeleton.app.screens.PreferenceScreen;
 
+import java.awt.*;
 
-public class RoboRallyApplication extends com.badlogic.gdx.Game {
+
+public class RoboRallyApplication extends Game {
 
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
@@ -25,9 +30,13 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     public static Music music;
 
     private boolean hasGame = false;
+    public int screenWidth, screenHeight;
 
     @Override
     public void create() {
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        screenWidth = screenSize.width;
+        screenHeight = screenSize.height;
         initializeMusic();
         LoadingScreen loadingScreen = new LoadingScreen(this);
         setScreen(loadingScreen);
@@ -41,7 +50,7 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
     private void initializeMusic() {
         music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/test1.wav"));
         music.setLooping(true);
-        music.play();
+        //music.play();
     }
 
     public AppPreferences getPreferences(){
@@ -64,7 +73,7 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
                 break;
             case APPLICATION:
                 if(gameScreen == null){
-                    gameScreen = new GameScreen(this);
+                    gameScreen = new GameScreen(this, screenWidth, screenHeight);
                 }
                 this.setScreen(gameScreen);
                 gameScreen.setAsInputProcessor();
@@ -94,5 +103,15 @@ public class RoboRallyApplication extends com.badlogic.gdx.Game {
 
     public void setGameScreen(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
+    }
+
+    public static void main(String[] args) {
+        LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        cfg.title = "RoboRallyApplication";
+        cfg.width = screenSize.width;
+        cfg.height = screenSize.height;
+
+        new LwjglApplication(new RoboRallyApplication(), cfg);
     }
 }

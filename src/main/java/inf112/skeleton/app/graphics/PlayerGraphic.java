@@ -13,8 +13,7 @@ import inf112.skeleton.app.screens.GameScreen;
 
 public class PlayerGraphic extends Image {
 
-    final float PLAYER_WIDTH = GameScreen.TILE_SIZE;
-    final float PLAYER_HEIGHT = GameScreen.TILE_SIZE;
+    final float TILE_SIZE = GameScreen.TILE_SIZE;
     private final int START_Y_AXIS = 152;
     private final Player player;
     private Direction direction;
@@ -30,7 +29,7 @@ public class PlayerGraphic extends Image {
         direction = player.getDirection();
         degrees = 0f;
 
-        setBounds(PLAYER_WIDTH*player.getCol(), START_Y_AXIS + PLAYER_HEIGHT*player.getRow(), PLAYER_WIDTH, PLAYER_HEIGHT);
+        setBounds(TILE_SIZE*player.getCol(), TILE_SIZE*player.getRow(), TILE_SIZE, TILE_SIZE);
         setOrigin(Align.center);
     }
 
@@ -49,11 +48,11 @@ public class PlayerGraphic extends Image {
 
 
     public void animateMoveDelayed(int newCol, int newRow, int moves) {
-        sequenceAction.addAction(Actions.delay(1, Actions.moveTo(PLAYER_WIDTH*newCol, START_Y_AXIS + PLAYER_HEIGHT*newRow, 0.3f*Math.abs(moves))));
+        sequenceAction.addAction(Actions.delay(1, Actions.moveTo(TILE_SIZE*newCol, TILE_SIZE*newRow, 0.3f*Math.abs(moves))));
     }
 
     public void animateMove(int newCol, int newRow, int moves) {
-        sequenceAction.addAction(Actions.delay(0, Actions.moveTo(PLAYER_WIDTH*newCol, START_Y_AXIS + PLAYER_HEIGHT*newRow, 0.3f*Math.abs(moves))));
+        sequenceAction.addAction(Actions.delay(0, Actions.moveTo(TILE_SIZE*newCol, TILE_SIZE*newRow, 0.3f*Math.abs(moves))));
     }
 
     public void animateRotationDelayed(Direction direction, Direction newDir) {
@@ -77,7 +76,7 @@ public class PlayerGraphic extends Image {
     }
 
     public void respawn() {
-        setBounds(PLAYER_WIDTH*player.getCol(), START_Y_AXIS + PLAYER_HEIGHT*player.getRow(), PLAYER_WIDTH, PLAYER_HEIGHT);
+        setBounds(TILE_SIZE*player.getCol(), TILE_SIZE*player.getRow(), TILE_SIZE, TILE_SIZE);
         setOrigin(Align.center);
         sequenceAction.addAction(Actions.scaleTo(1, 1, 0.5f));
     }
