@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
             }
         });
         gameStage.addActor(button);
-
+        int buttonX = (width - (width / 4))-52;
         gameLoop = new GameLoop(board, this, buttonX);
 
     }
@@ -234,25 +234,25 @@ public class GameScreen implements Screen {
 
         if(players.get(0).inPowerDown) {
             TextButton continuePowerDown = new TextButton("CONTINUE POWER DOWN", parent.getSkin());
-            continuePowerDown.setBounds(buttonX, 192, 300, 50);
+            continuePowerDown.setBounds(buttonX, 290, 350, 50);
             continuePowerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
                     players.get(0).continuePowerDown = true;
                 }
             });
-            stage.addActor(continuePowerDown);
+            gameStage.addActor(continuePowerDown);
 
         } else {
             TextButton powerDown = new TextButton("POWER DOWN", parent.getSkin());
-            powerDown.setBounds(buttonX, 192, 200, 50);
+            powerDown.setBounds(buttonX, 290, 200, 50);
             powerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
                     players.get(0).announcedPowerDown = true;
                 }
             });
-            stage.addActor(powerDown);
+            gameStage.addActor(powerDown);
         }
 
     }
