@@ -16,6 +16,9 @@ public class Player implements Comparable<Player> {
     private Direction direction;
     public Card[] program;
     public Card[] hand;
+    public boolean announcedPowerDown = false;
+    public boolean inPowerDown = false;
+    public boolean continuePowerDown = false;
 
     private int damageTokens;
     private int lifeTokens;

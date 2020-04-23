@@ -24,7 +24,7 @@ public class GameLoop {
     private ArrayList<CardGraphic> cardGraphics;
     private PriorityQueue<Player> movementPriority;
     private Deck deck;
-
+    private int buttonX;
     private int phase = 0;
     private int currentProgramRegister = 0;
 
@@ -33,10 +33,10 @@ public class GameLoop {
     private boolean canPlay = false;
     private boolean roundOver = false;
 
-    public GameLoop(Board board, GameScreen gameScreen) {
+    public GameLoop(Board board, GameScreen gameScreen, int buttonX) {
         this.gameScreen = gameScreen;
         this.board = board;
-
+        this.buttonX = buttonX;
         this.players = board.getPlayers();
         this.client = players.get(0);
         this.movementPriority = new PriorityQueue<>();
@@ -52,36 +52,51 @@ public class GameLoop {
     public void tick() {
         switch (phase) {
             case 0:
+                // display powerdown button or continue powerdown button
+                gameScreen.setPowerdown(buttonX);
                 // Check if new deck is needed
                 int cardsNeededInDeck = 0;
                 for (Player player : players) {
                     cardsNeededInDeck += player.getHandSize();
                 }
-                if (deck.getDeckSize() <= cardsNeededInDeck) {
+                /*if (deck.getDeckSize() <= cardsNeededInDeck) {
                     deck = new Deck(true);
+                }*/
+                deck = new Deck(true);
+                // Deal hand to all players or discard all damageTokens if in Power Down
+                for (Player player : players) {
+                    if (!player.inPowerDown) {
+                        deck.dealHand(player);
+                    } else {
+                        player.setDamageTokens(0);
+                    }
                 }
 
-                // Deal hand to all players.
-                for (Player player : players) {
-                    deck.dealHand(player);
+                // NPC announce power down if it has a certain ammount of damage tokens
+                for (Player player : players.subList(1, players.size())) {
+                    if (player.getDamageTokens() >= 4) {
+                        player.announcedPowerDown = true;
+                    }
                 }
                 phase++;
                 break;
 
             case 1:
                 // Draw cards on screen and lock in the programs for all NPC's
-                if (!cardsDisplayed) {
+                if (!cardsDisplayed && !client.inPowerDown) {
                     for (Card card : client.getHand()) {
                         CardGraphic cardGraphic = new CardGraphic(card);
                         gameScreen.addStageActor(cardGraphic);
                         cardGraphics.add(cardGraphic);
                     }
                     cardsDisplayed = true;
-                    for (Player player : players.subList(1, players.size())) {
+                    }
+                for (Player player : players.subList(1, players.size())) {
+                    if (!player.inPowerDown) {
                         gameScreen.lockRandomProgram(player);
                     }
                 }
-                if (client.hasLockedInProgram()) {
+                if (client.hasLockedInProgram() || client.inPowerDown) {
                     phase++;
                 }
                 break;
@@ -89,7 +104,12 @@ public class GameLoop {
             case 2:
                 // Decide the order in which program cards will be played
                 if (currentProgramRegister < 5) {
-                    movementPriority.addAll(players);
+                    for (Player player : players) {
+                        if (!player.inPowerDown) {
+                            movementPriority.add(player);
+                        }
+                    }
+                   // movementPriority.addAll(players);
                     canPlay = true;
                     phase++;
                     break;
@@ -174,6 +194,18 @@ public class GameLoop {
                         if (player.hasQueuedRespawn) {
                             player.reSpawn(player.getDirection());
                         }
+                        // Player chose to not continue power down
+                        if (player.announcedPowerDown && player.inPowerDown && !player.continuePowerDown) {
+                            player.announcedPowerDown = false;
+                            player.inPowerDown = false;
+                        }
+                        // Player announced power down this turn and will enter power down next turn
+                        if (player.announcedPowerDown) {
+                            player.inPowerDown = true;
+                        }
+
+
+
                     }
                     gameScreen.updatePlayerGraphics();
                     gameScreen.clearCards(cardGraphics);
