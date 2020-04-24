@@ -6,7 +6,6 @@ import com.badlogic.gdx.audio.Sound;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
-import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.RepairSite;
@@ -87,7 +86,11 @@ public class GameLoop {
             case 2:
                 // Decide the order in which program cards will be played
                 if (currentProgramRegister < 5) {
-                    movementPriority.addAll(players);
+                    for (Player player : players) {
+                        if (!player.isDestroyed() && player.getProgram()[currentProgramRegister] != null) {
+                            movementPriority.add(player);
+                        }
+                    }
                     canPlay = true;
                     phase++;
                     break;
@@ -108,7 +111,7 @@ public class GameLoop {
 
             case 4:
                 // Board elements move, starting with all conveyor belts
-                if (movementPriority.isEmpty() && !canPlay) {
+                if (movementPriority.isEmpty()) {
                     board.rollConveyorBelts(false);
                     gameScreen.updatePlayerGraphics();
                     phase++;
@@ -135,17 +138,19 @@ public class GameLoop {
                 break;
             case 8:
                 for (Player player : players) {
-                    Tile tile = board.getTile(player);
-                    if (tile instanceof Flag) {
-                        player.setArchiveMarker(tile);
-                    }
-                    if (tile instanceof RepairSite) {
-                        player.setArchiveMarker(tile);
-                        if (player.getDamageTokens() > 0) {
-                            player.setDamageTokens(player.getDamageTokens()-1);
+                    if (!player.isDestroyed()) {
+                        Tile tile = board.getTile(player);
+                        if (tile instanceof Flag) {
+                            player.setArchiveMarker(tile);
                         }
+                        if (tile instanceof RepairSite) {
+                            player.setArchiveMarker(tile);
+                            if (player.getDamageTokens() > 0) {
+                                player.setDamageTokens(player.getDamageTokens()-1);
+                            }
+                        }
+                        player.getPlayerInfoGraphic().updateValues();
                     }
-                    player.getPlayerInfoGraphic().updateValues();
                 }
                 canClean = true;
                 phase++;
@@ -158,7 +163,7 @@ public class GameLoop {
                     roundOver = true;
                     phase++;
                 } else {
-                    currentProgramRegister++;
+                    currentProgramRegister ++;
                     phase = 2;
                     canClean = false;
                 }
@@ -168,9 +173,10 @@ public class GameLoop {
             case 10:
                 if (canClean && roundOver) {
                     for (Player player : players) {
-                        player.clearHand();
-                        if (player.hasQueuedRespawn) {
-                            player.reSpawn(player.getDirection());
+                        player.discardHandAndWipeProgram();
+                        if (player.isDestroyed() && player.getLifeTokens() > 0) {
+                            player.reboot();
+                            player.getGraphics().animateRespawn();
                         }
                     }
                     gameScreen.updatePlayerGraphics();

@@ -22,8 +22,8 @@ public class Player implements Comparable<Player> {
 
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
-    public boolean hasQueuedRespawn = false;
     private PlayerInfoGraphic playerInfoGraphic;
+    private boolean destroyed;
 
 
     public Player(int row, int col, Direction direction) {
@@ -44,10 +44,6 @@ public class Player implements Comparable<Player> {
         this.lifeTokens = 3;
 
         PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(this);
-    }
-
-    public Tile getArchiveMarker() {
-        return archiveMarker;
     }
 
     public void setArchiveMarker(Tile archiveMarker) {
@@ -73,19 +69,6 @@ public class Player implements Comparable<Player> {
     public void stepIn(Direction direction) {
         setRow(row + direction.getRowTrajectory());
         setCol(col + direction.getColumnTrajectory());
-    }
-
-    private void reSpawn() {
-        setRow(archiveMarker.getRow());
-        setCol(archiveMarker.getCol());
-    }
-
-    public void reSpawn(Direction direction) {
-        reSpawn();
-        setDirection(direction);
-        hasQueuedRespawn = false;
-
-        playerGraphic.respawn();
     }
 
     public Direction getDirection () {
@@ -116,7 +99,6 @@ public class Player implements Comparable<Player> {
         this.playerGraphic = playerGraphic;
     }
 
-
     public void rotateClockwise() {
         setDirection(getDirection().turnClockwise());
     }
@@ -135,14 +117,14 @@ public class Player implements Comparable<Player> {
 
     public Card[] getProgram() { return program;}
 
-    public void setProgram() {
+    public void createEmptyProgram() {
         this.program = new Card[5];
     }
-    public void clearHand() {
-        program = null;
-        hand = null;
-    }
 
+    public void discardHandAndWipeProgram() {
+        hand = null;
+        program = null;
+    }
 
     @Override
     public String toString() {
@@ -156,21 +138,13 @@ public class Player implements Comparable<Player> {
     public void applyDamage(int damage) {
         this.damageTokens += damage;
         if (this.damageTokens > 9) {
-            looseLife();
-            this.damageTokens = 0;
+            destroy();
         }
         this.playerInfoGraphic.updateValues();
     }
 
-    public void looseLife() {
-        lifeTokens--;
-        playerInfoGraphic.updateValues();
-    }
-
-    public void queueRespawn() {
-        if (lifeTokens > 0) {
-            this.hasQueuedRespawn = true;
-        }
+    public void setDamageTokens(int newDamageTokens) {
+        damageTokens = newDamageTokens;
     }
 
     @Override
@@ -186,7 +160,23 @@ public class Player implements Comparable<Player> {
         return this.playerInfoGraphic;
     }
 
-    public void setDamageTokens(int newDamageTokens) {
-        damageTokens = newDamageTokens;
+
+    public void destroy() {
+        lifeTokens --;
+        destroyed = true;
     }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void reboot() {
+        setRow(archiveMarker.getRow());
+        setCol(archiveMarker.getCol());
+        archiveMarker.setPlayer(this);
+
+        destroyed = false;
+        damageTokens = 2;
+    }
+
 }

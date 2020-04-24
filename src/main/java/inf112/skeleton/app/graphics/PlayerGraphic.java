@@ -7,8 +7,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
-import inf112.skeleton.app.cards.Card;
-import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.screens.GameScreen;
 
 public class PlayerGraphic extends Image {
@@ -19,7 +17,9 @@ public class PlayerGraphic extends Image {
     private Direction direction;
     private float degrees;
 
+
     SequenceAction sequenceAction = new SequenceAction();
+    public boolean isVisible = true;
 
     public PlayerGraphic(Player player){
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
@@ -37,34 +37,30 @@ public class PlayerGraphic extends Image {
         return player;
     }
 
-    public void updatePlayerGraphic(Card card, Direction oldDirection) {
-        if (card instanceof MovementCard) {
-            animateMoveDelayed(player.getCol(), player.getRow(), ((MovementCard) card).getMoveID());
-        }
-        else {
-            animateRotationDelayed(oldDirection, player.getDirection());
-        }
+
+    public void animateMove(int moves) {
+        int row = player.getRow();
+        int col = player.getCol();
+        sequenceAction.addAction(Actions.delay(0,
+                Actions.moveTo(TILE_SIZE * col, TILE_SIZE * row, 0.3f*Math.abs(moves))));
     }
 
-
-    public void animateMoveDelayed(int newCol, int newRow, int moves) {
-        sequenceAction.addAction(Actions.delay(1, Actions.moveTo(TILE_SIZE*newCol, TILE_SIZE*newRow, 0.3f*Math.abs(moves))));
-    }
-
-    public void animateMove(int newCol, int newRow, int moves) {
-        sequenceAction.addAction(Actions.delay(0, Actions.moveTo(TILE_SIZE*newCol, TILE_SIZE*newRow, 0.3f*Math.abs(moves))));
-    }
-
-    public void animateRotationDelayed(Direction direction, Direction newDir) {
-        this.direction = newDir;
-        degrees += Direction.getDegreesBetween(direction, newDir);
-        sequenceAction.addAction(Actions.delay(1, Actions.rotateTo(degrees, 0.5f)));
-    }
-
-    public void animateRotation(Direction direction, Direction newDir) {
-        this.direction = newDir;
+    public void animateRotation() {
+        Direction newDir = player.getDirection();
         degrees += Direction.getDegreesBetween(direction, newDir);
         sequenceAction.addAction(Actions.delay(0, Actions.rotateTo(degrees, 0.5f)));
+        this.direction = newDir;
+    }
+
+    public void animateFall() {
+        sequenceAction.addAction(Actions.fadeOut(0.5f));
+        isVisible = false;
+    }
+
+    public void animateRespawn() {
+        animateMove(1);
+        sequenceAction.addAction(Actions.fadeIn(0.5f));
+        isVisible = true;
     }
 
     public void animate(){
@@ -75,9 +71,4 @@ public class PlayerGraphic extends Image {
         return direction;
     }
 
-    public void respawn() {
-        setBounds(TILE_SIZE*player.getCol(), TILE_SIZE*player.getRow(), TILE_SIZE, TILE_SIZE);
-        setOrigin(Align.center);
-        sequenceAction.addAction(Actions.scaleTo(1, 1, 0.5f));
-    }
 }

@@ -6,11 +6,9 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -35,19 +33,17 @@ public class GameScreen implements Screen {
     public final RoboRallyApplication parent;
     public final int width, height;
 
-    private final GameScreenInputProcessor inputProcessor;
     private final Viewport gamePort;
     private final OrthographicCamera gameCamera;
 
     public TiledMapManager mapHandler;
     private TiledMap map;
-    private OrthographicCamera camera;
     private OrthogonalTiledMapRenderer renderer;
+    private GameScreenInputProcessor inputProcessor;
 
     public final static int TILE_SIZE = 60;
     private float timeInSeconds = 0f;
     private float period = 0.8f;
-    private TiledMapTileLayer playerLayer;
 
     private ArrayList<PlayerGraphic> playerGraphics = new ArrayList<>();
 
@@ -103,12 +99,24 @@ public class GameScreen implements Screen {
         inputProcessor = new GameScreenInputProcessor(parent, player1, board);
         gameStage.addListener(inputProcessor);
 
+        TextButton change = new TextButton("CHANGE", parent.getSkin());
+        change.setBounds(width - (width / 4), 400, 150, 50);
+        change.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                int index = players.indexOf(inputProcessor.getPlayer());
+                int newIndex = (index + 1) % players.size();
+                inputProcessor.setPlayer(players.get(newIndex));
+            }
+        });
+        gameStage.addActor(change);
+
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
         button.setBounds(width - (width / 4), 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                players.get(0).setProgram();
+                players.get(0).createEmptyProgram();
                 lockInProgram(players.get(0), players.get(0).getHand());
             }
         });
@@ -120,12 +128,16 @@ public class GameScreen implements Screen {
 
     public void updatePlayerGraphics() {
         for (Player player : players) {
-            player.getGraphics().animateMove(player.getCol(), player.getRow(), 1);
-            player.getGraphics().animateRotation(player.getGraphics().getDirection(), player.getDirection());
-            if (board.getTile(player) instanceof Hole) {
-                player.getGraphics().addAction(Actions.scaleTo(0.01f, 0.01f, 1f));
+            PlayerGraphic graphic = player.getGraphics();
+            if (graphic.isVisible) {
+                graphic.animateMove(1);
+                graphic.animateRotation();
+                if (board.getTile(player) instanceof Hole) {
+                    graphic.animateFall();
+                }
+                graphic.animate();
             }
-            player.getGraphics().animate();
+
         }
     }
 
@@ -139,15 +151,15 @@ public class GameScreen implements Screen {
     }
 
     public void lockRandomProgram(Player player) {
-        player.setProgram();
+        player.createEmptyProgram();
         Random rand = new Random();
-        int[] ranval = new int[9 - player.getDamageTokens()];
-        for (int j = 0; j < ranval.length; j++) ranval[j] = j;
-        for (int i = ranval.length - 1; i > 0; i--) {
+        int[] randomValue = new int[9 - player.getDamageTokens()];
+        for (int j = 0; j < randomValue.length; j++) randomValue[j] = j;
+        for (int i = randomValue.length - 1; i > 0; i--) {
             int index = rand.nextInt(i + 1);
-            int temp = ranval[i];
-            ranval[i] = ranval[index];
-            ranval[index] = temp;
+            int temp = randomValue[i];
+            randomValue[i] = randomValue[index];
+            randomValue[index] = temp;
         }
         for (int i = 0; i<5; i++) {
                 if (player.getHand()[i] != null) {
