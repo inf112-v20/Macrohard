@@ -122,6 +122,7 @@ public class Board {
                         break;
                     case "REPAIR_SITE":
                         currentTile = new RepairSite(row,col);
+                        break;
                     default:
                         currentTile = new Tile(row, col);
                         break;
