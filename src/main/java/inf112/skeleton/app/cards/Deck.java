@@ -99,4 +99,8 @@ public class Deck {
         return result;
     }
 
+    public ArrayList<Card> getDeck() {
+        return deck;
+    }
+
 }

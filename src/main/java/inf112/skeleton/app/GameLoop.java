@@ -102,7 +102,7 @@ public class GameLoop {
                 // Decide the order in which program cards will be played
                 if (currentProgramRegister < 5) {
                     for (Player player : players) {
-                        if (!player.inPowerDown !player.isDestroyed() && player.getProgram()[currentProgramRegister] != null) {
+                        if (!player.inPowerDown && !player.isDestroyed() && player.getProgram()[currentProgramRegister] != null) {
                             movementPriority.add(player);
                         }
                     }

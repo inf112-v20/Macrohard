@@ -43,7 +43,7 @@ public class DeckTest {
         deck.dealHand(player);
         for(Card card : player.getHand()) {
             for(Card dcard: deck.getDeck()) {
-                assertFalse(card == dcard);
+                assertFalse(card.equals(dcard));
             }
         }
     }
