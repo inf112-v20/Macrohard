@@ -1,6 +1,7 @@
 package inf112.skeleton.app;
 
 
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
@@ -24,7 +25,7 @@ public class GameLoop {
     private int buttonX;
     public int phase = 0;
     private int currentProgramRegister = 0;
-
+    private TextButton powerDownStatus;
     private boolean cardsDisplayed = false;
     private boolean canClean = false;
     private boolean canPlay = false;
@@ -47,7 +48,7 @@ public class GameLoop {
         switch (phase) {
             case 0:
                 // display powerdown button or continue powerdown button
-                gameScreen.setPowerdown(buttonX);
+                powerDownStatus = gameScreen.setPowerdown(buttonX);
                 // Check if new deck is needed
                 int cardsNeededInDeck = 0;
                 for (Player player : players) {
@@ -103,7 +104,6 @@ public class GameLoop {
                             movementPriority.add(player);
                         }
                     }
-                   // movementPriority.addAll(players);
                     canPlay = true;
                     phase++;
                     break;
@@ -204,12 +204,13 @@ public class GameLoop {
                     // Player chose to not continue power down
                     if (player.hasQueuedPowerDown && player.inPowerDown && !player.continuePowerDown) {
                         player.hasQueuedPowerDown = false;
+                        player.inPowerDown = false;
                     }
                     // Player announced power down this turn and will enter power down next turn
                     if (player.hasQueuedPowerDown) {
                         player.inPowerDown = true;
-                        player.hasQueuedPowerDown = false;
                     }
+                    powerDownStatus.remove();
                 }
                 gameScreen.updatePlayerGraphics();
                 gameScreen.clearCards(cardGraphics);

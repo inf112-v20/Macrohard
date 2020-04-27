@@ -262,8 +262,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void setPowerdown(int buttonX) {
-
+    public TextButton setPowerdown(int buttonX) {
         if(players.get(0).inPowerDown) {
             TextButton continuePowerDown = new TextButton("CONTINUE POWER DOWN", parent.getSkin());
             continuePowerDown.setBounds(buttonX, 290, 350, 50);
@@ -274,6 +273,7 @@ public class GameScreen implements Screen {
                 }
             });
             gameStage.addActor(continuePowerDown);
+            return continuePowerDown;
 
         } else {
             TextButton powerDown = new TextButton("POWER DOWN", parent.getSkin());
@@ -285,6 +285,7 @@ public class GameScreen implements Screen {
                 }
             });
             gameStage.addActor(powerDown);
+            return powerDown;
         }
 
     }
