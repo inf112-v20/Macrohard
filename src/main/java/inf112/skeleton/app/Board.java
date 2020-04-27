@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
 public class Board {
 
@@ -208,13 +209,29 @@ public class Board {
         }
     }
 
-    public void fireLasers() {
+    public void fireBoardLasers() {
         for (Laser laser : lasers) {
             Tile targetTile = getLaserTarget(getTile(laser), laser.getDirection());
             if (targetTile.isOccupied()) {
-                Player damagedPlayer = targetTile.getPlayer();
-                damagedPlayer.applyDamage(laser.getDamage());
+                targetTile.getPlayer().applyDamage(laser.getDamage());
             }
+        }
+    }
+
+    public void firePlayerLasers() {
+        LinkedList<Player> damagedPlayers = new LinkedList<>();
+        for (Player player : players) {
+            if (!player.isDestroyed()) {
+                Tile targetTile = getLaserTarget(getTile(player), player.getDirection());
+                if (targetTile.isOccupied()) {
+                    damagedPlayers.add(targetTile.getPlayer());
+                }
+            }
+        }
+        // Damage applied simultaneously to all players
+        // to avoid players being destroyed before firing own laser
+        for (Player player : damagedPlayers) {
+            player.applyDamage(1);
         }
     }
 

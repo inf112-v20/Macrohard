@@ -4,9 +4,6 @@ import inf112.skeleton.app.tiles.Laser;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 public class BoardLaserTest {
@@ -33,7 +30,7 @@ public class BoardLaserTest {
 
     @Test
     public void firingOneLaserOnceGivesOneDamageTokenToTargetPlayer() {
-        board.fireLasers();
+        board.fireBoardLasers();
 
         assertEquals(laser.getDamage(), targetPlayer.getDamageTokens());
     }
@@ -42,15 +39,15 @@ public class BoardLaserTest {
     public void firingDoubleLaserOnceGivesTwoDamageTokensToTargetPlayer() {
         board.getLasers().remove(laser);
         board.getLasers().add(doubleLaser);
-        board.fireLasers();
+        board.fireBoardLasers();
 
         assertEquals(doubleLaser.getDamage(), targetPlayer.getDamageTokens());
     }
 
     @Test
     public void firingOneLaserTwiceGivesTwoDamageTokensToTargetPlayer() {
-        board.fireLasers();
-        board.fireLasers();
+        board.fireBoardLasers();
+        board.fireBoardLasers();
 
         assertEquals((laser.getDamage() * 2), targetPlayer.getDamageTokens());
     }
@@ -58,7 +55,7 @@ public class BoardLaserTest {
     @Test
     public void targetPlayerShieldsNextPlayerFromDamage() {
         int shieldedPlayerDamageTokens = shieldedPlayer.getDamageTokens();
-        board.fireLasers();
+        board.fireBoardLasers();
 
         assertEquals(shieldedPlayerDamageTokens, shieldedPlayer.getDamageTokens());
     }
@@ -66,7 +63,7 @@ public class BoardLaserTest {
     @Test
     public void damageGivenToShieldedPlayerWhenRemovingTargetPlayerFromBoardBeforeFiringLaser() {
         board.getTile(targetPlayer).setPlayer(null);
-        board.fireLasers();
+        board.fireBoardLasers();
 
         assertEquals(laser.getDamage(), shieldedPlayer.getDamageTokens());
     }
@@ -75,7 +72,7 @@ public class BoardLaserTest {
     public void erectingWallBetweenLaserAndTargetPlayerShieldsTargetPlayerFromDamage() {
         int targetPlayerDamageTokens = targetPlayer.getDamageTokens();
         board.getTile(laser).getWalls().add(laser.getDirection());
-        board.fireLasers();
+        board.fireBoardLasers();
 
         assertEquals(targetPlayerDamageTokens, targetPlayer.getDamageTokens());
     }
@@ -84,7 +81,7 @@ public class BoardLaserTest {
     public void erectingWallBehindLaserDoesNotObstructLaserBeam() {
         int targetPlayerDamageTokens = targetPlayer.getDamageTokens();
         board.getTile(laserRow, laser.getCol()).getWalls().add(laser.getDirection().opposite());
-        board.fireLasers();
+        board.fireBoardLasers();
 
         assertNotEquals(targetPlayerDamageTokens,
                 targetPlayer.getDamageTokens());

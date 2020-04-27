@@ -103,7 +103,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 mapHandler.getLayer("LASERBEAMS").setVisible(true);
-                board.fireLasers();
+                board.fireBoardLasers();
                 SoundEffects.FIRE_LASERS.play(parent.getPreferences().getSoundVolume());
                 mapHandler.getLayer("LASERBEAMS").setVisible(false);
             }

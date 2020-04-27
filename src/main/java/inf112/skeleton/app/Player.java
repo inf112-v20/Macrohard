@@ -28,7 +28,6 @@ public class Player implements Comparable<Player> {
 
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
-    private PlayerInfoGraphic playerInfoGraphic;
     private boolean destroyed;
 
 

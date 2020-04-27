@@ -147,7 +147,8 @@ public class GameLoop {
             case 7:
                 // Board lasers fire
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
-                board.fireLasers();
+                board.fireBoardLasers();
+                board.firePlayerLasers();
                 SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 gameScreen.updatePlayerGraphics();
                 phase++;
