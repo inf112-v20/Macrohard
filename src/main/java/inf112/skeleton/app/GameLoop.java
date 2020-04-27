@@ -62,12 +62,13 @@ public class GameLoop {
                 for (Player player : players) {
                     if (!player.inPowerDown) {
                         deck.dealHand(player);
-                    } else {
+                    }
+                    else {
                         player.setDamageTokens(0);
                     }
                 }
 
-                // NPC announce power down if it has a certain ammount of damage tokens
+                // NPC announce power down if it has a certain amount of damage tokens
                 for (Player player : players.subList(1, players.size())) {
                     if (player.getDamageTokens() >= 4) {
                         player.hasQueuedPowerDown = true;
@@ -148,6 +149,7 @@ public class GameLoop {
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                 board.fireLasers();
                 SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
+                gameScreen.updatePlayerGraphics();
                 phase++;
                 break;
             case 8:
@@ -212,7 +214,6 @@ public class GameLoop {
                     }
                     powerDownStatus.remove();
                 }
-                gameScreen.updatePlayerGraphics();
                 gameScreen.clearCards(cardGraphics);
                 cardsDisplayed = false;
                 canClean = false;

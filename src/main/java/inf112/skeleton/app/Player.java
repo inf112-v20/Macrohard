@@ -1,6 +1,5 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
@@ -10,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Random;
 
 public class Player implements Comparable<Player> {
 
@@ -50,8 +48,6 @@ public class Player implements Comparable<Player> {
         this.isNPC = isNPC;
         this.damageTokens = 0;
         this.lifeTokens = 3;
-
-        PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(this);
     }
 
     public int getRow() {
@@ -143,10 +139,6 @@ public class Player implements Comparable<Player> {
         }
     }
 
-    public void createEmptyProgram() {
-        this.program = new Card[5];
-    }
-
     public void discardHandAndWipeProgram() {
         hand = null;
         program = null;
@@ -157,19 +149,10 @@ public class Player implements Comparable<Player> {
         if (this.damageTokens > 9) {
             destroy();
         }
-        this.playerInfoGraphic.updateValues();
     }
 
     public void setDamageTokens(int newDamageTokens) {
         damageTokens = newDamageTokens;
-    }
-
-    public void setInfoGraphic(PlayerInfoGraphic playerInfoGraphic) {
-        this.playerInfoGraphic = playerInfoGraphic;
-    }
-
-    public PlayerInfoGraphic getPlayerInfoGraphic(){
-        return this.playerInfoGraphic;
     }
 
     public void destroy() {

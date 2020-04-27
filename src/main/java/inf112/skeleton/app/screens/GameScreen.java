@@ -23,7 +23,6 @@ import inf112.skeleton.app.tiles.Hole;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Random;
 
 public class GameScreen implements Screen {
 
@@ -88,7 +87,6 @@ public class GameScreen implements Screen {
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
             gameStage.addActor(playerGraphic);
-            gameStage.addActor(player.getPlayerInfoGraphic());
         }
 
         // --- INPUT ----
@@ -98,6 +96,19 @@ public class GameScreen implements Screen {
         rebootWindow = new RebootWindow(this, player1);
         rebootWindow.setVisible(false);
         gameStage.addActor(rebootWindow);
+
+        TextButton fireLaser = new TextButton("LASER", parent.getSkin());
+        fireLaser.setBounds(width - (width / 4f), 504, 150, 50);
+        fireLaser.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                mapHandler.getLayer("LASERBEAMS").setVisible(true);
+                board.fireLasers();
+                SoundEffects.FIRE_LASERS.play(parent.getPreferences().getSoundVolume());
+                mapHandler.getLayer("LASERBEAMS").setVisible(false);
+            }
+        });
+        gameStage.addActor(fireLaser);
 
         TextButton reboot = new TextButton("REBOOT", parent.getSkin());
         reboot.setBounds(width - (width / 4f), 452, 150, 50);
@@ -145,44 +156,17 @@ public class GameScreen implements Screen {
         for (Player player : players) {
             PlayerGraphic graphic = player.getGraphics();
             if (graphic.isVisible) {
-                graphic.animateMove(1);
+                graphic.animateMove();
                 graphic.animateRotation();
                 if (board.getTile(player) instanceof Hole) {
                     graphic.animateFall();
                     SoundEffects.FALLING_ROBOT.play(parent.getPreferences().getSoundVolume());
                 }
-                graphic.animate();
-            }
-
-        }
-    }
-
-    public void lockInProgram(Player player, Card[] cards){
-        // Create program of selected cards from hand
-        for (Card card : cards) {
-            if (card.isInProgramRegister()) {
-                player.getProgram()[card.registerIndex - 1] = card;
-            }
-        }
-    }
-
-    public void lockRandomProgram(Player player) {
-        player.createEmptyProgram();
-        Random rand = new Random();
-        int[] randomValue = new int[9 - player.getDamageTokens()];
-        for (int j = 0; j < randomValue.length; j++) randomValue[j] = j;
-        for (int i = randomValue.length - 1; i > 0; i--) {
-            int index = rand.nextInt(i + 1);
-            int temp = randomValue[i];
-            randomValue[i] = randomValue[index];
-            randomValue[index] = temp;
-        }
-        for (int i = 0; i<5; i++) {
-                if (player.getHand()[i] != null) {
-                    player.getProgram()[i] = player.getHand()[i];
-                } else {
-                    player.getProgram()[i] = null;
+                else if (player.isDestroyed()) {
+                    graphic.animateDestruction();
                 }
+            }
+
         }
     }
 
