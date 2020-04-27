@@ -1,6 +1,7 @@
 package inf112.skeleton.app.cards;
 
 public enum MovementType implements CardType {
+
     ONE_FORWARD,
     TWO_FORWARD,
     THREE_FORWARD,

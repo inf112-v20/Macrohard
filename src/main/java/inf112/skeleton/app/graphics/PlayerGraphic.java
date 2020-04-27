@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.SoundEffects;
 import inf112.skeleton.app.screens.GameScreen;
 
 public class PlayerGraphic extends Image {
@@ -57,8 +58,9 @@ public class PlayerGraphic extends Image {
         isVisible = false;
     }
 
-    public void animateRespawn() {
+    public void animateReboot() {
         animateMove(1);
+        animateRotation();
         sequenceAction.addAction(Actions.fadeIn(0.5f));
         isVisible = true;
     }

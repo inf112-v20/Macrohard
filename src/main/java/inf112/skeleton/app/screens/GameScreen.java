@@ -9,8 +9,7 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -43,11 +42,9 @@ public class GameScreen implements Screen {
 
     public final static int TILE_SIZE = 60;
     private float timeInSeconds = 0f;
-    private float period = 0.8f;
-
-    private ArrayList<PlayerGraphic> playerGraphics = new ArrayList<>();
 
     private Board board;
+    public final RebootWindow rebootWindow;
 
     private Stage gameStage;
     private GameLoop gameLoop;
@@ -90,7 +87,6 @@ public class GameScreen implements Screen {
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
-            playerGraphics.add(playerGraphic);
             gameStage.addActor(playerGraphic);
             gameStage.addActor(player.getPlayerInfoGraphic());
         }
@@ -99,8 +95,28 @@ public class GameScreen implements Screen {
         inputProcessor = new GameScreenInputProcessor(parent, player1, board);
         gameStage.addListener(inputProcessor);
 
+        rebootWindow = new RebootWindow(this, player1);
+        rebootWindow.setVisible(false);
+        gameStage.addActor(rebootWindow);
+
+        TextButton reboot = new TextButton("REBOOT", parent.getSkin());
+        reboot.setBounds(width - (width / 4f), 452, 150, 50);
+        reboot.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent changeEvent, Actor actor) {
+                for (Player player : players) {
+                    if (player.isDestroyed() && player.getLifeTokens() > 0) {
+                        player.reboot();
+                        player.getGraphics().animateReboot();
+                    }
+                }
+                updatePlayerGraphics();
+            }
+        });
+        gameStage.addActor(reboot);
+
         TextButton change = new TextButton("CHANGE", parent.getSkin());
-        change.setBounds(width - (width / 4), 400, 150, 50);
+        change.setBounds(width - (width / 4f), 400, 150, 50);
         change.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -112,16 +128,15 @@ public class GameScreen implements Screen {
         gameStage.addActor(change);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(width - (width / 4), 348, 150, 50);
+        button.setBounds(width - (width / 4f), 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                players.get(0).createEmptyProgram();
-                lockInProgram(players.get(0), players.get(0).getHand());
+                players.get(0).lockInProgram();
             }
         });
         gameStage.addActor(button);
-        int buttonX = (width - (width / 4))-52;
+        int buttonX = (width - (width / 4)) - 52;
         gameLoop = new GameLoop(board, this, buttonX);
 
     }
@@ -134,6 +149,7 @@ public class GameScreen implements Screen {
                 graphic.animateRotation();
                 if (board.getTile(player) instanceof Hole) {
                     graphic.animateFall();
+                    SoundEffects.FALLING_ROBOT.play(parent.getPreferences().getSoundVolume());
                 }
                 graphic.animate();
             }
@@ -145,7 +161,7 @@ public class GameScreen implements Screen {
         // Create program of selected cards from hand
         for (Card card : cards) {
             if (card.isInProgramRegister()) {
-                player.getProgram()[card.programIndex - 1] = card;
+                player.getProgram()[card.registerIndex - 1] = card;
             }
         }
     }
@@ -190,19 +206,19 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+        gameCamera.position.set(width / 2f - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
+        renderer.setView(gameCamera);
+        renderer.render();
+        gameStage.act();
+        gameStage.draw();
+
         // Comment this out to disable GameLoop
         timeInSeconds += Gdx.graphics.getRawDeltaTime();
+        float period = 0.8f;
         if (timeInSeconds > period) {
             timeInSeconds -= period;
             gameLoop.tick();
         }
-
-        gameCamera.position.set(width / 2 - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
-        renderer.setView(gameCamera);
-        renderer.render();
-
-        gameStage.act();
-        gameStage.draw();
     }
 
     @Override
@@ -235,6 +251,10 @@ public class GameScreen implements Screen {
         gameStage.addActor(actor);
     }
 
+    public Stage getGameStage() {
+        return gameStage;
+    }
+
     public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
         for (CardGraphic cardGraphic : cardsOnScreen) {
             cardGraphic.reset();
@@ -261,7 +281,7 @@ public class GameScreen implements Screen {
             powerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
-                    players.get(0).announcedPowerDown = true;
+                    players.get(0).hasQueuedPowerDown = true;
                 }
             });
             gameStage.addActor(powerDown);
@@ -269,4 +289,11 @@ public class GameScreen implements Screen {
 
     }
 
+    public void openRebootWindow() {
+        rebootWindow.setVisible(true);
+    }
+
+    public void closeRebootWindow() {
+        rebootWindow.setVisible(false);
+    }
 }

@@ -1,8 +1,6 @@
 package inf112.skeleton.app;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
@@ -15,7 +13,6 @@ import java.util.*;
 
 public class GameLoop {
 
-    private final Sound laserSound = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/laserbeam.wav"));
     private final GameScreen gameScreen;
     private final Board board;
 
@@ -25,7 +22,7 @@ public class GameLoop {
     private PriorityQueue<Player> movementPriority;
     private Deck deck;
     private int buttonX;
-    private int phase = 0;
+    public int phase = 0;
     private int currentProgramRegister = 0;
 
     private boolean cardsDisplayed = false;
@@ -72,7 +69,7 @@ public class GameLoop {
                 // NPC announce power down if it has a certain ammount of damage tokens
                 for (Player player : players.subList(1, players.size())) {
                     if (player.getDamageTokens() >= 4) {
-                        player.announcedPowerDown = true;
+                        player.hasQueuedPowerDown = true;
                     }
                 }
                 phase++;
@@ -90,7 +87,7 @@ public class GameLoop {
                     }
                 for (Player player : players.subList(1, players.size())) {
                     if (!player.inPowerDown) {
-                        gameScreen.lockRandomProgram(player);
+                        player.lockInRandomProgram();
                     }
                 }
                 if (client.hasLockedInProgram() || client.inPowerDown) {
@@ -143,13 +140,14 @@ public class GameLoop {
                 // Gears rotate
                 board.rotateGears();
                 gameScreen.updatePlayerGraphics();
+                SoundEffects.ROTATE_GEARS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 phase++;
                 break;
             case 7:
                 // Board lasers fire
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                 board.fireLasers();
-                laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
+                SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 phase++;
                 break;
             case 8:
@@ -161,11 +159,8 @@ public class GameLoop {
                         }
                         if (tile instanceof RepairSite) {
                             player.setArchiveMarker(tile);
-                            if (player.getDamageTokens() > 0) {
-                                player.setDamageTokens(player.getDamageTokens()-1);
-                            }
+                            player.repair();
                         }
-                        player.getPlayerInfoGraphic().updateValues();
                     }
                 }
                 canClean = true;
@@ -188,30 +183,41 @@ public class GameLoop {
 
             case 10:
                 if (canClean && roundOver) {
-                    for (Player player : players) {
-                        player.discardHandAndWipeProgram();
-                        if (player.isDestroyed() && player.getLifeTokens() > 0) {
-                            player.reboot();
-                            player.getGraphics().animateRespawn();
-                        }
-                        // Player chose to not continue power down
-                        if (player.announcedPowerDown && player.inPowerDown && !player.continuePowerDown) {
-                            player.announcedPowerDown = false;
-                            player.inPowerDown = false;
-                        }
-                        // Player announced power down this turn and will enter power down next turn
-                        if (player.announcedPowerDown) {
-                            player.inPowerDown = true;
-                        }
+                    if (client.isDestroyed() && client.getLifeTokens() > 0) {
+                        gameScreen.openRebootWindow();
                     }
-                    gameScreen.updatePlayerGraphics();
-                    gameScreen.clearCards(cardGraphics);
-                    cardsDisplayed = false;
-                    currentProgramRegister = 0;
-                    canClean = false;
-                    phase = 0;
-                    break;
+                    else {
+                        phase ++;
+                    }
                 }
+                break;
+            case 11:
+                for (Player player : players) {
+                    player.discardHandAndWipeProgram();
+
+                    //Reboot destroyed players if they still have more life tokens
+                    if (player.isDestroyed() && player.getLifeTokens() > 0) {
+                        player.setDirection(Direction.any());
+                        player.reboot();
+                        player.getGraphics().animateReboot();
+                    }
+                    // Player chose to not continue power down
+                    if (player.hasQueuedPowerDown && player.inPowerDown && !player.continuePowerDown) {
+                        player.hasQueuedPowerDown = false;
+                    }
+                    // Player announced power down this turn and will enter power down next turn
+                    if (player.hasQueuedPowerDown) {
+                        player.inPowerDown = true;
+                        player.hasQueuedPowerDown = false;
+                    }
+                }
+                gameScreen.updatePlayerGraphics();
+                gameScreen.clearCards(cardGraphics);
+                cardsDisplayed = false;
+                canClean = false;
+                currentProgramRegister = 0;
+                phase = 0;
+                break;
             default:
                 System.out.println("phase index did an oopsie :)");
         }

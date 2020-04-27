@@ -17,6 +17,6 @@ public class MovementCard extends Card {
     public String toString() {
         return "MovementCard{" + "priority=" + priority +
                 ", numberOfMoves=" + getMoveID() +
-                ", programIndex=" + programIndex + '}';
+                ", registerIndex=" + registerIndex + '}';
     }
 }

@@ -7,6 +7,11 @@ import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Random;
+
 public class Player implements Comparable<Player> {
 
     public boolean isNPC;
@@ -16,7 +21,7 @@ public class Player implements Comparable<Player> {
     private Direction direction;
     public Card[] program;
     public Card[] hand;
-    public boolean announcedPowerDown = false;
+    public boolean hasQueuedPowerDown = false;
     public boolean inPowerDown = false;
     public boolean continuePowerDown = false;
 
@@ -49,10 +54,6 @@ public class Player implements Comparable<Player> {
         PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(this);
     }
 
-    public void setArchiveMarker(Tile archiveMarker) {
-        this.archiveMarker = archiveMarker;
-    }
-
     public int getRow() {
         return row;
     }
@@ -69,17 +70,21 @@ public class Player implements Comparable<Player> {
         this.col = col;
     }
 
-    public void stepIn(Direction direction) {
-        setRow(row + direction.getRowTrajectory());
-        setCol(col + direction.getColumnTrajectory());
-    }
-
     public Direction getDirection () {
         return this.direction;
     }
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setArchiveMarker(Tile archiveMarker) {
+        this.archiveMarker = archiveMarker;
+    }
+
+    public void stepIn(Direction direction) {
+        setRow(row + direction.getRowTrajectory());
+        setCol(col + direction.getColumnTrajectory());
     }
 
     public boolean hasLockedInProgram() { return getProgram() != null; }
@@ -118,7 +123,25 @@ public class Player implements Comparable<Player> {
         return hand;
     }
 
-    public Card[] getProgram() { return program;}
+    public Card[] getProgram() { return program; }
+
+    public void lockInProgram() {
+        program = new Card[5];
+        for (Card card: hand) {
+            if (card.isInProgramRegister()) {
+                program[card.registerIndex - 1] = card;
+            }
+        }
+    }
+
+    public void lockInRandomProgram() {
+        program = new Card[5];
+        ArrayList<Card> shuffledHand = new ArrayList<>(Arrays.asList(hand));
+        Collections.shuffle(shuffledHand);
+        for (int i = 0; i < program.length; i ++) {
+            program[i] = shuffledHand.get(i);
+        }
+    }
 
     public void createEmptyProgram() {
         this.program = new Card[5];
@@ -127,15 +150,6 @@ public class Player implements Comparable<Player> {
     public void discardHandAndWipeProgram() {
         hand = null;
         program = null;
-    }
-
-    @Override
-    public String toString() {
-        return "Player{" +
-                "row=" + row +
-                ", col=" + col +
-                ", damage=" + damageTokens +
-                '}';
     }
 
     public void applyDamage(int damage) {
@@ -150,11 +164,6 @@ public class Player implements Comparable<Player> {
         damageTokens = newDamageTokens;
     }
 
-    @Override
-    public int compareTo(@NotNull Player otherPlayer) {
-        return getProgram()[programRegister].compareTo(otherPlayer.getProgram()[programRegister]);
-    }
-
     public void setInfoGraphic(PlayerInfoGraphic playerInfoGraphic) {
         this.playerInfoGraphic = playerInfoGraphic;
     }
@@ -162,7 +171,6 @@ public class Player implements Comparable<Player> {
     public PlayerInfoGraphic getPlayerInfoGraphic(){
         return this.playerInfoGraphic;
     }
-
 
     public void destroy() {
         lifeTokens --;
@@ -182,4 +190,22 @@ public class Player implements Comparable<Player> {
         damageTokens = 2;
     }
 
+    //Discard one damage token if there exist at least one damage token
+    public void repair() {
+        if (damageTokens > 0) { damageTokens --; }
+    }
+
+    @Override
+    public int compareTo(@NotNull Player otherPlayer) {
+        return getProgram()[programRegister].compareTo(otherPlayer.getProgram()[programRegister]);
+    }
+
+    @Override
+    public String toString() {
+        return "Player{" +
+                "row=" + row +
+                ", col=" + col +
+                ", damage=" + damageTokens +
+                '}';
+    }
 }
