@@ -3,6 +3,7 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
@@ -27,7 +28,7 @@ public class GameLoop {
     private int buttonX;
     private int phase = 0;
     private int currentProgramRegister = 0;
-
+    private TextButton powerDownStatus;
     private boolean cardsDisplayed = false;
     private boolean canClean = false;
     private boolean canPlay = false;
@@ -50,7 +51,7 @@ public class GameLoop {
         switch (phase) {
             case 0:
                 // display powerdown button or continue powerdown button
-                gameScreen.setPowerdown(buttonX);
+                powerDownStatus = gameScreen.setPowerdown(buttonX);
                 // Check if new deck is needed
                 int cardsNeededInDeck = 0;
                 for (Player player : players) {
@@ -203,6 +204,7 @@ public class GameLoop {
                         if (player.announcedPowerDown) {
                             player.inPowerDown = true;
                         }
+                        powerDownStatus.remove();
                     }
                     gameScreen.updatePlayerGraphics();
                     gameScreen.clearCards(cardGraphics);
