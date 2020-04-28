@@ -116,7 +116,7 @@ public class GameScreen implements Screen {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 for (Player player : players) {
-                    if (player.isDestroyed() && player.getLifeTokens() > 0) {
+                    if (player.isDestroyed() && !player.isDead()) {
                         player.reboot();
                         player.getGraphics().animateReboot();
                     }
@@ -170,8 +170,8 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void runProgram(Player player, int programIndex) {
-        Card card = player.getProgram()[programIndex];
+    public void runProgram(Player player, int registerIndex) {
+        Card card = player.getProgram()[registerIndex];
         board.execute(player, card);
         updatePlayerGraphics();
     }
@@ -281,4 +281,9 @@ public class GameScreen implements Screen {
     public void closeRebootWindow() {
         rebootWindow.setVisible(false);
     }
+
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
 }

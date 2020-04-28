@@ -133,7 +133,8 @@ public class Player implements Comparable<Player> {
         program = new Card[5];
         ArrayList<Card> shuffledHand = new ArrayList<>(Arrays.asList(hand));
         Collections.shuffle(shuffledHand);
-        for (int i = 0; i < program.length; i ++) {
+        int bound = Math.min(program.length, shuffledHand.size());
+        for (int i = 0; i < bound; i ++) {
             program[i] = shuffledHand.get(i);
         }
     }
@@ -162,6 +163,8 @@ public class Player implements Comparable<Player> {
     public boolean isDestroyed() {
         return destroyed;
     }
+
+    public boolean isDead() { return lifeTokens <= 0; }
 
     public void reboot() {
         setRow(archiveMarker.getRow());

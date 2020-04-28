@@ -106,7 +106,7 @@ public class GameLoop {
                         }
                     }
                     canPlay = true;
-                    phase++;
+                    phase ++;
                     break;
                 }
                 break;
@@ -116,6 +116,9 @@ public class GameLoop {
                 if (canPlay && currentProgramRegister < 5 && !movementPriority.isEmpty()) {
                     Player player = movementPriority.poll();
                     gameScreen.runProgram(player, currentProgramRegister);
+                    if (player.isDead()) {
+                        remove(player);
+                    }
                     if (movementPriority.isEmpty()) {
                         canPlay = false;
                         phase++;
@@ -128,14 +131,14 @@ public class GameLoop {
                 if (movementPriority.isEmpty()) {
                     board.rollConveyorBelts(false);
                     gameScreen.updatePlayerGraphics();
-                    phase++;
+                    phase ++;
                 }
                 break;
             case 5:
                 // Express belts move
                 board.rollConveyorBelts(true);
                 gameScreen.updatePlayerGraphics();
-                phase++;
+                phase ++;
                 break;
             case 6:
                 // Gears rotate
@@ -175,7 +178,7 @@ public class GameLoop {
                 // if on last programRegister, do full round cleanup
                 if (currentProgramRegister == 4) {
                     roundOver = true;
-                    phase++;
+                    phase ++;
                 } else {
                     currentProgramRegister ++;
                     phase = 2;
@@ -186,7 +189,7 @@ public class GameLoop {
 
             case 10:
                 if (canClean && roundOver) {
-                    if (client.isDestroyed() && client.getLifeTokens() > 0) {
+                    if (client.isDestroyed() && !client.isDead()) {
                         gameScreen.openRebootWindow();
                     }
                     else {
@@ -199,7 +202,7 @@ public class GameLoop {
                     player.discardHandAndWipeProgram();
 
                     //Reboot destroyed players if they still have more life tokens
-                    if (player.isDestroyed() && player.getLifeTokens() > 0) {
+                    if (player.isDestroyed() && !player.isDead()) {
                         player.setDirection(Direction.any());
                         player.reboot();
                         player.getGraphics().animateReboot();
@@ -223,6 +226,17 @@ public class GameLoop {
                 break;
             default:
                 System.out.println("phase index did an oopsie :)");
+        }
+    }
+
+    private void remove(Player player) {
+        players.remove(player);
+        board.getPlayers().remove(player);
+        gameScreen.getPlayers().remove(player);
+        for (Player p: players
+             ) {
+            System.out.println(p);
+
         }
     }
 
