@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.screens.GameScreen;
 
 import java.io.File;
 
@@ -24,14 +25,21 @@ public class PlayerInfoGraphic extends Image {
     private Pixmap pixmap;
     private BitmapFont.BitmapFontData fontData;
 
-    public PlayerInfoGraphic(Player player){
+    private final int height = 160;
+    private final int width = 120;
+
+    public PlayerInfoGraphic(Player player, GameScreen parent){
         super(new Texture("./assets/PlayerInfoBackground.png"));
         initiatedPlayers++;
         playerNumber = initiatedPlayers;
 
         this.player = player;
 
-        setBounds(10 + (initiatedPlayers * 130), 870, 120, 160);
+        int maxHeight = parent.getHeight();
+        System.out.println(maxHeight);
+        System.out.println(this.getHeight());
+
+        setBounds(1100, maxHeight - 400 - (playerNumber*170), 120, 160);
         resetPixmaps();
         updateValues();
     }
