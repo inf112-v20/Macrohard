@@ -29,6 +29,8 @@ import java.util.Arrays;
 public class GameScreen implements Screen {
 
     private static final int CARD_GRAPHIC_HEIGHT =  150;
+    private static final int CARD_GRAPHIC_SELECTED_WIDTH = 80;
+    private static final int PADDING = 5;
 
     public final RoboRallyApplication parent;
     public final int width, height;
@@ -102,7 +104,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(rebootWindow);
 
         TextButton fireLaser = new TextButton("LASER", parent.getSkin());
-        fireLaser.setBounds(width - 150, 504, 150, 50);
+        fireLaser.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 504, 150, 50);
         fireLaser.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -115,7 +117,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(fireLaser);
 
         TextButton reboot = new TextButton("REBOOT", parent.getSkin());
-        reboot.setBounds(width - 150, 452, 150, 50);
+        reboot.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 452, 150, 50);
         reboot.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -131,7 +133,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(reboot);
 
         TextButton change = new TextButton("CHANGE", parent.getSkin());
-        change.setBounds(width - 150, 400, 150, 50);
+        change.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 400, 150, 50);
         change.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -143,7 +145,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(change);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(width - 150, 348, 150, 50);
+        button.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -151,9 +153,10 @@ public class GameScreen implements Screen {
             }
         });
         gameStage.addActor(button);
-        int buttonX = (width - (width / 4)) - 52;
+        int buttonX = (width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING)) - 52;
         gameLoop = new GameLoop(board, this, buttonX);
 
+        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT+5));
     }
 
     public void updatePlayerGraphics() {
@@ -193,8 +196,6 @@ public class GameScreen implements Screen {
     public void render(float v) {
         Gdx.gl.glClearColor(0.5f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        //gameCamera.position.set(width / 2f - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
         renderer.setView(gameCamera);
         renderer.render();
         gameStage.act();
