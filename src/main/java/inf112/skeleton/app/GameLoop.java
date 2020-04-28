@@ -200,7 +200,6 @@ public class GameLoop {
             case 11:
                 for (Player player : players) {
                     player.discardHandAndWipeProgram();
-
                     //Reboot destroyed players if they still have more life tokens
                     if (player.isDestroyed() && !player.isDead()) {
                         player.setDirection(Direction.any());
@@ -240,4 +239,14 @@ public class GameLoop {
         }
     }
 
+    private void lockCards (Player player, int lockedCards){
+        int index = 4;
+        for (int i = lockedCards-1; i <= 0 ; i--){
+            player.program[i].isLocked = true;
+            index--;
+        }
+        for (int j = 0; j < lockedCards-1; j++){
+            player.program[j] = null;
+        }
+    }
 }

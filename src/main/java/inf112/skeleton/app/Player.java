@@ -38,6 +38,7 @@ public class Player implements Comparable<Player> {
         this.isNPC = false;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.program = new Card[5];
     }
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
@@ -47,6 +48,7 @@ public class Player implements Comparable<Player> {
         this.isNPC = isNPC;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.program = new Card[5];
     }
 
     public int getRow() {
@@ -82,7 +84,12 @@ public class Player implements Comparable<Player> {
         setCol(col + direction.getColumnTrajectory());
     }
 
-    public boolean hasLockedInProgram() { return getProgram() != null; }
+    public boolean hasLockedInProgram() {
+        for(Card card : this.getProgram()){
+            if (card == null) return false;
+        }
+        return true;
+    }
 
     public int getDamageTokens() {
         return damageTokens;
@@ -121,7 +128,7 @@ public class Player implements Comparable<Player> {
     public Card[] getProgram() { return program; }
 
     public void lockInProgram() {
-        program = new Card[5];
+        //program = new Card[5];
         for (Card card: hand) {
             if (card.isInProgramRegister()) {
                 program[card.registerIndex - 1] = card;
@@ -130,7 +137,7 @@ public class Player implements Comparable<Player> {
     }
 
     public void lockInRandomProgram() {
-        program = new Card[5];
+        //program = new Card[5];
         ArrayList<Card> shuffledHand = new ArrayList<>(Arrays.asList(hand));
         Collections.shuffle(shuffledHand);
         int bound = Math.min(program.length, shuffledHand.size());
@@ -141,7 +148,11 @@ public class Player implements Comparable<Player> {
 
     public void discardHandAndWipeProgram() {
         hand = null;
-        program = null;
+
+        int lockedCards = Math.max(this.getDamageTokens()-4, 0);
+        for (int i = 0; i < program.length - lockedCards; i++){
+            program[i] = null;
+        }
     }
 
     public void applyDamage(int damage) {
