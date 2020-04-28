@@ -59,10 +59,8 @@ public class GameScreen implements Screen {
         // Initialise players
         Player player1 = new Player(0, 1, Direction.EAST, false);
         Player player2 = new Player(0, 1, Direction.EAST, true);
-        Player player3 = new Player(0, 2, Direction.EAST, true);
-        Player player4 = new Player(0, 2, Direction.EAST, true);
-        Player player5 = new Player(0, 2, Direction.EAST, true);
-        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4, player5));
+
+        players = new ArrayList<>(Arrays.asList(player1, player2));
 
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");

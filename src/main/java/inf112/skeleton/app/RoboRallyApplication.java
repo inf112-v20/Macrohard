@@ -18,6 +18,7 @@ import java.awt.*;
 
 public class RoboRallyApplication extends Game {
 
+    public static int NUMBER_OF_PLAYERS = 0;
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private PreferenceScreen preferenceScreen;
@@ -111,6 +112,7 @@ public class RoboRallyApplication extends Game {
         cfg.title = "RoboRallyApplication";
         cfg.width = screenSize.width;
         cfg.height = screenSize.height;
+        cfg.fullscreen = true;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }

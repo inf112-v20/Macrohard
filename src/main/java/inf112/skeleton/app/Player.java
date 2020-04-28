@@ -2,7 +2,6 @@ package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
-import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,6 +28,7 @@ public class Player implements Comparable<Player> {
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
     private boolean destroyed;
+    private final int name;
 
 
     public Player(int row, int col, Direction direction) {
@@ -38,6 +38,7 @@ public class Player implements Comparable<Player> {
         this.isNPC = false;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.name = ++ RoboRallyApplication.NUMBER_OF_PLAYERS;
     }
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
@@ -47,6 +48,7 @@ public class Player implements Comparable<Player> {
         this.isNPC = isNPC;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.name = ++ RoboRallyApplication.NUMBER_OF_PLAYERS;
     }
 
     public int getRow() {
@@ -192,5 +194,9 @@ public class Player implements Comparable<Player> {
                 ", col=" + col +
                 ", damage=" + damageTokens +
                 '}';
+    }
+
+    public int name() {
+        return name;
     }
 }

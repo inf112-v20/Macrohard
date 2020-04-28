@@ -2,10 +2,12 @@ package inf112.skeleton.app;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
+import inf112.skeleton.app.screens.WinScreen;
 import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.RepairSite;
 import inf112.skeleton.app.tiles.Tile;
@@ -45,6 +47,9 @@ public class GameLoop {
 
     // Assumes the non-NPC player is always the first element of the players ArrayList
     public void tick() {
+        if (players.size() == 1) {
+            gameScreen.parent.setScreen(new WinScreen(players.get(0)));
+        }
         switch (phase) {
             case 0:
                 // display powerdown button or continue powerdown button
@@ -233,11 +238,6 @@ public class GameLoop {
         players.remove(player);
         board.getPlayers().remove(player);
         gameScreen.getPlayers().remove(player);
-        for (Player p: players
-             ) {
-            System.out.println(p);
-
-        }
     }
 
 }
