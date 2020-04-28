@@ -11,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import inf112.skeleton.app.*;
@@ -71,14 +72,14 @@ public class GameScreen implements Screen {
         board = new Board(players, handler);
 
         // Initialise board-view
-        gameCamera = new OrthographicCamera();
+        gameCamera = new OrthographicCamera(width, height);
         renderer.setView(gameCamera);
 
         MapProperties properties = map.getProperties();
         int tileSize = (Integer) properties.get("tilewidth");
         int boardHeight = (Integer) properties.get("height");
 
-        gamePort = new FitViewport(width, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+        gamePort = new ExtendViewport(width, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
 
         gameStage = new Stage(gamePort);
 
@@ -188,7 +189,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.5f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         gameCamera.position.set(width / 2f - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
