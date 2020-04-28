@@ -98,12 +98,12 @@ public class CardGraphic extends Image {
         isSelected = selected;
         card.selected = selected;
         if (!selected) {
-            programIndices.add(card.programIndex);
-            card.programIndex = -1;
+            programIndices.add(card.registerIndex);
+            card.registerIndex = -1;
         }
         else if (!programIndices.isEmpty()) {
             cardIndex = programIndices.poll();
-            card.setProgramIndex(cardIndex);
+            card.setRegisterIndex(cardIndex);
         }
     }
 

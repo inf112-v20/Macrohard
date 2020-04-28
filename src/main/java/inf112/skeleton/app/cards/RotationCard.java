@@ -28,7 +28,7 @@ public class RotationCard extends Card {
         return "RotationCard{" +
                 "rotationType=" + rotationType +
                 ", priority=" + priority +
-                ", programIndex=" + programIndex +
+                ", registerIndex=" + registerIndex +
                 '}';
     }
 

@@ -8,7 +8,6 @@ import java.util.Collections;
 
 public class Deck {
 
-    private int deckSize = 84;
     private ArrayList<Card> deck;
 
 /*    public Deck(boolean shuffled) {
@@ -82,18 +81,13 @@ public class Deck {
         int handSize = 9 - player.getDamageTokens();
         Card[] playerHand = new Card[handSize];
         for (int i = 0; i < handSize; i++) {
-            playerHand[i] = deck.remove(i);
+            playerHand[i] = deck.remove(deck.size() - 1);
         }
         player.setHand(playerHand);
-        deckSize -= handSize;
-    }
-
-    public ArrayList<Card> getDeck() {
-        return deck;
     }
 
     public int getDeckSize() {
-        return getDeck().size();
+        return deck.size();
     }
 
     @Override
@@ -103,6 +97,10 @@ public class Deck {
             result+= (i.toString()+"\n");
         }
         return result;
+    }
+
+    public ArrayList<Card> getDeck() {
+        return deck;
     }
 
 }

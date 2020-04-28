@@ -38,6 +38,16 @@ public class DeckTest {
         assertEquals(deck.getDeckSize(), deckSize - (9-player.getDamageTokens() ));
     }
 
+    @Test
+    public void cardDealtEqualsCardRemoved() {
+        deck.dealHand(player);
+        for(Card card : player.getHand()) {
+            for(Card dcard: deck.getDeck()) {
+                assertFalse(card.equals(dcard));
+            }
+        }
+    }
+
 
 
 }

@@ -1,11 +1,14 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 
 public class Player implements Comparable<Player> {
 
@@ -16,14 +19,16 @@ public class Player implements Comparable<Player> {
     private Direction direction;
     public Card[] program;
     public Card[] hand;
+    public boolean hasQueuedPowerDown = false;
+    public boolean inPowerDown = false;
+    public boolean continuePowerDown = false;
 
     private int damageTokens;
     private int lifeTokens;
 
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
-    public boolean hasQueuedRespawn = false;
-    private PlayerInfoGraphic playerInfoGraphic;
+    private boolean destroyed;
 
 
     public Player(int row, int col, Direction direction) {
@@ -42,16 +47,6 @@ public class Player implements Comparable<Player> {
         this.isNPC = isNPC;
         this.damageTokens = 0;
         this.lifeTokens = 3;
-
-        PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(this);
-    }
-
-    public Tile getArchiveMarker() {
-        return archiveMarker;
-    }
-
-    public void setArchiveMarker(Tile archiveMarker) {
-        this.archiveMarker = archiveMarker;
     }
 
     public int getRow() {
@@ -70,30 +65,21 @@ public class Player implements Comparable<Player> {
         this.col = col;
     }
 
-    public void stepIn(Direction direction) {
-        setRow(row + direction.getRowTrajectory());
-        setCol(col + direction.getColumnTrajectory());
-    }
-
-    private void reSpawn() {
-        setRow(archiveMarker.getRow());
-        setCol(archiveMarker.getCol());
-    }
-
-    public void reSpawn(Direction direction) {
-        reSpawn();
-        setDirection(direction);
-        hasQueuedRespawn = false;
-
-        playerGraphic.respawn();
-    }
-
     public Direction getDirection () {
         return this.direction;
     }
 
     public void setDirection(Direction direction) {
         this.direction = direction;
+    }
+
+    public void setArchiveMarker(Tile archiveMarker) {
+        this.archiveMarker = archiveMarker;
+    }
+
+    public void stepIn(Direction direction) {
+        setRow(row + direction.getRowTrajectory());
+        setCol(col + direction.getColumnTrajectory());
     }
 
     public boolean hasLockedInProgram() { return getProgram() != null; }
@@ -116,7 +102,6 @@ public class Player implements Comparable<Player> {
         this.playerGraphic = playerGraphic;
     }
 
-
     public void rotateClockwise() {
         setDirection(getDirection().turnClockwise());
     }
@@ -133,16 +118,69 @@ public class Player implements Comparable<Player> {
         return hand;
     }
 
-    public Card[] getProgram() { return program;}
+    public Card[] getProgram() { return program; }
 
-    public void setProgram() {
-        this.program = new Card[5];
+    public void lockInProgram() {
+        program = new Card[5];
+        for (Card card: hand) {
+            if (card.isInProgramRegister()) {
+                program[card.registerIndex - 1] = card;
+            }
+        }
     }
-    public void clearHand() {
-        program = null;
+
+    public void lockInRandomProgram() {
+        program = new Card[5];
+        ArrayList<Card> shuffledHand = new ArrayList<>(Arrays.asList(hand));
+        Collections.shuffle(shuffledHand);
+        for (int i = 0; i < program.length; i ++) {
+            program[i] = shuffledHand.get(i);
+        }
+    }
+
+    public void discardHandAndWipeProgram() {
         hand = null;
+        program = null;
     }
 
+    public void applyDamage(int damage) {
+        this.damageTokens += damage;
+        if (this.damageTokens > 9) {
+            destroy();
+        }
+    }
+
+    public void setDamageTokens(int newDamageTokens) {
+        damageTokens = newDamageTokens;
+    }
+
+    public void destroy() {
+        lifeTokens --;
+        destroyed = true;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public void reboot() {
+        setRow(archiveMarker.getRow());
+        setCol(archiveMarker.getCol());
+        archiveMarker.setPlayer(this);
+
+        destroyed = false;
+        damageTokens = 2;
+    }
+
+    //Discard one damage token if there exist at least one damage token
+    public void repair() {
+        if (damageTokens > 0) { damageTokens --; }
+    }
+
+    @Override
+    public int compareTo(@NotNull Player otherPlayer) {
+        return getProgram()[programRegister].compareTo(otherPlayer.getProgram()[programRegister]);
+    }
 
     @Override
     public String toString() {
@@ -151,42 +189,5 @@ public class Player implements Comparable<Player> {
                 ", col=" + col +
                 ", damage=" + damageTokens +
                 '}';
-    }
-
-    public void applyDamage(int damage) {
-        this.damageTokens += damage;
-        if (this.damageTokens > 9) {
-            looseLife();
-            this.damageTokens = 0;
-        }
-        this.playerInfoGraphic.updateValues();
-    }
-
-    public void looseLife() {
-        lifeTokens--;
-        playerInfoGraphic.updateValues();
-    }
-
-    public void queueRespawn() {
-        if (lifeTokens > 0) {
-            this.hasQueuedRespawn = true;
-        }
-    }
-
-    @Override
-    public int compareTo(@NotNull Player otherPlayer) {
-        return getProgram()[programRegister].compareTo(otherPlayer.getProgram()[programRegister]);
-    }
-
-    public void setInfoGraphic(PlayerInfoGraphic playerInfoGraphic) {
-        this.playerInfoGraphic = playerInfoGraphic;
-    }
-
-    public PlayerInfoGraphic getPlayerInfoGraphic(){
-        return this.playerInfoGraphic;
-    }
-
-    public void setDamageTokens(int newDamageTokens) {
-        damageTokens = newDamageTokens;
     }
 }

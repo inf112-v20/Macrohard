@@ -30,7 +30,7 @@ public class PlayerInfoGraphic extends Image {
         playerNumber = initiatedPlayers;
 
         this.player = player;
-        player.setInfoGraphic(this);
+
         setBounds(10 + (initiatedPlayers * 130), 870, 120, 160);
         resetPixmaps();
         updateValues();
