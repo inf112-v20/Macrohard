@@ -17,6 +17,7 @@ import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
+import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.tiles.Hole;
@@ -84,7 +85,9 @@ public class GameScreen implements Screen {
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
+            PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(player, this);
             gameStage.addActor(playerGraphic);
+            gameStage.addActor(playerInfoGraphic);
         }
 
         // --- INPUT ----
@@ -282,6 +285,18 @@ public class GameScreen implements Screen {
 
     public ArrayList<Player> getPlayers() {
         return players;
+    }
+
+    public Board getBoard(){
+        return board;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
     }
 
 }

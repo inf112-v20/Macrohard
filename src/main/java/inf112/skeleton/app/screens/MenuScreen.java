@@ -32,7 +32,7 @@ public class MenuScreen implements Screen {
     public void show() {
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
 
         TextButton newGame = new TextButton("New Game", skin);
         newGame.addListener(new ChangeListener() {
