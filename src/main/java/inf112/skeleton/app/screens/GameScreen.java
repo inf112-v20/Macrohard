@@ -37,6 +37,7 @@ public class GameScreen implements Screen {
 
     private final Viewport gamePort;
     private final OrthographicCamera gameCamera;
+    private final MapProperties properties;
 
     public TiledMapManager mapHandler;
     private TiledMap map;
@@ -79,7 +80,7 @@ public class GameScreen implements Screen {
         gameCamera = new OrthographicCamera(width, height);
         renderer.setView(gameCamera);
 
-        MapProperties properties = map.getProperties();
+        this.properties = map.getProperties();
         int tileSize = (Integer) properties.get("tilewidth");
         int boardHeight = (Integer) properties.get("height");
 
@@ -305,4 +306,7 @@ public class GameScreen implements Screen {
         return width;
     }
 
+    public MapProperties getMapProperties() {
+        return this.properties;
+    }
 }
