@@ -19,30 +19,22 @@ public class PlayerInfoGraphic extends Image {
 
     private final Player player;
 
-    static int initiatedPlayers = -1;
-    private final int playerNumber;
     private File file;
     private Pixmap fontPixmap;
     private Pixmap pixmap;
     private BitmapFont.BitmapFontData fontData;
 
-    private final int height = 160;
-    private final int width = 120;
-
     public PlayerInfoGraphic(Player player, GameScreen parent){
         super(new Texture("./assets/PlayerInfoBackground.png"));
-        initiatedPlayers++;
-        playerNumber = initiatedPlayers;
 
         this.player = player;
+        player.setInfoGraphic(this);
 
         int maxHeight = parent.getHeight();
-        System.out.println(maxHeight);
-        System.out.println(this.getHeight());
 
         int boardWidth = (Integer) parent.getMapProperties().get("tilewidth") * (Integer) parent.getMapProperties().get("width");
 
-        setBounds(boardWidth + 5, maxHeight - 400 - (playerNumber*170), 120, 160);
+        setBounds(boardWidth + 5, maxHeight - 400 - (player.name()*170), 120, 160);
         resetPixmaps();
         updateValues();
     }
@@ -59,8 +51,8 @@ public class PlayerInfoGraphic extends Image {
         this.fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
     }
 
-    public void drawName(){
-        String playerName = "PLAYER " + (playerNumber+1);
+    private void drawName(){
+        String playerName = "PLAYER " + (player.name());
         for(int i = 0; i<playerName.length(); i++){
             BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(playerName.charAt(i));
             pixmap.drawPixmap(fontPixmap, 10 + 35*i, 10,
@@ -68,8 +60,8 @@ public class PlayerInfoGraphic extends Image {
         }
     }
 
-    public void drawDamage(){
-        String health = "DAMAGE " + player.getDamageTokens();
+    private void drawDamage(){
+        String health = "DMG   " + player.getDamageTokens();
         for(int i = 0; i<health.length(); i++){
             BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(health.charAt(i));
             pixmap.drawPixmap(fontPixmap, 10 + 35*i, 80,
@@ -77,11 +69,20 @@ public class PlayerInfoGraphic extends Image {
         }
     }
 
-    public void drawLifeTokens(){
-        String life = "LIFE " + player.getLifeTokens();
+    private void drawLifeTokens(){
+        String life = "LIFE  " + player.getLifeTokens();
         for(int i = 0; i<life.length(); i++){
             BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
             pixmap.drawPixmap(fontPixmap, 10 + 35*i, 150,
+                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
+        }
+    }
+
+    private void drawFlag(){
+        String life = "FLAG  " + player.getPreviousFlag();
+        for(int i = 0; i<life.length(); i++){
+            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
+            pixmap.drawPixmap(fontPixmap, 10 + 35*i, 220,
                     partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
         }
     }
@@ -96,6 +97,7 @@ public class PlayerInfoGraphic extends Image {
         drawName();
         drawDamage();
         drawLifeTokens();
+        drawFlag();
         draw();
     }
 }

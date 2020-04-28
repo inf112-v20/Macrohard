@@ -2,7 +2,6 @@ package inf112.skeleton.app;
 
 
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
@@ -54,6 +53,7 @@ public class GameLoop {
             case 0:
                 // display powerdown button or continue powerdown button
                 powerDownStatus = gameScreen.setPowerdown(buttonX);
+
                 // Check if new deck is needed
                 int cardsNeededInDeck = 0;
                 for (Player player : players) {
@@ -135,20 +135,20 @@ public class GameLoop {
                 // Board elements move, starting with all conveyor belts
                 if (movementPriority.isEmpty()) {
                     board.rollConveyorBelts(false);
-                    gameScreen.updatePlayerGraphics();
+                    gameScreen.updateGraphics();
                     phase ++;
                 }
                 break;
             case 5:
                 // Express belts move
                 board.rollConveyorBelts(true);
-                gameScreen.updatePlayerGraphics();
+                gameScreen.updateGraphics();
                 phase ++;
                 break;
             case 6:
                 // Gears rotate
                 board.rotateGears();
-                gameScreen.updatePlayerGraphics();
+                gameScreen.updateGraphics();
                 SoundEffects.ROTATE_GEARS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 phase++;
                 break;
@@ -158,7 +158,7 @@ public class GameLoop {
                 board.fireBoardLasers();
                 board.firePlayerLasers();
                 SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
-                gameScreen.updatePlayerGraphics();
+                gameScreen.updateGraphics();
                 phase++;
                 break;
             case 8:
@@ -166,7 +166,15 @@ public class GameLoop {
                     if (!player.isDestroyed()) {
                         Tile tile = board.getTile(player);
                         if (tile instanceof Flag) {
-                            player.setArchiveMarker(tile);
+                            Flag flag = (Flag) tile;
+                            player.setArchiveMarker(flag);
+                            if (player.getNextFlag() == flag.getNumber()) {
+                                player.touchFlag();
+                                player.getInfoGraphic().updateValues();
+                                if (player.getPreviousFlag() == board.getNumberOfFlags()) {
+                                    gameScreen.parent.setScreen(new WinScreen(player));
+                                }
+                            }
                         }
                         if (tile instanceof RepairSite) {
                             player.setArchiveMarker(tile);
@@ -209,7 +217,7 @@ public class GameLoop {
                     if (player.isDestroyed() && !player.isDead()) {
                         player.setDirection(Direction.any());
                         player.reboot();
-                        player.getGraphics().animateReboot();
+                        player.getPlayerGraphic().animateReboot();
                     }
                     // Player chose to not continue power down
                     if (player.hasQueuedPowerDown && player.inPowerDown && !player.continuePowerDown) {
@@ -238,15 +246,5 @@ public class GameLoop {
         board.getPlayers().remove(player);
         gameScreen.getPlayers().remove(player);
     }
-
-    private void lockCards (Player player, int lockedCards){
-        int index = 4;
-        for (int i = lockedCards-1; i <= 0 ; i--){
-            player.program[i].isLocked = true;
-            index--;
-        }
-        for (int j = 0; j < lockedCards-1; j++){
-            player.program[j] = null;
-        }
-    }
+    
 }

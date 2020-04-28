@@ -2,6 +2,8 @@ package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
+import inf112.skeleton.app.graphics.PlayerInfoGraphic;
+import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,11 +26,13 @@ public class Player implements Comparable<Player> {
 
     private int damageTokens;
     private int lifeTokens;
+    private int previousFlag = 0;
 
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
     private boolean destroyed;
     private final int name;
+    private PlayerInfoGraphic infoGraphic;
 
 
     public Player(int row, int col, Direction direction) {
@@ -103,12 +107,20 @@ public class Player implements Comparable<Player> {
 
     public int getHandSize() { return 9 - damageTokens; }
 
-    public PlayerGraphic getGraphics() {
-        return this.playerGraphic;
+    public PlayerGraphic getPlayerGraphic() {
+        return playerGraphic;
     }
 
-    public void setGraphic(PlayerGraphic playerGraphic) {
+    public void setPlayerGraphic(PlayerGraphic playerGraphic) {
         this.playerGraphic = playerGraphic;
+    }
+
+    public PlayerInfoGraphic getInfoGraphic() {
+        return infoGraphic;
+    }
+
+    public void setInfoGraphic(PlayerInfoGraphic infoGraphic) {
+        this.infoGraphic = infoGraphic;
     }
 
     public void rotateClockwise() {
@@ -206,5 +218,17 @@ public class Player implements Comparable<Player> {
 
     public int name() {
         return name;
+    }
+
+    public int getNextFlag() {
+        return previousFlag + 1;
+    }
+
+    public void touchFlag() {
+        previousFlag ++;
+    }
+
+    public int getPreviousFlag() {
+        return previousFlag;
     }
 }

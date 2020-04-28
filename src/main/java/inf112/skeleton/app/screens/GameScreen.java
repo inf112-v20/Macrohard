@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
@@ -123,10 +122,10 @@ public class GameScreen implements Screen {
                 for (Player player : players) {
                     if (player.isDestroyed() && !player.isDead()) {
                         player.reboot();
-                        player.getGraphics().animateReboot();
+                        player.getPlayerGraphic().animateReboot();
                     }
                 }
-                updatePlayerGraphics();
+                updateGraphics();
             }
         });
         gameStage.addActor(reboot);
@@ -158,9 +157,9 @@ public class GameScreen implements Screen {
         gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT+5));
     }
 
-    public void updatePlayerGraphics() {
+    public void updateGraphics() {
         for (Player player : players) {
-            PlayerGraphic graphic = player.getGraphics();
+            PlayerGraphic graphic = player.getPlayerGraphic();
             if (graphic.isVisible) {
                 graphic.animateMove();
                 graphic.animateRotation();
@@ -172,14 +171,14 @@ public class GameScreen implements Screen {
                     graphic.animateDestruction();
                 }
             }
-
+            player.getInfoGraphic().updateValues();
         }
     }
 
     public void runProgram(Player player, int registerIndex) {
         Card card = player.getProgram()[registerIndex];
         board.execute(player, card);
-        updatePlayerGraphics();
+        updateGraphics();
     }
 
     public void setAsInputProcessor() {
@@ -255,7 +254,7 @@ public class GameScreen implements Screen {
     public TextButton setPowerdown(int buttonX) {
         if(players.get(0).inPowerDown) {
             TextButton continuePowerDown = new TextButton("CONTINUE POWER DOWN", parent.getSkin());
-            continuePowerDown.setBounds(buttonX, 290, 350, 50);
+            continuePowerDown.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 290, 350, 50);
             continuePowerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -267,7 +266,7 @@ public class GameScreen implements Screen {
 
         } else {
             TextButton powerDown = new TextButton("POWER DOWN", parent.getSkin());
-            powerDown.setBounds(buttonX, 290, 200, 50);
+            powerDown.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 290, 200, 50);
             powerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {

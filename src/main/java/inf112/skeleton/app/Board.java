@@ -24,6 +24,8 @@ public class Board {
     private ArrayList<Laser> lasers;
     private LinkedList<ConveyorBelt> queuedConveyorBelts;
 
+    private int numberOfFlags = 0;
+
     //Graphic-independent constructor for test-classes
     public Board(int height, int width, Player... players) {
         this.players = new ArrayList<>(Arrays.asList(players));
@@ -177,6 +179,7 @@ public class Board {
                     int number = (Integer) manager.getCell("FLAGS", row, col).getTile().getProperties().get("Number");
                     Flag flag = new Flag(number, row, col);
                     layTile(flag);
+                    numberOfFlags ++;
                 }
             }
         }
@@ -253,6 +256,10 @@ public class Board {
 
     public Tile getTile(Laser laser) {
         return getTile(laser.getRow(), laser.getCol());
+    }
+
+    public int getNumberOfFlags() {
+        return numberOfFlags;
     }
 
     private Tile getLaserTarget(Tile tile, Direction direction) {
