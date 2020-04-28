@@ -100,7 +100,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(rebootWindow);
 
         TextButton fireLaser = new TextButton("LASER", parent.getSkin());
-        fireLaser.setBounds(width - 160, 504, 150, 50);
+        fireLaser.setBounds(width - 150, 504, 150, 50);
         fireLaser.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(fireLaser);
 
         TextButton reboot = new TextButton("REBOOT", parent.getSkin());
-        reboot.setBounds(width - 160, 452, 150, 50);
+        reboot.setBounds(width - 150, 452, 150, 50);
         reboot.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -129,7 +129,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(reboot);
 
         TextButton change = new TextButton("CHANGE", parent.getSkin());
-        change.setBounds(width - 160, 400, 150, 50);
+        change.setBounds(width - 150, 400, 150, 50);
         change.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -141,7 +141,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(change);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(width - 160, 348, 150, 50);
+        button.setBounds(width - 150, 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -184,7 +184,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        RoboRallyApplication.music.play();
+        //RoboRallyApplication.music.play();
     }
 
     @Override
