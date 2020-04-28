@@ -6,6 +6,7 @@ public abstract class Card implements Comparable<Card> {
     public boolean selected = false;
     public int registerIndex = -1;
     protected final CardType cardType;
+    public boolean isLocked;
 
     public Card(int priority, CardType cardType) {
         this.priority = priority;
