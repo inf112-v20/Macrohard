@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import inf112.skeleton.app.Player;
@@ -39,7 +40,9 @@ public class PlayerInfoGraphic extends Image {
         System.out.println(maxHeight);
         System.out.println(this.getHeight());
 
-        setBounds(1100, maxHeight - 400 - (playerNumber*170), 120, 160);
+        int boardWidth = (Integer) parent.getMapProperties().get("tilewidth") * (Integer) parent.getMapProperties().get("width");
+
+        setBounds(boardWidth + 5, maxHeight - 400 - (playerNumber*170), 120, 160);
         resetPixmaps();
         updateValues();
     }
