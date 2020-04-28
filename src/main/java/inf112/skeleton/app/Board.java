@@ -221,7 +221,7 @@ public class Board {
         LinkedList<Player> damagedPlayers = new LinkedList<>();
         for (Player player : players) {
             if (!player.isDestroyed()) {
-                Tile targetTile = getLaserTarget(getTile(player), player.getDirection());
+                Tile targetTile = getLaserTarget(getAdjacentTile(getTile(player), player.getDirection()), player.getDirection());
                 if (targetTile.isOccupied()) {
                     damagedPlayers.add(targetTile.getPlayer());
                 }
