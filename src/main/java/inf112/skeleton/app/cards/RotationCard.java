@@ -9,6 +9,7 @@ public class RotationCard extends Card {
     public RotationCard(int priority, RotationType rotationType) {
         super(priority, rotationType);
         this.rotationType = rotationType;
+        this.isLocked = false;
     }
 
     public Direction getNewDirection(Direction direction) {

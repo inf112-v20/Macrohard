@@ -7,6 +7,7 @@ public class MovementCard extends Card {
     public MovementCard(int priority, MovementType movementType){
         super(priority, movementType);
         this.movementType = movementType;
+        this.isLocked = false;
     }
 
     public int getMoveID() {

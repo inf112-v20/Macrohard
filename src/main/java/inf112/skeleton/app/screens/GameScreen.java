@@ -245,8 +245,10 @@ public class GameScreen implements Screen {
 
     public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
         for (CardGraphic cardGraphic : cardsOnScreen) {
-            cardGraphic.reset();
-            cardGraphic.remove();
+            if(!cardGraphic.getCard().isLocked) {
+                cardGraphic.reset();
+                cardGraphic.remove();
+            }
         }
     }
 
