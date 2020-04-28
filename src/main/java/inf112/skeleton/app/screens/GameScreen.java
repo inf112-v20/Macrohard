@@ -100,7 +100,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(rebootWindow);
 
         TextButton fireLaser = new TextButton("LASER", parent.getSkin());
-        fireLaser.setBounds(width - (width / 4f), 504, 150, 50);
+        fireLaser.setBounds(width - 160, 504, 150, 50);
         fireLaser.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -113,7 +113,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(fireLaser);
 
         TextButton reboot = new TextButton("REBOOT", parent.getSkin());
-        reboot.setBounds(width - (width / 4f), 452, 150, 50);
+        reboot.setBounds(width - 160, 452, 150, 50);
         reboot.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -129,7 +129,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(reboot);
 
         TextButton change = new TextButton("CHANGE", parent.getSkin());
-        change.setBounds(width - (width / 4f), 400, 150, 50);
+        change.setBounds(width - 160, 400, 150, 50);
         change.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -141,7 +141,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(change);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(width - (width / 4f), 348, 150, 50);
+        button.setBounds(width - 160, 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -184,7 +184,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-        //RoboRallyApplication.music.play();
+        RoboRallyApplication.music.play();
     }
 
     @Override
@@ -192,7 +192,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.5f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        gameCamera.position.set(width / 2f - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
+        //gameCamera.position.set(width / 2f - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
         renderer.setView(gameCamera);
         renderer.render();
         gameStage.act();
