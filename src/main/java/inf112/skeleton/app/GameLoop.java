@@ -1,12 +1,10 @@
 package inf112.skeleton.app;
 
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
-import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.RepairSite;
@@ -16,7 +14,6 @@ import java.util.*;
 
 public class GameLoop {
 
-    private final Sound laserSound = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/laserbeam.wav"));
     private final GameScreen gameScreen;
     private final Board board;
 
@@ -25,19 +22,19 @@ public class GameLoop {
     private ArrayList<CardGraphic> cardGraphics;
     private PriorityQueue<Player> movementPriority;
     private Deck deck;
-
-    private int phase = 0;
+    private int buttonX;
+    public int phase = 0;
     private int currentProgramRegister = 0;
-
+    private TextButton powerDownStatus;
     private boolean cardsDisplayed = false;
     private boolean canClean = false;
     private boolean canPlay = false;
     private boolean roundOver = false;
 
-    public GameLoop(Board board, GameScreen gameScreen) {
+    public GameLoop(Board board, GameScreen gameScreen, int buttonX) {
         this.gameScreen = gameScreen;
         this.board = board;
-
+        this.buttonX = buttonX;
         this.players = board.getPlayers();
         this.client = players.get(0);
         this.movementPriority = new PriorityQueue<>();
@@ -50,6 +47,8 @@ public class GameLoop {
     public void tick() {
         switch (phase) {
             case 0:
+                // display powerdown button or continue powerdown button
+                powerDownStatus = gameScreen.setPowerdown(buttonX);
                 // Check if new deck is needed
                 int cardsNeededInDeck = 0;
                 for (Player player : players) {
@@ -59,27 +58,41 @@ public class GameLoop {
                     deck = new Deck(true);
                 }
 
-                // Deal hand to all players.
+                // Deal hand to all players or discard all damageTokens if in Power Down
                 for (Player player : players) {
-                    deck.dealHand(player);
+                    if (!player.inPowerDown) {
+                        deck.dealHand(player);
+                    }
+                    else {
+                        player.setDamageTokens(0);
+                    }
+                }
+
+                // NPC announce power down if it has a certain amount of damage tokens
+                for (Player player : players.subList(1, players.size())) {
+                    if (player.getDamageTokens() >= 4) {
+                        player.hasQueuedPowerDown = true;
+                    }
                 }
                 phase++;
                 break;
 
             case 1:
                 // Draw cards on screen and lock in the programs for all NPC's
-                if (!cardsDisplayed) {
+                if (!cardsDisplayed && !client.inPowerDown) {
                     for (Card card : client.getHand()) {
                         CardGraphic cardGraphic = new CardGraphic(card);
                         gameScreen.addStageActor(cardGraphic);
                         cardGraphics.add(cardGraphic);
                     }
                     cardsDisplayed = true;
-                    for (Player player : players.subList(1, players.size())) {
-                        gameScreen.lockRandomProgram(player);
+                    }
+                for (Player player : players.subList(1, players.size())) {
+                    if (!player.inPowerDown) {
+                        player.lockInRandomProgram();
                     }
                 }
-                if (client.hasLockedInProgram()) {
+                if (client.hasLockedInProgram() || client.inPowerDown) {
                     phase++;
                 }
                 break;
@@ -87,9 +100,13 @@ public class GameLoop {
             case 2:
                 // Decide the order in which program cards will be played
                 if (currentProgramRegister < 5) {
-                    movementPriority.addAll(players);
+                    for (Player player : players) {
+                        if (!player.inPowerDown && !player.isDestroyed() && player.getProgram()[currentProgramRegister] != null) {
+                            movementPriority.add(player);
+                        }
+                    }
                     canPlay = true;
-                    phase++;
+                    phase ++;
                     break;
                 }
                 break;
@@ -99,6 +116,9 @@ public class GameLoop {
                 if (canPlay && currentProgramRegister < 5 && !movementPriority.isEmpty()) {
                     Player player = movementPriority.poll();
                     gameScreen.runProgram(player, currentProgramRegister);
+                    if (player.isDead()) {
+                        remove(player);
+                    }
                     if (movementPriority.isEmpty()) {
                         canPlay = false;
                         phase++;
@@ -108,44 +128,46 @@ public class GameLoop {
 
             case 4:
                 // Board elements move, starting with all conveyor belts
-                if (movementPriority.isEmpty() && !canPlay) {
+                if (movementPriority.isEmpty()) {
                     board.rollConveyorBelts(false);
                     gameScreen.updatePlayerGraphics();
-                    phase++;
+                    phase ++;
                 }
                 break;
             case 5:
                 // Express belts move
                 board.rollConveyorBelts(true);
                 gameScreen.updatePlayerGraphics();
-                phase++;
+                phase ++;
                 break;
             case 6:
                 // Gears rotate
                 board.rotateGears();
                 gameScreen.updatePlayerGraphics();
+                SoundEffects.ROTATE_GEARS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 phase++;
                 break;
             case 7:
                 // Board lasers fire
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
-                board.fireLasers();
-                laserSound.play(gameScreen.parent.getPreferences().getSoundVolume());
+                board.fireBoardLasers();
+                board.firePlayerLasers();
+                SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
+                gameScreen.updatePlayerGraphics();
                 phase++;
                 break;
             case 8:
                 for (Player player : players) {
-                    Tile tile = board.getTile(player);
-                    if (tile instanceof Flag) {
-                        player.setArchiveMarker(tile);
-                    }
-                    if (tile instanceof RepairSite) {
-                        player.setArchiveMarker(tile);
-                        if (player.getDamageTokens() > 0) {
-                            player.setDamageTokens(player.getDamageTokens()-1);
+                    if (!player.isDestroyed()) {
+                        Tile tile = board.getTile(player);
+                        if (tile instanceof Flag) {
+                            player.setArchiveMarker(tile);
+                        }
+                        if (tile instanceof RepairSite) {
+                            player.setArchiveMarker(tile);
+                            player.repair();
                         }
                     }
-                    player.getPlayerInfoGraphic().updateValues();
                 }
                 canClean = true;
                 phase++;
@@ -154,12 +176,11 @@ public class GameLoop {
                 // Clean up
                 // Increment programRegister and reset gameLoop values.
                 // if on last programRegister, do full round cleanup
-                System.out.println(currentProgramRegister);
                 if (currentProgramRegister == 4) {
                     roundOver = true;
-                    phase++;
+                    phase ++;
                 } else {
-                    currentProgramRegister++;
+                    currentProgramRegister ++;
                     phase = 2;
                     canClean = false;
                 }
@@ -168,41 +189,54 @@ public class GameLoop {
 
             case 10:
                 if (canClean && roundOver) {
-                    for (Player player : players) {
-                        player.clearHand();
-                        if (player.hasQueuedRespawn) {
-                            player.reSpawn(player.getDirection());
-                        }
+                    if (client.isDestroyed() && !client.isDead()) {
+                        gameScreen.openRebootWindow();
                     }
-                    gameScreen.updatePlayerGraphics();
-                    gameScreen.clearCards(cardGraphics);
-                    cardsDisplayed = false;
-                    currentProgramRegister = 0;
-                    for(Player player : players){
-
-                        int numberOfLockedCards = player.getDamageTokens()-4;
-                        if (numberOfLockedCards > 0) {
-                            //int index = 4;
-                            for (int i = 4; i >= numberOfLockedCards-1; i--) {
-                                player.program[i].isLocked = true;
-                                //index--;
-                            }
-                            for (int i = 0; i < numberOfLockedCards-1; i ++){
-                                player.program[i]=null;
-                            }
-                        } else {
-                            //remove all cards from program:
-                          player.program = null;
-                        }
-
-                        System.out.println(player.program);
+                    else {
+                        phase ++;
                     }
-                    canClean = false;
-                    phase = 0;
-                    break;
                 }
+                break;
+            case 11:
+                for (Player player : players) {
+                    player.discardHandAndWipeProgram();
+
+                    //Reboot destroyed players if they still have more life tokens
+                    if (player.isDestroyed() && !player.isDead()) {
+                        player.setDirection(Direction.any());
+                        player.reboot();
+                        player.getGraphics().animateReboot();
+                    }
+                    // Player chose to not continue power down
+                    if (player.hasQueuedPowerDown && player.inPowerDown && !player.continuePowerDown) {
+                        player.hasQueuedPowerDown = false;
+                        player.inPowerDown = false;
+                    }
+                    // Player announced power down this turn and will enter power down next turn
+                    if (player.hasQueuedPowerDown) {
+                        player.inPowerDown = true;
+                    }
+                    powerDownStatus.remove();
+                }
+                gameScreen.clearCards(cardGraphics);
+                cardsDisplayed = false;
+                canClean = false;
+                currentProgramRegister = 0;
+                phase = 0;
+                break;
             default:
                 System.out.println("phase index did an oopsie :)");
+        }
+    }
+
+    private void remove(Player player) {
+        players.remove(player);
+        board.getPlayers().remove(player);
+        gameScreen.getPlayers().remove(player);
+        for (Player p: players
+             ) {
+            System.out.println(p);
+
         }
     }
 
