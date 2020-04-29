@@ -19,7 +19,6 @@ public class Player implements Comparable<Player> {
     private Direction direction;
     public Card[] program;
     public Card[] hand;
-    public boolean hasQueuedPowerDown = false;
     public boolean inPowerDown = false;
     public boolean continuePowerDown = false;
 

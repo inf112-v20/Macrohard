@@ -25,7 +25,9 @@ public class GameLoop {
     private int buttonX;
     public int phase = 0;
     private int currentProgramRegister = 0;
-    private TextButton powerDownStatus;
+    private TextButton[] powerDownStatus;
+    public boolean buttonsDisplayed = false;
+    public boolean powerDownInput = false;
     private boolean cardsDisplayed = false;
     private boolean canClean = false;
     private boolean canPlay = false;
@@ -47,8 +49,7 @@ public class GameLoop {
     public void tick() {
         switch (phase) {
             case 0:
-                // display powerdown button or continue powerdown button
-                powerDownStatus = gameScreen.setPowerdown(buttonX);
+                gameScreen.powerDown();
                 // Check if new deck is needed
                 int cardsNeededInDeck = 0;
                 for (Player player : players) {
@@ -68,12 +69,6 @@ public class GameLoop {
                     }
                 }
 
-                // NPC announce power down if it has a certain amount of damage tokens
-                for (Player player : players.subList(1, players.size())) {
-                    if (player.getDamageTokens() >= 4) {
-                        player.hasQueuedPowerDown = true;
-                    }
-                }
                 phase++;
                 break;
 
@@ -123,6 +118,12 @@ public class GameLoop {
                         canPlay = false;
                         phase++;
                     }
+                }
+                // if all players are in power down, move on.
+                if (players.stream().allMatch(player -> player.inPowerDown)) {
+                   currentProgramRegister = 4;
+                    phase++;
+
                 }
                 break;
 
@@ -188,13 +189,15 @@ public class GameLoop {
                 break;
 
             case 10:
-                if (canClean && roundOver) {
+                if (canClean && roundOver &&!powerDownInput) {
                     if (client.isDestroyed() && !client.isDead()) {
                         gameScreen.openRebootWindow();
+                    } else if(!buttonsDisplayed) {
+                        buttonsDisplayed = true;
+                        powerDownStatus = gameScreen.powerDownOptions();
                     }
-                    else {
-                        phase ++;
-                    }
+                    }else {
+                    phase++;
                 }
                 break;
             case 11:
@@ -207,18 +210,23 @@ public class GameLoop {
                         player.reboot();
                         player.getGraphics().animateReboot();
                     }
-                    // Player chose to not continue power down
-                    if (player.hasQueuedPowerDown && player.inPowerDown && !player.continuePowerDown) {
-                        player.hasQueuedPowerDown = false;
+                }
+                // NPC announce power down if it has a certain amount of damage tokens
+                for (Player player : players.subList(1, players.size())) {
+                    if (player.inPowerDown && player.getDamageTokens() < 4) {
                         player.inPowerDown = false;
                     }
-                    // Player announced power down this turn and will enter power down next turn
-                    if (player.hasQueuedPowerDown) {
+                    if (player.getDamageTokens() > 4) {
                         player.inPowerDown = true;
                     }
-                    powerDownStatus.remove();
                 }
+
+                powerDownStatus[0].remove();
+                powerDownStatus[1].remove();
+
                 gameScreen.clearCards(cardGraphics);
+                buttonsDisplayed = false;
+                powerDownInput = false;
                 cardsDisplayed = false;
                 canClean = false;
                 currentProgramRegister = 0;

@@ -2,8 +2,11 @@ package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -11,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import inf112.skeleton.app.*;
@@ -30,7 +34,6 @@ public class GameScreen implements Screen {
 
     public final RoboRallyApplication parent;
     public final int width, height;
-
     private final Viewport gamePort;
     private final OrthographicCamera gameCamera;
 
@@ -246,30 +249,82 @@ public class GameScreen implements Screen {
         }
     }
 
-    public TextButton setPowerdown(int buttonX) {
-        if(players.get(0).inPowerDown) {
-            TextButton continuePowerDown = new TextButton("CONTINUE POWER DOWN", parent.getSkin());
-            continuePowerDown.setBounds(buttonX, 290, 350, 50);
+    public TextButton[] powerDownOptions() {
+        if (players.get(0).inPowerDown) {
+            TextButton continuePowerDown = new TextButton("CONTINUE", parent.getSkin());
+            continuePowerDown.setBounds(1500, 130, 200, 50);
+            TextButton stopPowerDown = new TextButton("STOP", parent.getSkin());
+            stopPowerDown.setBounds(1500, 70, 200, 50);
+            stopPowerDown.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    stopPowerDown.setText("STOPPING..");
+                    stopPowerDown.setColor(Color.RED);
+                    players.get(0).inPowerDown = false;
+                    players.get(0).continuePowerDown = false;
+                    gameLoop.powerDownInput = true;
+                }
+            });
             continuePowerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
+                    continuePowerDown.setText("CONTINUING..");
+                    continuePowerDown.setColor(Color.RED);
                     players.get(0).continuePowerDown = true;
+                    gameLoop.powerDownInput = true;
                 }
             });
+            gameStage.addActor(stopPowerDown);
             gameStage.addActor(continuePowerDown);
-            return continuePowerDown;
-
+            return (new TextButton[]{continuePowerDown, stopPowerDown});
         } else {
+            TextButton continueGame = new TextButton("CONTINUE", parent.getSkin());
+            continueGame.setBounds(1500, 130, 200, 50);
             TextButton powerDown = new TextButton("POWER DOWN", parent.getSkin());
-            powerDown.setBounds(buttonX, 290, 200, 50);
+            powerDown.setBounds(1500, 70, 200, 50);
+            continueGame.addListener(new ChangeListener() {
+                @Override
+                public void changed(ChangeEvent changeEvent, Actor actor) {
+                    continueGame.setText("CONTINUING..");
+                    continueGame.setColor(Color.RED);
+                    gameLoop.powerDownInput = true;
+                }
+            });
             powerDown.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
-                    players.get(0).hasQueuedPowerDown = true;
+                    if (players.get(0).getDamageTokens() == 0) {
+                        powerDown.setBounds(1500,70,300,50);
+                        powerDown.setText("ILLEGAL, NO DAMAGE TAKEN");
+                        gameLoop.powerDownInput = true;
+                    }
+                    powerDown.setText("REPAIRING..");
+                    powerDown.setColor(Color.RED);
+                    players.get(0).inPowerDown = true;
+                    gameLoop.powerDownInput = true;
+
                 }
             });
+            gameStage.addActor(continueGame);
             gameStage.addActor(powerDown);
-            return powerDown;
+            return (new TextButton[]{continueGame, powerDown});
+        }
+    }
+
+    public void powerDown() {
+        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
+        if (players.get(0).inPowerDown) {
+            Texture green = new Texture("./assets/buttons/powerDownGreen.png");
+            style.checked = new TextureRegionDrawable(new TextureRegion(green));
+            ImageButton powerDown = new ImageButton(style.checked);
+            powerDown.setBounds(1500, 200, 200, 200);
+            gameStage.addActor(powerDown);
+        } else {
+            Texture red = new Texture("./assets/buttons/powerDownRed.png");
+            style.checked = new TextureRegionDrawable(new TextureRegion(red));
+            ImageButton powerDown = new ImageButton(style.checked);
+            powerDown.setBounds(1500, 200, 200, 200);
+            gameStage.addActor(powerDown);
         }
 
     }
