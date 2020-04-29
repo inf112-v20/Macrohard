@@ -156,7 +156,7 @@ public class GameScreen implements Screen {
         });
         gameStage.addActor(button);
         int buttonX = (width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING)) - 52;
-        gameLoop = new GameLoop(board, this, buttonX);
+        gameLoop = new GameLoop(board, this);
 
         gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT+5));
     }

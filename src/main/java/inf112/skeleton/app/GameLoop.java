@@ -23,7 +23,6 @@ public class GameLoop {
     private ArrayList<CardGraphic> cardGraphics;
     private PriorityQueue<Player> movementPriority;
     private Deck deck;
-    private int buttonX;
     public int phase = 0;
     private int currentProgramRegister = 0;
     private TextButton[] powerDownStatus;
@@ -34,10 +33,9 @@ public class GameLoop {
     private boolean canPlay = false;
     private boolean roundOver = false;
 
-    public GameLoop(Board board, GameScreen gameScreen, int buttonX) {
+    public GameLoop(Board board, GameScreen gameScreen) {
         this.gameScreen = gameScreen;
         this.board = board;
-        this.buttonX = buttonX;
         this.players = board.getPlayers();
         this.client = players.get(0);
         this.movementPriority = new PriorityQueue<>();
@@ -125,7 +123,7 @@ public class GameLoop {
                     }
                 }
                 // if none of the players are able to move, continue.
-                if (players.stream().allMatch(player -> player.inPowerDown || player.isDead())) {
+                if (players.stream().allMatch(player -> player.inPowerDown || player.isDestroyed())) {
                    currentProgramRegister = 4;
                     phase++;
 
