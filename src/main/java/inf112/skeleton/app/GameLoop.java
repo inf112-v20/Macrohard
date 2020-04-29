@@ -6,6 +6,7 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.screens.GameScreen;
+import inf112.skeleton.app.screens.WinScreen;
 import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.RepairSite;
 import inf112.skeleton.app.tiles.Tile;
@@ -47,6 +48,9 @@ public class GameLoop {
 
     // Assumes the non-NPC player is always the first element of the players ArrayList
     public void tick() {
+        if (players.size() == 1) {
+            gameScreen.parent.setScreen(new WinScreen(players.get(0)));
+        }
         switch (phase) {
             case 0:
                 gameScreen.powerDown();
@@ -68,6 +72,7 @@ public class GameLoop {
                         player.setDamageTokens(0);
                     }
                 }
+
 
                 phase++;
                 break;
@@ -131,20 +136,20 @@ public class GameLoop {
                 // Board elements move, starting with all conveyor belts
                 if (movementPriority.isEmpty()) {
                     board.rollConveyorBelts(false);
-                    gameScreen.updatePlayerGraphics();
+                    gameScreen.updateGraphics();
                     phase ++;
                 }
                 break;
             case 5:
                 // Express belts move
                 board.rollConveyorBelts(true);
-                gameScreen.updatePlayerGraphics();
+                gameScreen.updateGraphics();
                 phase ++;
                 break;
             case 6:
                 // Gears rotate
                 board.rotateGears();
-                gameScreen.updatePlayerGraphics();
+                gameScreen.updateGraphics();
                 SoundEffects.ROTATE_GEARS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 phase++;
                 break;
@@ -154,7 +159,7 @@ public class GameLoop {
                 board.fireBoardLasers();
                 board.firePlayerLasers();
                 SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
-                gameScreen.updatePlayerGraphics();
+                gameScreen.updateGraphics();
                 phase++;
                 break;
             case 8:
@@ -162,7 +167,15 @@ public class GameLoop {
                     if (!player.isDestroyed()) {
                         Tile tile = board.getTile(player);
                         if (tile instanceof Flag) {
-                            player.setArchiveMarker(tile);
+                            Flag flag = (Flag) tile;
+                            player.setArchiveMarker(flag);
+                            if (player.getNextFlag() == flag.getNumber()) {
+                                player.touchFlag();
+                                player.getInfoGraphic().updateValues();
+                                if (player.getPreviousFlag() == board.getNumberOfFlags()) {
+                                    gameScreen.parent.setScreen(new WinScreen(player));
+                                }
+                            }
                         }
                         if (tile instanceof RepairSite) {
                             player.setArchiveMarker(tile);
@@ -208,7 +221,7 @@ public class GameLoop {
                     if (player.isDestroyed() && !player.isDead()) {
                         player.setDirection(Direction.any());
                         player.reboot();
-                        player.getGraphics().animateReboot();
+                        player.getPlayerGraphic().animateReboot();
                     }
                 }
                 // NPC announce power down if it has a certain amount of damage tokens
@@ -241,11 +254,6 @@ public class GameLoop {
         players.remove(player);
         board.getPlayers().remove(player);
         gameScreen.getPlayers().remove(player);
-        for (Player p: players
-             ) {
-            System.out.println(p);
-
-        }
     }
 
 }

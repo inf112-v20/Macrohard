@@ -8,7 +8,6 @@ import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.cards.*;
-import inf112.skeleton.app.screens.GameScreen;
 
 public class GameScreenInputProcessor extends InputListener {
 
@@ -33,19 +32,19 @@ public class GameScreenInputProcessor extends InputListener {
             case Input.Keys.UP:
                 MovementCard movementCardUp = new MovementCard(0, MovementType.ONE_FORWARD);
                 board.execute(player, movementCardUp);
-                parent.getGameScreen().updatePlayerGraphics();
+                parent.getGameScreen().updateGraphics();
                 //System.out.println(player);
                 break;
             case Input.Keys.DOWN:
                 MovementCard movementCardDown = new MovementCard(0, MovementType.ONE_BACKWARD);
                 board.execute(player, movementCardDown);
-                parent.getGameScreen().updatePlayerGraphics();
+                parent.getGameScreen().updateGraphics();
                 break;
             case Input.Keys.RIGHT:
                 Direction oldDirectionR = player.getDirection();
                 RotationCard rotationCardRight = new RotationCard(0, RotationType.CLOCKWISE);
                 board.execute(player, rotationCardRight);
-                parent.getGameScreen().updatePlayerGraphics();
+                parent.getGameScreen().updateGraphics();
                 //System.out.println(player);
                 break;
             case Input.Keys.LEFT:
@@ -53,7 +52,7 @@ public class GameScreenInputProcessor extends InputListener {
                 RotationCard rotationCardLeft = new RotationCard(0, RotationType.COUNTER_CLOCKWISE);
                 board.execute(player, rotationCardLeft);
                 //player.getGraphics().animateRotation(oldDirectionL, player.getDirection());
-                parent.getGameScreen().updatePlayerGraphics();
+                parent.getGameScreen().updateGraphics();
                 //System.out.println(player);
                 break;
         }

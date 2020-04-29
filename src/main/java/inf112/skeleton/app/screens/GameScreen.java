@@ -14,13 +14,13 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import inf112.skeleton.app.*;
 import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
+import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.tiles.Hole;
@@ -31,11 +31,15 @@ import java.util.Arrays;
 public class GameScreen implements Screen {
 
     private static final int CARD_GRAPHIC_HEIGHT =  150;
+    private static final int CARD_GRAPHIC_SELECTED_WIDTH = 80;
+    private static final int PADDING = 5;
 
     public final RoboRallyApplication parent;
     public final int width, height;
+
     private final Viewport gamePort;
     private final OrthographicCamera gameCamera;
+    private final MapProperties properties;
 
     public TiledMapManager mapHandler;
     private TiledMap map;
@@ -62,10 +66,8 @@ public class GameScreen implements Screen {
         // Initialise players
         Player player1 = new Player(0, 1, Direction.EAST, false);
         Player player2 = new Player(0, 1, Direction.EAST, true);
-        Player player3 = new Player(0, 2, Direction.EAST, true);
-        Player player4 = new Player(0, 2, Direction.EAST, true);
-        Player player5 = new Player(0, 2, Direction.EAST, true);
-        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4, player5));
+
+        players = new ArrayList<>(Arrays.asList(player1, player2));
 
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
@@ -75,21 +77,23 @@ public class GameScreen implements Screen {
         board = new Board(players, handler);
 
         // Initialise board-view
-        gameCamera = new OrthographicCamera();
+        gameCamera = new OrthographicCamera(width, height);
         renderer.setView(gameCamera);
 
-        MapProperties properties = map.getProperties();
+        this.properties = map.getProperties();
         int tileSize = (Integer) properties.get("tilewidth");
         int boardHeight = (Integer) properties.get("height");
 
-        gamePort = new FitViewport(width, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+        gamePort = new ExtendViewport(width, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
 
         gameStage = new Stage(gamePort);
 
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
+            PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(player, this);
             gameStage.addActor(playerGraphic);
+            gameStage.addActor(playerInfoGraphic);
         }
 
         // --- INPUT ----
@@ -101,7 +105,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(rebootWindow);
 
         TextButton fireLaser = new TextButton("LASER", parent.getSkin());
-        fireLaser.setBounds(width - (width / 4f), 504, 150, 50);
+        fireLaser.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 504, 150, 50);
         fireLaser.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -114,23 +118,23 @@ public class GameScreen implements Screen {
         gameStage.addActor(fireLaser);
 
         TextButton reboot = new TextButton("REBOOT", parent.getSkin());
-        reboot.setBounds(width - (width / 4f), 452, 150, 50);
+        reboot.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 452, 150, 50);
         reboot.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 for (Player player : players) {
                     if (player.isDestroyed() && !player.isDead()) {
                         player.reboot();
-                        player.getGraphics().animateReboot();
+                        player.getPlayerGraphic().animateReboot();
                     }
                 }
-                updatePlayerGraphics();
+                updateGraphics();
             }
         });
         gameStage.addActor(reboot);
 
         TextButton change = new TextButton("CHANGE", parent.getSkin());
-        change.setBounds(width - (width / 4f), 400, 150, 50);
+        change.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 400, 150, 50);
         change.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -142,7 +146,7 @@ public class GameScreen implements Screen {
         gameStage.addActor(change);
 
         TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(width - (width / 4f), 348, 150, 50);
+        button.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 348, 150, 50);
         button.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -150,14 +154,15 @@ public class GameScreen implements Screen {
             }
         });
         gameStage.addActor(button);
-        int buttonX = (width - (width / 4)) - 52;
+        int buttonX = (width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING)) - 52;
         gameLoop = new GameLoop(board, this, buttonX);
 
+        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT+5));
     }
 
-    public void updatePlayerGraphics() {
+    public void updateGraphics() {
         for (Player player : players) {
-            PlayerGraphic graphic = player.getGraphics();
+            PlayerGraphic graphic = player.getPlayerGraphic();
             if (graphic.isVisible) {
                 graphic.animateMove();
                 graphic.animateRotation();
@@ -169,14 +174,14 @@ public class GameScreen implements Screen {
                     graphic.animateDestruction();
                 }
             }
-
+            player.getInfoGraphic().updateValues();
         }
     }
 
     public void runProgram(Player player, int registerIndex) {
         Card card = player.getProgram()[registerIndex];
         board.execute(player, card);
-        updatePlayerGraphics();
+        updateGraphics();
     }
 
     public void setAsInputProcessor() {
@@ -190,10 +195,8 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float v) {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.5f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        gameCamera.position.set(width / 2f - 150, gamePort.getWorldHeight() / 2 - CARD_GRAPHIC_HEIGHT, 0);
         renderer.setView(gameCamera);
         renderer.render();
         gameStage.act();
@@ -244,8 +247,10 @@ public class GameScreen implements Screen {
 
     public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
         for (CardGraphic cardGraphic : cardsOnScreen) {
-            cardGraphic.reset();
-            cardGraphic.remove();
+            if(!cardGraphic.getCard().isLocked) {
+                cardGraphic.reset();
+                cardGraphic.remove();
+            }
         }
     }
 
@@ -341,4 +346,19 @@ public class GameScreen implements Screen {
         return players;
     }
 
+    public Board getBoard(){
+        return board;
+    }
+
+    public int getHeight(){
+        return height;
+    }
+
+    public int getWidth(){
+        return width;
+    }
+
+    public MapProperties getMapProperties() {
+        return this.properties;
+    }
 }

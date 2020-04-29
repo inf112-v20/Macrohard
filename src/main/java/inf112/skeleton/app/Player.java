@@ -3,6 +3,7 @@ package inf112.skeleton.app;
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
+import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
@@ -24,10 +25,13 @@ public class Player implements Comparable<Player> {
 
     private int damageTokens;
     private int lifeTokens;
+    private int previousFlag = 0;
 
     private PlayerGraphic playerGraphic;
     public int programRegister = 0;
     private boolean destroyed;
+    private final int name;
+    private PlayerInfoGraphic infoGraphic;
 
 
     public Player(int row, int col, Direction direction) {
@@ -37,6 +41,8 @@ public class Player implements Comparable<Player> {
         this.isNPC = false;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.program = new Card[5];
+        this.name = ++ RoboRallyApplication.NUMBER_OF_PLAYERS;
     }
 
     public Player(int row, int col, Direction direction, boolean isNPC) {
@@ -46,6 +52,8 @@ public class Player implements Comparable<Player> {
         this.isNPC = isNPC;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.program = new Card[5];
+        this.name = ++ RoboRallyApplication.NUMBER_OF_PLAYERS;
     }
 
     public int getRow() {
@@ -81,7 +89,12 @@ public class Player implements Comparable<Player> {
         setCol(col + direction.getColumnTrajectory());
     }
 
-    public boolean hasLockedInProgram() { return getProgram() != null; }
+    public boolean hasLockedInProgram() {
+        for (Card card : getProgram()){
+            if (card == null) return false;
+        }
+        return true;
+    }
 
     public int getDamageTokens() {
         return damageTokens;
@@ -93,12 +106,20 @@ public class Player implements Comparable<Player> {
 
     public int getHandSize() { return 9 - damageTokens; }
 
-    public PlayerGraphic getGraphics() {
-        return this.playerGraphic;
+    public PlayerGraphic getPlayerGraphic() {
+        return playerGraphic;
     }
 
-    public void setGraphic(PlayerGraphic playerGraphic) {
+    public void setPlayerGraphic(PlayerGraphic playerGraphic) {
         this.playerGraphic = playerGraphic;
+    }
+
+    public PlayerInfoGraphic getInfoGraphic() {
+        return infoGraphic;
+    }
+
+    public void setInfoGraphic(PlayerInfoGraphic infoGraphic) {
+        this.infoGraphic = infoGraphic;
     }
 
     public void rotateClockwise() {
@@ -120,7 +141,6 @@ public class Player implements Comparable<Player> {
     public Card[] getProgram() { return program; }
 
     public void lockInProgram() {
-        program = new Card[5];
         for (Card card: hand) {
             if (card.isInProgramRegister()) {
                 program[card.registerIndex - 1] = card;
@@ -129,7 +149,6 @@ public class Player implements Comparable<Player> {
     }
 
     public void lockInRandomProgram() {
-        program = new Card[5];
         ArrayList<Card> shuffledHand = new ArrayList<>(Arrays.asList(hand));
         Collections.shuffle(shuffledHand);
         int bound = Math.min(program.length, shuffledHand.size());
@@ -140,7 +159,10 @@ public class Player implements Comparable<Player> {
 
     public void discardHandAndWipeProgram() {
         hand = null;
-        program = null;
+        int lockedCards = Math.max(getDamageTokens() - 4, 0);
+        for (int i = 0; i < program.length - lockedCards; i++){
+            program[i] = null;
+        }
     }
 
     public void applyDamage(int damage) {
@@ -191,5 +213,21 @@ public class Player implements Comparable<Player> {
                 ", col=" + col +
                 ", damage=" + damageTokens +
                 '}';
+    }
+
+    public int name() {
+        return name;
+    }
+
+    public int getNextFlag() {
+        return previousFlag + 1;
+    }
+
+    public void touchFlag() {
+        previousFlag ++;
+    }
+
+    public int getPreviousFlag() {
+        return previousFlag;
     }
 }

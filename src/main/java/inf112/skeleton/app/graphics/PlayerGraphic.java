@@ -23,7 +23,7 @@ public class PlayerGraphic extends Image {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
 
         this.player = player;
-        player.setGraphic(this);
+        player.setPlayerGraphic(this);
 
         direction = player.getDirection();
         degrees = 0f;

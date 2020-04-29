@@ -45,7 +45,7 @@ public class RebootWindow extends Window {
                 Direction direction = Direction.fromString(value);
                 rebootPlayer.setDirection(direction);
                 rebootPlayer.reboot();
-                rebootPlayer.getGraphics().animateReboot();
+                rebootPlayer.getPlayerGraphic().animateReboot();
                 parent.closeRebootWindow();
             }
         });
