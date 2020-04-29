@@ -124,8 +124,8 @@ public class GameLoop {
                         phase++;
                     }
                 }
-                // if all players are in power down, move on.
-                if (players.stream().allMatch(player -> player.inPowerDown)) {
+                // if none of the players are able to move, continue.
+                if (players.stream().allMatch(player -> player.inPowerDown || player.isDead())) {
                    currentProgramRegister = 4;
                     phase++;
 
@@ -203,7 +203,8 @@ public class GameLoop {
 
             case 10:
                 if (canClean && roundOver &&!powerDownInput) {
-                    if (client.isDestroyed() && !client.isDead()) {
+                    if (client.isDestroyed() && !client.isDead() && !buttonsDisplayed) {
+                        buttonsDisplayed = true;
                         gameScreen.openRebootWindow();
                     } else if(!buttonsDisplayed) {
                         buttonsDisplayed = true;
@@ -214,6 +215,13 @@ public class GameLoop {
                 }
                 break;
             case 11:
+                if (gameScreen.rebootWindow.isVisible()) {
+                    gameScreen.closeRebootWindow();
+                } else {
+                    powerDownStatus[0].remove();
+                    powerDownStatus[1].remove();
+                }
+                gameScreen.closeRebootWindow();
                 for (Player player : players) {
                     player.discardHandAndWipeProgram();
 
@@ -233,9 +241,6 @@ public class GameLoop {
                         player.inPowerDown = true;
                     }
                 }
-
-                powerDownStatus[0].remove();
-                powerDownStatus[1].remove();
 
                 gameScreen.clearCards(cardGraphics);
                 buttonsDisplayed = false;

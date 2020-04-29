@@ -26,12 +26,12 @@ public class RebootWindow extends Window {
 
         setMovable(false);
         setResizable(false);
-        setBounds(400, 600, 300, 100);
+        setBounds(300, 1000, 700, 200);
 
         for (String value : new String[]{"NORTH", "EAST", "SOUTH", "WEST"}) {
             add(getImageButton(value));
         }
-
+        add(parent.powerDownOptions());
         parent.getGameStage().addActor(this);
     }
 
@@ -46,7 +46,6 @@ public class RebootWindow extends Window {
                 rebootPlayer.setDirection(direction);
                 rebootPlayer.reboot();
                 rebootPlayer.getPlayerGraphic().animateReboot();
-                parent.closeRebootWindow();
             }
         });
         return imageButton;
