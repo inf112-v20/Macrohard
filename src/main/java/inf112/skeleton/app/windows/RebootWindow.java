@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.GameLoop;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
 
@@ -20,7 +21,7 @@ public class RebootWindow extends Window {
     private Player client;
 
 
-    public RebootWindow(Stage gameStage, Player client) {
+    public RebootWindow(GameLoop gameLoop, Player client) {
         super("Choose reboot-direction", new Skin(Gdx.files.internal("assets/skins/expee/expee-ui.json")));
         this.client = client;
 
@@ -30,15 +31,15 @@ public class RebootWindow extends Window {
 
 
         for (String value : new String[]{"NORTH", "EAST", "SOUTH", "WEST"}) {
-            add(getImageButton(value));
+            add(getImageButton(gameLoop, value));
         }
 
         pack();
-        gameStage.addActor(this);
+        gameLoop.gameScreen.getGameStage().addActor(this);
         setPosition(RoboRallyApplication.screenWidth / 2f, RoboRallyApplication.screenHeight / 2f);
     }
 
-    private ImageButton getImageButton(String value) {
+    private ImageButton getImageButton(GameLoop gameLoop, String value) {
         Texture image = new Texture("./assets/robots/robot" + value + ".png");
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(image));
         ImageButton imageButton = new ImageButton(drawable);
@@ -49,6 +50,7 @@ public class RebootWindow extends Window {
                 client.setDirection(direction);
                 client.reboot();
                 client.getPlayerGraphic().animateReboot();
+                gameLoop.phase ++;
             }
         });
         return imageButton;

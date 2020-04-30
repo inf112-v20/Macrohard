@@ -49,7 +49,7 @@ public class GameLoop {
 
         programButton = new ProgramButton(this, gameScreen);
 
-        rebootWindow = new RebootWindow(gameScreen.getGameStage(), client);
+        rebootWindow = new RebootWindow(this, client);
         continuePowerDown = new ContinuePowerDownWindow(this, client);
         cancelPowerDownWindow = new CancelPowerDownWindow(this, client);
     }
@@ -232,16 +232,18 @@ public class GameLoop {
                 if (client.isDestroyed() && !client.isDead()) {
                     rebootWindow.setVisible(true);
                 } else {
-                    rebootWindow.setVisible(false);
-                    if (client.announcedPowerDown) {
-                        cancelPowerDownWindow.setVisible(true);
-                    } else {
-                        phase++;
-                    }
-
+                    phase += 2;
                 }
                 break;
             case 12:
+                rebootWindow.setVisible(false);
+                if (client.announcedPowerDown) {
+                    cancelPowerDownWindow.setVisible(true);
+                } else {
+                    phase ++;
+                }
+                break;
+            case 13:
                 cancelPowerDownWindow.setVisible(false);
                 for (Player player : players) {
                     player.discardHandAndWipeProgram();
