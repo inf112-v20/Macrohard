@@ -2,6 +2,7 @@ package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import inf112.skeleton.app.GameMusic;
 import inf112.skeleton.app.RoboRallyApplication;
 
 public class PreferenceScreen implements Screen {
@@ -23,7 +25,7 @@ public class PreferenceScreen implements Screen {
 
     public static Boolean isCheckedMusic = true;
     private float volume;
-
+    private Music music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/FactorySwing.wav"));
     public PreferenceScreen(RoboRallyApplication parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
@@ -43,9 +45,64 @@ public class PreferenceScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
         final SelectBox<String> selectBox=new SelectBox<String>(skin);
-        Dialog dialog=new Dialog("Setting",skin);
+        selectBox.setItems("Factory Swing","Short Circuit","Nullpointer Exception","Norwegian Steel", "Robot Boogaloo");
+        selectBox.addListener(event -> {
+            String song = selectBox.getSelected();
+            System.out.println(song);
+            //selectBox.
+            switch (song){
+                case "Short Circuit":
+                    if (RoboRallyApplication.currentSong == song){
+                        break;
+                    } else {
+                        RoboRallyApplication.currentSong = song;
+                        RoboRallyApplication.music.stop();
+                        RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/ShortCircuit.wav"));
+                        RoboRallyApplication.music.play();
+                    }
+                    break;
+                case "Factory Swing":
+                    if (RoboRallyApplication.currentSong == song){
+                        break;
+                    }
+                    RoboRallyApplication.currentSong = song;
+                    RoboRallyApplication.music.stop();
+                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/FactorySwing.wav"));
+                    RoboRallyApplication.music.play();
+                    break;
 
-        selectBox.setItems("Short Circuit","Factory Swing","Nullpointer Exception","Norwegian Steel", "Robot Boogaloo");
+                case "Nullpointer Exception":
+                    if (RoboRallyApplication.currentSong == song){
+                        break;
+                    }
+                    RoboRallyApplication.currentSong = song;
+                    RoboRallyApplication.music.stop();
+                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/NullpointerException.wav"));
+                    RoboRallyApplication.music.play();
+                    break;
+
+                case "Norwegian Steel":
+                    if (RoboRallyApplication.currentSong == song){
+                        break;
+                    }
+                    RoboRallyApplication.currentSong = song;
+                    RoboRallyApplication.music.stop();
+                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/NorwegianSteel.wav"));
+                    RoboRallyApplication.music.play();
+                    break;
+
+                case "Robot Boogaloo":
+                    if (RoboRallyApplication.currentSong == song){
+                        break;
+                    }
+                    RoboRallyApplication.currentSong = song;
+                    RoboRallyApplication.music.stop();
+                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/RobotBoogaloo.wav"));
+                    RoboRallyApplication.music.play();
+                    break;
+            }
+            return false;
+        });
 
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.setValue(parent.getPreferences().getMusicVolume());
@@ -132,6 +189,7 @@ public class PreferenceScreen implements Screen {
 
     @Override
     public void render(float v) {
+       // = music;
         RoboRallyApplication.music.setVolume(volume);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);

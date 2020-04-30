@@ -29,6 +29,7 @@ public class RoboRallyApplication extends Game {
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
     public static Music music;
+    public static String currentSong;
 
     private boolean hasGame = false;
     public static int screenWidth, screenHeight;
@@ -49,9 +50,10 @@ public class RoboRallyApplication extends Game {
     }
 
     private void initializeMusic() {
+        currentSong = "Factory Swing";
         music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/FactorySwing.wav"));
         music.setLooping(true);
-        //music.play();
+        music.play();
     }
 
     public AppPreferences getPreferences() {
