@@ -49,7 +49,7 @@ public class RoboRallyApplication extends Game {
     }
 
     private void initializeMusic() {
-        music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/test1.wav"));
+        music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/FactorySwing.wav"));
         music.setLooping(true);
         //music.play();
     }

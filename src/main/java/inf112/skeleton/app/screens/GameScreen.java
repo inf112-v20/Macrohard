@@ -55,6 +55,8 @@ public class GameScreen implements Screen {
     private GameLoop gameLoop;
     private final ArrayList<Player> players;
 
+    private float stateTime;
+
     public GameScreen(final RoboRallyApplication parent, int width, int height) {
         this.parent = parent;
         this.width = width;
@@ -107,6 +109,7 @@ public class GameScreen implements Screen {
         gameLoop = new GameLoop(board, this);
 
         gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT + 5));
+        stateTime = 0f;
     }
 
     public void updateGraphics() {
@@ -148,6 +151,12 @@ public class GameScreen implements Screen {
     public void render(float v) {
         Gdx.gl.glClearColor(0.5f, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        stateTime += Gdx.graphics.getDeltaTime();
+
+        for(Player player : players){
+            player.getPlayerGraphic().updateAnimationFrame(stateTime);
+        }
         renderer.setView(gameCamera);
         renderer.render();
         gameStage.act();

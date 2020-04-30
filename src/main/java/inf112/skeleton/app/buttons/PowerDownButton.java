@@ -16,7 +16,7 @@ public class PowerDownButton extends ImageButton {
 
     public PowerDownButton(Player client, GameScreen gameScreen) {
         super(UNCHECKED, UNCHECKED, CHECKED);
-        setBounds(gameScreen.width - 120, -130, 120, 120);
+        setBounds(gameScreen.width - 120 - 90, -130, 120, 120);
         addListener(new PowerDownButtonListener(client));
         gameScreen.getGameStage().addActor(this);
     }
