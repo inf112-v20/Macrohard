@@ -54,51 +54,35 @@ public class PreferenceScreen implements Screen {
                 case "Short Circuit":
                     if (RoboRallyApplication.currentSong == song){
                         break;
-                    } else {
-                        RoboRallyApplication.currentSong = song;
-                        RoboRallyApplication.music.stop();
-                        RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/ShortCircuit.wav"));
-                        RoboRallyApplication.music.play();
                     }
+                    changeSong(song, "data/Music/ShortCircuit.wav");
                     break;
                 case "Factory Swing":
                     if (RoboRallyApplication.currentSong == song){
                         break;
                     }
-                    RoboRallyApplication.currentSong = song;
-                    RoboRallyApplication.music.stop();
-                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/FactorySwing.wav"));
-                    RoboRallyApplication.music.play();
+                    changeSong(song, "data/Music/FactorySwing.wav");
                     break;
 
                 case "Nullpointer Exception":
                     if (RoboRallyApplication.currentSong == song){
                         break;
                     }
-                    RoboRallyApplication.currentSong = song;
-                    RoboRallyApplication.music.stop();
-                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/NullpointerException.wav"));
-                    RoboRallyApplication.music.play();
+                    changeSong(song, "data/Music/NullpointerException.wav");
                     break;
 
                 case "Norwegian Steel":
                     if (RoboRallyApplication.currentSong == song){
                         break;
                     }
-                    RoboRallyApplication.currentSong = song;
-                    RoboRallyApplication.music.stop();
-                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/NorwegianSteel.wav"));
-                    RoboRallyApplication.music.play();
+                    changeSong(song, "data/Music/NorwegianSteel.wav");
                     break;
 
                 case "Robot Boogaloo":
                     if (RoboRallyApplication.currentSong == song){
                         break;
                     }
-                    RoboRallyApplication.currentSong = song;
-                    RoboRallyApplication.music.stop();
-                    RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal("data/Music/RobotBoogaloo.wav"));
-                    RoboRallyApplication.music.play();
+                    changeSong(song, "data/Music/RobotBoogaloo.wav");
                     break;
             }
             return false;
@@ -220,5 +204,13 @@ public class PreferenceScreen implements Screen {
     @Override
     public void dispose() {
         //Nothing yet
+    }
+
+    private void changeSong (String song, String filepath){
+        RoboRallyApplication.currentSong = song;
+        RoboRallyApplication.music.stop();
+        RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal(filepath));
+        RoboRallyApplication.music.setLooping(true);
+        RoboRallyApplication.music.play();
     }
 }
