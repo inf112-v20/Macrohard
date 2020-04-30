@@ -1,6 +1,9 @@
 package inf112.skeleton.app.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Align;
@@ -19,8 +22,19 @@ public class PlayerGraphic extends Image {
 
     public boolean isVisible = true;
 
+    // ANIMATION
+    Animation<TextureRegion> idleAnimation;
+    Texture idleSheet;
+    float stateTime;
+
     public PlayerGraphic(Player player) {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
+
+       idleSheet = new Texture(Gdx.files.internal("placeholder.png"));
+       TextureRegion[][] temp = TextureRegion.split(idleSheet,
+               idleSheet.getWidth(),
+               idleSheet.getHeight());
+       TextureRegion[] idleFrames = new TextureRegion[idleSheet.getWidth()* idleSheet.getHeight()];
 
         this.player = player;
         player.setPlayerGraphic(this);
