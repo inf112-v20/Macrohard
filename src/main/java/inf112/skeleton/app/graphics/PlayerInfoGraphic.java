@@ -31,7 +31,7 @@ public class PlayerInfoGraphic extends Image {
         int maxHeight = parent.getHeight();
         int boardWidth = (int) parent.getMapProperties().get("tilewidth") * (int) parent.getMapProperties().get("width");
 
-        setBounds(boardWidth + 5, maxHeight - 400 - (player.name() * 170), 120, 160);
+        setBounds(boardWidth + 5, maxHeight - 400 - ((player.name()-1) * 170), 120, 160);
         resetPixmaps();
         updateValues();
     }
