@@ -42,6 +42,11 @@ public class PreferenceScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
+        final SelectBox<String> selectBox=new SelectBox<String>(skin);
+        Dialog dialog=new Dialog("Setting",skin);
+
+        selectBox.setItems("Short Circuit","Factory Swing","Nullpointer Exception","Norwegian Steel", "Robot Boogaloo");
+
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.setValue(parent.getPreferences().getMusicVolume());
         volumeMusicSlider.addListener(event -> {
@@ -93,6 +98,7 @@ public class PreferenceScreen implements Screen {
 
         titleLabel = new Label("Preferences", skin);
         titleLabel.setFontScale(2f);
+        Label songLabel = new Label("Song", skin);
         Label volumeMusicLabel = new Label("Music Volume", skin);
         musicOnOffLabel = new Label("Music", skin);
         Label volumeSoundLabel = new Label("Sound Volume", skin);
@@ -101,6 +107,9 @@ public class PreferenceScreen implements Screen {
         //Add elements to table
         table.add(titleLabel).colspan(2);
         table.row().pad(50, 10, 10, 10);
+        table.add(songLabel).left();
+        table.add(selectBox);
+        table.row().pad(10, 10, 10, 10);
         table.add(volumeMusicLabel).left();
         table.add(volumeMusicSlider);
         table.row().pad(10, 10, 10, 10);
