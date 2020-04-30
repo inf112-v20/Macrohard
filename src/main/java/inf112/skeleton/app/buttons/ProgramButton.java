@@ -13,7 +13,7 @@ public class ProgramButton extends TextButton {
     public ProgramButton(GameLoop gameLoop, GameScreen gameScreen) {
         super("LOCK PROGRAM", RoboRallyApplication.getSkin());
         setColor(Color.DARK_GRAY);
-        setBounds(gameScreen.width - 350, -105, 200, 60);
+        setBounds(gameScreen.width - 350 - 90, -105, 200, 60);
         addListener(new ProgramButtonChangeListener(this, gameLoop));
         setVisible(false);
         gameScreen.getGameStage().addActor(this);
