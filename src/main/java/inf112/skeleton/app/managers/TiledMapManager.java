@@ -42,7 +42,7 @@ public class TiledMapManager {
         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
         if (getCell("PLAYERBEAMS", row, col) == null) {
             cell.setTile(map.getTileSets().getTile(id));
-        } else {
+        } else if (getCell("PLAYERBEAMS", row, col).getTile().getId() != id) {
             cell.setTile(map.getTileSets().getTile(40));
         }
         getLayer("PLAYERBEAMS").setCell(col, row, cell);
