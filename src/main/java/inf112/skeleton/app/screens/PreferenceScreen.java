@@ -51,6 +51,13 @@ public class PreferenceScreen implements Screen {
             System.out.println(song);
             //selectBox.
             switch (song){
+                case "Factory Swing":
+                    if (RoboRallyApplication.currentSong == song){
+                        break;
+                    }
+                    changeSong(song, "data/Music/FactorySwing.wav");
+                    break;
+
                 case "Short Circuit":
                     if (RoboRallyApplication.currentSong == song){
                         break;

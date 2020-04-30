@@ -38,9 +38,9 @@ public class MenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.setGameScreen(null);
-                parent.changeScreen(RoboRallyApplication.APPLICATION);
-                parent.hasGame(true);
+                //parent.setGameScreen(null);
+                parent.changeScreen(RoboRallyApplication.CREATE);
+                //parent.hasGame(true);
             }
         });
         TextButton preferences = new TextButton("Preferences", skin);
