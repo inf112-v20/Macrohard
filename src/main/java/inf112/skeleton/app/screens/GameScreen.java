@@ -4,8 +4,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
@@ -18,9 +22,11 @@ import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.tiles.Hole;
+import inf112.skeleton.app.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedList;
 
 public class GameScreen implements Screen {
 
@@ -201,4 +207,17 @@ public class GameScreen implements Screen {
         return this.properties;
     }
 
+    public void drawPlayerLasers(ArrayList<LinkedList<Tile>> firePlayerLasers) {
+        for (LinkedList<Tile> laserBeam : firePlayerLasers) {
+            Direction direction = laserBeam.getFirst().getPlayer().getDirection();
+            boolean horizontal = direction == Direction.EAST || direction == Direction.WEST;
+            for (Tile tile : laserBeam) {
+                mapHandler.setLaserCell(horizontal, tile.getRow(), tile.getCol());
+            }
+        }
+    }
+
+    public void erasePlayerLasers() {
+        mapHandler.cleanPlayerLaserLayer();
+    }
 }

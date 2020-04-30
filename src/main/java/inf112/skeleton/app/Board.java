@@ -223,12 +223,15 @@ public class Board {
         }
     }
 
-    public void firePlayerLasers() {
+    public ArrayList<LinkedList<Tile>> firePlayerLasers() {
+        ArrayList<LinkedList<Tile>> laserBeamTiles = new ArrayList<>();
         LinkedList<Player> damagedPlayers = new LinkedList<>();
         for (Player player : players) {
-            if (!(player.isDestroyed() || wallCollision(getTile(player), player.getDirection()))) {
-                Tile targetTile = getLaserTarget(getAdjacentTile(getTile(player), player.getDirection()), player.getDirection());
-                if (targetTile.isOccupied()) {
+            if (!player.isDestroyed()) {
+                LinkedList<Tile> laserTrajectory = getPlayerLaserBeam(getTile(player), player.getDirection());
+                laserBeamTiles.add(laserTrajectory);
+                Tile targetTile = laserTrajectory.getLast();
+                if (targetTile.isOccupied() && !targetTile.getPlayer().equals(player)) {
                     damagedPlayers.add(targetTile.getPlayer());
                 }
             }
@@ -238,6 +241,7 @@ public class Board {
         for (Player player : damagedPlayers) {
             player.applyDamage(1);
         }
+        return laserBeamTiles;
     }
 
     public void rotateGears() {
@@ -268,8 +272,22 @@ public class Board {
         if (isOccupied(tile) || wallCollision(tile, direction) || outOfBounds(tile, direction)) {
             return tile;
         } else {
-            return getLaserTarget(getAdjacentTile(tile, direction), direction);
+            return getLaserTarget(getNextTile(tile, direction), direction);
         }
+    }
+
+    private LinkedList<Tile> getPlayerLaserBeam(Tile fromTile, Direction inDirection) {
+        LinkedList<Tile> beam = new LinkedList<>();
+        beam.add(fromTile);
+        Tile currentTile = fromTile;
+        while (!wallCollision(currentTile, inDirection) && !outOfBounds(currentTile, inDirection)) {
+            currentTile = getNextTile(currentTile, inDirection);
+            beam.add(currentTile);
+            if (currentTile.isOccupied()) {
+                break;
+            }
+        }
+        return beam;
     }
 
     private ArrayList<Player> queueConveyorBelts(boolean expressOnly) {
@@ -282,7 +300,7 @@ public class Board {
                     ConveyorBelt belt = (ConveyorBelt) tile;
                     if (!expressOnly || belt.isExpress()) {
                         if (legalRoll(belt, belt.getDirection(), expressOnly)) {
-                            Tile targetTile = getAdjacentTile(belt, belt.getDirection());
+                            Tile targetTile = getNextTile(belt, belt.getDirection());
                             int index = targetTiles.indexOf(targetTile);
                             if (targetTiles.contains(targetTile)) {
                                 queuedConveyorBelts.remove(index);
@@ -314,7 +332,7 @@ public class Board {
 
     private void roll(ConveyorBelt belt, Player player) {
         Direction direction = belt.getDirection();
-        Tile toTile = getAdjacentTile(belt, direction);
+        Tile toTile = getNextTile(belt, direction);
 
         //Row and column of player is updated
         player.stepIn(direction);
@@ -350,7 +368,7 @@ public class Board {
 
     public void stepOne(Player player, Direction direction) {
         Tile fromTile = getTile(player);
-        Tile toTile = getAdjacentTile(fromTile, direction);
+        Tile toTile = getNextTile(fromTile, direction);
 
         if (toTile.isOccupied()) {
             stepOne(toTile.getPlayer(), direction);
@@ -375,7 +393,7 @@ public class Board {
         if (player.isDestroyed() || outOfBounds(fromTile, direction) || wallCollision(getTile(player), direction)) {
             return false;
         }
-        Tile toTile = getAdjacentTile(fromTile, direction);
+        Tile toTile = getNextTile(fromTile, direction);
         if (!toTile.isOccupied()) {
             return true;
         }
@@ -392,7 +410,7 @@ public class Board {
         if (outOfBounds(fromTile, direction) || wallCollision(tile, direction)) {
             return false;
         }
-        Tile toTile = getAdjacentTile(fromTile, direction);
+        Tile toTile = getNextTile(fromTile, direction);
         if (!toTile.isOccupied()) {
             return true;
         } else if (toTile instanceof ConveyorBelt) {
@@ -431,7 +449,7 @@ public class Board {
         return getTile(player.getRow(), player.getCol());
     }
 
-    public Tile getAdjacentTile(Tile tile, Direction direction) {
+    public Tile getNextTile(Tile tile, Direction direction) {
         return board[tile.getRow() + direction.getRowTrajectory()][tile.getCol() + direction.getColumnTrajectory()];
     }
 

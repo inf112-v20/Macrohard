@@ -187,7 +187,7 @@ public class GameLoop {
                 // Board- and player-lasers fire
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                 board.fireBoardLasers();
-                board.firePlayerLasers();
+                gameScreen.drawPlayerLasers(board.firePlayerLasers());
                 SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 gameScreen.updateGraphics();
                 phase++;
@@ -226,6 +226,7 @@ public class GameLoop {
                     phase = 3;
                 }
                 gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
+                gameScreen.erasePlayerLasers();
                 break;
             case 11:
                 if (client.isDestroyed() && !client.isDead()) {
