@@ -4,7 +4,7 @@ public class MovementCard extends Card {
 
     private MovementType movementType;
 
-    public MovementCard(int priority, MovementType movementType){
+    public MovementCard(int priority, MovementType movementType) {
         super(priority, movementType);
         this.movementType = movementType;
         this.isLocked = false;

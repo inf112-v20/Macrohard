@@ -1,9 +1,10 @@
-package inf112.skeleton.app.screens;
+package inf112.skeleton.app.windows;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -12,27 +13,29 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.RoboRallyApplication;
 
 public class RebootWindow extends Window {
 
-    private Player rebootPlayer;
-    private GameScreen parent;
+    private Player client;
 
 
-    public RebootWindow(GameScreen parent, Player rebootPlayer) {
+    public RebootWindow(Stage gameStage, Player client) {
         super("Choose reboot-direction", new Skin(Gdx.files.internal("assets/skins/expee/expee-ui.json")));
-        this.parent = parent;
-        this.rebootPlayer = rebootPlayer;
+        this.client = client;
 
-        setMovable(false);
-        setResizable(false);
-        setBounds(300, 1000, 700, 200);
+        setMovable(true);
+        setResizable(true);
+        setVisible(false);
+
 
         for (String value : new String[]{"NORTH", "EAST", "SOUTH", "WEST"}) {
             add(getImageButton(value));
         }
-        add(parent.powerDownOptions());
-        parent.getGameStage().addActor(this);
+
+        pack();
+        gameStage.addActor(this);
+        setPosition(RoboRallyApplication.screenWidth / 2f, RoboRallyApplication.screenHeight / 2f);
     }
 
     private ImageButton getImageButton(String value) {
@@ -43,11 +46,12 @@ public class RebootWindow extends Window {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
                 Direction direction = Direction.fromString(value);
-                rebootPlayer.setDirection(direction);
-                rebootPlayer.reboot();
-                rebootPlayer.getPlayerGraphic().animateReboot();
+                client.setDirection(direction);
+                client.reboot();
+                client.getPlayerGraphic().animateReboot();
             }
         });
         return imageButton;
     }
+
 }

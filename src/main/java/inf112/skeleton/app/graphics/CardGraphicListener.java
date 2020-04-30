@@ -24,7 +24,7 @@ public class CardGraphicListener extends ClickListener {
 
     private Texture texture;
     private Pixmap pixmap;
-    private int cardIndex;
+    private int registerIndex;
     private Pixmap fontPixmap;
     private BitmapFont.BitmapFontData fontData;
 
@@ -44,18 +44,17 @@ public class CardGraphicListener extends ClickListener {
     }
 
     public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-        if(graphic.isSelected()){
+        if (graphic.isSelected()) {
             graphic.setSelected(false);
 
             // Reset highlight
             pixmap = new Pixmap(fileHandle);
             texture = new Texture(pixmap);
-        }
-        else if (!CardGraphic.programIndices.isEmpty()){
-            cardIndex = CardGraphic.programIndices.peek();
+        } else if (!CardGraphic.programIndices.isEmpty()) {
+            registerIndex = CardGraphic.programIndices.peek();
             graphic.setSelected(true);
 
-            BitmapFont.Glyph glyph = fontData.getGlyph(("" + cardIndex).charAt(0));
+            BitmapFont.Glyph glyph = fontData.getGlyph(("" + registerIndex).charAt(0));
 
             // Draw the character onto our base pixel-map, with a padding of 10
             pixmap.drawPixmap(fontPixmap, 10, 10,
@@ -69,7 +68,7 @@ public class CardGraphicListener extends ClickListener {
         int priority = graphic.getCard().getPriority();
         String priorityAsString = Integer.toString(priority);
 
-        for(int i = 0; i<priorityAsString.length(); i++) {
+        for (int i = 0; i < priorityAsString.length(); i++) {
             BitmapFont.Glyph partialPriorityGlyph = this.fontData.getGlyph(priorityAsString.charAt(i));
             pixmap.drawPixmap(fontPixmap, 120 + (i * 25), 30,
                     partialPriorityGlyph.srcX, partialPriorityGlyph.srcY, partialPriorityGlyph.width, partialPriorityGlyph.height);
@@ -82,27 +81,25 @@ public class CardGraphicListener extends ClickListener {
     }
 
     @Override
-    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor){
-        if(!graphic.isSelected()) {
+    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        if (!graphic.isSelected()) {
             graphic.addAction(Actions.scaleTo(CARD_MAX_SCALE, CARD_MAX_SCALE, 0.2f));
-            graphic.addAction(Actions.moveBy(-((CARD_MAX_SCALE-1)*50), 0, 0.2f));
+            graphic.addAction(Actions.moveBy(-((CARD_MAX_SCALE - 1) * 50), 0, 0.2f));
         }
     }
 
     @Override
     public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-        if(!graphic.isSelected()) {
+        if (!graphic.isSelected()) {
             graphic.addAction(Actions.moveTo(graphic.getInitialX(), Y_PADDING, 0.1f));
             graphic.addAction(Actions.scaleTo(1f, 1f, 0.1f));
-        }
-        else{
+        } else {
             float yPlacement = HORIZONTAL_PROGRAM_ALIGNMENT - Y_PADDING;
-            yPlacement -= (cardIndex-1) * (CARD_HEIGHT*1.2);
+            yPlacement -= (registerIndex - 1) * (CARD_HEIGHT * 1.2);
             graphic.addAction(Actions.moveTo(VERTICAL_PROGRAM_ALIGNMENT, yPlacement, 0.1f));
             graphic.addAction(Actions.scaleTo(0.8f, 0.8f, 0.1f));
         }
     }
-
 
 
 }

@@ -15,7 +15,7 @@ public class TiledMapManager {
     private final int height;
     private final int width;
 
-    public TiledMapManager (String fileName) {
+    public TiledMapManager(String fileName) {
         map = new TmxMapLoader().load(fileName);
         map.getLayers().get("LASERBEAMS").setVisible(false);
         properties = map.getProperties();
@@ -23,7 +23,7 @@ public class TiledMapManager {
         width = properties.get("width", Integer.class);
     }
 
-    public TiledMap getMap (){
+    public TiledMap getMap() {
         return map;
     }
 

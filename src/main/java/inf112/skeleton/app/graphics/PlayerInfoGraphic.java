@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import inf112.skeleton.app.Player;
@@ -19,28 +18,26 @@ public class PlayerInfoGraphic extends Image {
 
     private final Player player;
 
-    private File file;
     private Pixmap fontPixmap;
     private Pixmap pixmap;
     private BitmapFont.BitmapFontData fontData;
 
-    public PlayerInfoGraphic(Player player, GameScreen parent){
+    public PlayerInfoGraphic(Player player, GameScreen parent) {
         super(new Texture("./assets/PlayerInfoBackground.png"));
 
         this.player = player;
         player.setInfoGraphic(this);
 
         int maxHeight = parent.getHeight();
+        int boardWidth = (int) parent.getMapProperties().get("tilewidth") * (int) parent.getMapProperties().get("width");
 
-        int boardWidth = (Integer) parent.getMapProperties().get("tilewidth") * (Integer) parent.getMapProperties().get("width");
-
-        setBounds(boardWidth + 5, maxHeight - 400 - (player.name()*170), 120, 160);
+        setBounds(boardWidth + 5, maxHeight - 400 - (player.name() * 170), 120, 160);
         resetPixmaps();
         updateValues();
     }
 
-    public void resetPixmaps(){
-        this.file = new File("./assets/PlayerInfoBackground.png");
+    public void resetPixmaps() {
+        File file = new File("./assets/PlayerInfoBackground.png");
         this.pixmap = new Pixmap(new FileHandle(file));
 
         //FONT INIT
@@ -51,52 +48,52 @@ public class PlayerInfoGraphic extends Image {
         this.fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
     }
 
-    private void drawName(){
+    private void drawName() {
         String playerName = "PLAYER " + (player.name());
-        for(int i = 0; i<playerName.length(); i++){
+        for (int i = 0; i < playerName.length(); i++) {
             BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(playerName.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35*i, 10,
+            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 10,
                     partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
         }
     }
 
-    private void drawDamage(){
-        String health = "DMG   " + player.getDamageTokens();
-        for(int i = 0; i<health.length(); i++){
-            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(health.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35*i, 80,
-                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
-        }
-    }
-
-    private void drawLifeTokens(){
+    private void drawLifeTokens() {
         String life = "LIFE  " + player.getLifeTokens();
-        for(int i = 0; i<life.length(); i++){
+        for (int i = 0; i < life.length(); i++) {
             BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35*i, 150,
+            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 200,
                     partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
         }
     }
 
-    private void drawFlag(){
+    private void drawDamage() {
+        String health = "DMG   " + player.getDamageTokens();
+        for (int i = 0; i < health.length(); i++) {
+            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(health.charAt(i));
+            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 270,
+                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
+        }
+    }
+
+    private void drawFlag() {
         String life = "FLAG  " + player.getPreviousFlag();
-        for(int i = 0; i<life.length(); i++){
+        for (int i = 0; i < life.length(); i++) {
             BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35*i, 220,
+            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 340,
                     partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
         }
     }
 
-    public void draw(){
+    public void draw() {
         Texture texture = new Texture(pixmap);
         setDrawable(new SpriteDrawable(new Sprite(texture)));
     }
 
-    public void updateValues(){
+    public void updateValues() {
         resetPixmaps();
         drawName();
-        drawDamage();
         drawLifeTokens();
+        drawDamage();
         drawFlag();
         draw();
     }

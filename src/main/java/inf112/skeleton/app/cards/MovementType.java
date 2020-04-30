@@ -10,8 +10,7 @@ public enum MovementType implements CardType {
     public int getMoveID() {
         if (this.equals(ONE_BACKWARD)) {
             return -1;
-        }
-        else return this.ordinal() + 1;
+        } else return this.ordinal() + 1;
     }
 
     public String toString() {

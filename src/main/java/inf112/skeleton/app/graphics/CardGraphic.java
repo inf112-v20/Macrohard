@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import inf112.skeleton.app.Player;
 import inf112.skeleton.app.cards.Card;
 
 import java.io.File;
@@ -22,29 +23,32 @@ public class CardGraphic extends Image {
     public final static float CARD_ASPECT = 1.5f;
     public final static float CARD_MAX_SCALE = 1.2f;
     public final static int X_PADDING = 0;
-    public final static int Y_PADDING = - 150;
-    public final static int VERTICAL_PROGRAM_ALIGNMENT = - 80;
+    public final static int Y_PADDING = -150;
+    public final static int VERTICAL_PROGRAM_ALIGNMENT = -80;
     public final static int HORIZONTAL_PROGRAM_ALIGNMENT = 450;
     public final static int VERTICAL_HAND_MARGIN = 75;
 
     public static PriorityQueue<Integer> programIndices = new PriorityQueue<>(Arrays.asList(1, 2, 3, 4, 5));
     private static int xStartPosition = VERTICAL_HAND_MARGIN;
 
+    private final Card[] clientProgram;
     private final Card card;
-    private int cardIndex;
+    private int registerIndex;
     private float initialX;
 
     private final File file;
 
     private boolean isSelected;
 
-    public CardGraphic(final Card card){
+    public CardGraphic(Player client, Card card) {
         super(new Texture("./assets/cards/" + card.getName() + ".png"));
+        this.clientProgram = client.getProgram();
         this.card = card;
-        this.file = new File("./assets/cards/" + card.getName() + ".png");
-        this.initialX = xStartPosition;
 
-        setBounds(xStartPosition, Y_PADDING, CARD_WIDTH, CARD_HEIGHT*CARD_ASPECT);
+        this.file = new File("./assets/cards/" + card.getName() + ".png");
+        this.initialX = xStartPosition + (((CARD_WIDTH + X_PADDING) * client.getDamageTokens()) / 2f);
+
+        setBounds(initialX, Y_PADDING, CARD_WIDTH, CARD_HEIGHT * CARD_ASPECT);
         addListener(new CardGraphicListener(this));
 
         xStartPosition += CARD_WIDTH + X_PADDING;
@@ -62,13 +66,13 @@ public class CardGraphic extends Image {
         int priority = card.getPriority();
         String priorityAsString = Integer.toString(priority);
 
-        if(priorityAsString.length() == 2){
+        if (priorityAsString.length() == 2) {
             priorityAsString = "0" + priorityAsString;
         }
 
-        for(int i = 0; i<priorityAsString.length(); i++){
+        for (int i = 0; i < priorityAsString.length(); i++) {
             BitmapFont.Glyph partialPriorityGlyph = data.getGlyph(priorityAsString.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 120+(i*25), 30,
+            pixmap.drawPixmap(fontPixmap, 120 + (i * 25), 30,
                     partialPriorityGlyph.srcX, partialPriorityGlyph.srcY, partialPriorityGlyph.width, partialPriorityGlyph.height);
         }
 
@@ -99,11 +103,16 @@ public class CardGraphic extends Image {
         card.selected = selected;
         if (!selected) {
             programIndices.add(card.registerIndex);
+            for (int i = 0; i < clientProgram.length; i++) {
+                if (clientProgram[i] != null && clientProgram[i].equals(card)) {
+                    clientProgram[i] = null;
+                }
+            }
             card.registerIndex = -1;
-        }
-        else if (!programIndices.isEmpty()) {
-            cardIndex = programIndices.poll();
-            card.setRegisterIndex(cardIndex);
+        } else if (!programIndices.isEmpty()) {
+            registerIndex = programIndices.poll();
+            card.setRegisterIndex(registerIndex);
+            clientProgram[registerIndex - 1] = card;
         }
     }
 

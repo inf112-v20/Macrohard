@@ -4,10 +4,9 @@ import inf112.skeleton.app.tiles.ConveyorBelt;
 import inf112.skeleton.app.tiles.Tile;
 import org.junit.Before;
 import org.junit.Test;
-import java.util.ArrayList;
-import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LegalRollTest {
 
@@ -20,12 +19,12 @@ public class LegalRollTest {
     private Direction unOccupiedTileDirection = Direction.WEST;
 
     private Tile playerTile;
-    private ConveyorBelt northwardExpressBelt = new ConveyorBelt(midRow + Direction.NORTH.getRowTrajectory(), midCol + Direction.NORTH.getColumnTrajectory(), Direction.NORTH,true);
-    private ConveyorBelt eastwardBelt = new ConveyorBelt(midRow + Direction.EAST.getRowTrajectory(), midCol + Direction.EAST.getColumnTrajectory(), Direction.EAST,false);
+    private ConveyorBelt northwardExpressBelt = new ConveyorBelt(midRow + Direction.NORTH.getRowTrajectory(), midCol + Direction.NORTH.getColumnTrajectory(), Direction.NORTH, true);
+    private ConveyorBelt eastwardBelt = new ConveyorBelt(midRow + Direction.EAST.getRowTrajectory(), midCol + Direction.EAST.getColumnTrajectory(), Direction.EAST, false);
 
     @Before
     public void setUp() {
-        Player player = new Player(midRow, midCol, Direction.NORTH, false);
+        Player player = new Player(midRow, midCol, Direction.NORTH);
         Player dummy1 = new Player(eastwardBelt.getRow(), eastwardBelt.getCol(), Direction.EAST);
         Player dummy2 = new Player(northwardExpressBelt.getRow(), northwardExpressBelt.getCol(), Direction.NORTH);
 

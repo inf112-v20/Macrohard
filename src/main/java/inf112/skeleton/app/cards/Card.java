@@ -21,7 +21,9 @@ public abstract class Card implements Comparable<Card> {
         return this.priority;
     }
 
-    public void setRegisterIndex(int registerIndex) { this.registerIndex = registerIndex; }
+    public void setRegisterIndex(int registerIndex) {
+        this.registerIndex = registerIndex;
+    }
 
     public boolean isInProgramRegister() {
         return registerIndex != -1;
@@ -34,8 +36,8 @@ public abstract class Card implements Comparable<Card> {
     }
 
     @Override
-    public String toString(){
-       return ("TYPE: " + this.cardType + "PRIORITY: " + this.priority);
+    public String toString() {
+        return ("TYPE: " + this.cardType + "PRIORITY: " + this.priority);
     }
 
 }

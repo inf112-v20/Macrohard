@@ -1,13 +1,13 @@
 package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Screen;
-        import inf112.skeleton.app.RoboRallyApplication;
+import inf112.skeleton.app.RoboRallyApplication;
 
 public class LoadingScreen implements Screen {
 
     private RoboRallyApplication parent;
 
-    public LoadingScreen(RoboRallyApplication roborally){
+    public LoadingScreen(RoboRallyApplication roborally) {
         parent = roborally;
     }
 

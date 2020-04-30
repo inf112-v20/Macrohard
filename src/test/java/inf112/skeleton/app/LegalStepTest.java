@@ -5,7 +5,8 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 public class LegalStepTest {
 
@@ -15,17 +16,17 @@ public class LegalStepTest {
             Direction.EAST, Direction.SOUTH, Direction.WEST));
 
     private void createPlayerInMiddleOfBoard() {
-        player = new Player(4,4, Direction.NORTH, false);
-        board = new Board( 12, 12, player);
+        player = new Player(4, 4, Direction.NORTH);
+        board = new Board(12, 12, player);
     }
 
     private void createPlayerInMiddleOfBoardSurroundedByFourPlayers() {
-        player = new Player(4,4, Direction.NORTH, false);
-        Player dummy1 = new Player(5, 4, Direction.NORTH, true);
-        Player dummy2 = new Player(3, 4, Direction.NORTH, true);
-        Player dummy3 = new Player(4, 3, Direction.NORTH, true);
-        Player dummy4 = new Player(4, 5, Direction.NORTH, true);
-        board = new Board( 12, 12, player, dummy1, dummy2, dummy3, dummy4);
+        player = new Player(4, 4, Direction.NORTH);
+        Player dummy1 = new Player(5, 4, Direction.NORTH);
+        Player dummy2 = new Player(3, 4, Direction.NORTH);
+        Player dummy3 = new Player(4, 3, Direction.NORTH);
+        Player dummy4 = new Player(4, 5, Direction.NORTH);
+        board = new Board(12, 12, player, dummy1, dummy2, dummy3, dummy4);
     }
 
     @Test

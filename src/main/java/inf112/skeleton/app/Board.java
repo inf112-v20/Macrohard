@@ -69,7 +69,7 @@ public class Board {
             player.setArchiveMarker(dock);
             player.setRow(dock.getRow());
             player.setCol(dock.getCol());
-            playerIndex ++;
+            playerIndex++;
         }
     }
 
@@ -86,8 +86,8 @@ public class Board {
     //Fills the board with standard tiles
     public void layTiles() {
         board = new Tile[height][width];
-        for (int i = 0; i < height; i ++){
-            for (int j = 0; j < width; j ++) {
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 layTile(new Tile(i, j));
             }
         }
@@ -96,8 +96,8 @@ public class Board {
     //Fills the board with tiles in accordance with the mapManager
     public void layTiles(TiledMapManager mapManager) {
         board = new Tile[height][width];
-        for (int row = 0; row < height; row ++){
-            for (int col = 0; col < width; col ++) {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
                 TiledMapTile tile = mapManager.getCell("TILES", row, col).getTile();
                 String tileType = (String) tile.getProperties().get("Type");
                 Tile currentTile;
@@ -122,7 +122,7 @@ public class Board {
                         currentTile = new Flag(numberFlag, row, col);
                         break;
                     case "REPAIR_SITE":
-                        currentTile = new RepairSite(row,col);
+                        currentTile = new RepairSite(row, col);
                         break;
                     default:
                         currentTile = new Tile(row, col);
@@ -135,8 +135,8 @@ public class Board {
     }
 
     private void erectWalls(TiledMapManager manager) {
-        for (int row = 0; row < height; row ++) {
-            for (int col = 0; col < width; col ++) {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
                 if (manager.getCell("WALLS", row, col) != null) {
                     TiledMapTile wall = manager.getCell("WALLS", row, col).getTile();
                     String[] directions = ((String) wall.getProperties().get("Directions")).split(",");
@@ -151,9 +151,9 @@ public class Board {
                             }
                         }
                         int nrOfLasers = (Integer) wall.getProperties().get("NrOfLasers");
-                        if(nrOfLasers > 0) {
+                        if (nrOfLasers > 0) {
                             installLaser(nrOfLasers, dir.opposite(), row, col);
-                    }
+                        }
                     }
                 }
             }
@@ -168,18 +168,18 @@ public class Board {
         TiledMapTileLayer.Cell belt = mapManager.getCell("TILES", row, col);
         String value = (String) belt.getTile().getProperties().get("Direction");
         Direction dir = Direction.fromString(value);
-        boolean express =  (boolean) belt.getTile().getProperties().get("Express");
+        boolean express = (boolean) belt.getTile().getProperties().get("Express");
         return new ConveyorBelt(row, col, dir, express);
     }
 
-    private void placeFlags(TiledMapManager manager){
-        for (int row = 0; row < height; row ++) {
+    private void placeFlags(TiledMapManager manager) {
+        for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 if (manager.getCell("FLAGS", row, col) != null) {
                     int number = (Integer) manager.getCell("FLAGS", row, col).getTile().getProperties().get("Number");
                     Flag flag = new Flag(number, row, col);
                     layTile(flag);
-                    numberOfFlags ++;
+                    numberOfFlags++;
                 }
             }
         }
@@ -188,8 +188,7 @@ public class Board {
     public void execute(Player player, Card card) {
         if (card instanceof RotationCard) {
             rotate(player, (RotationCard) card);
-        }
-        else if (card instanceof MovementCard) {
+        } else if (card instanceof MovementCard) {
             move(player, (MovementCard) card);
         }
     }
@@ -204,10 +203,14 @@ public class Board {
 
     private void move(Player player, MovementCard card) {
         int roof = (card.getMoveID() == -1 ? 1 : card.getMoveID());
-        Direction direction = (card.getMoveID() == -1? player.getDirection().opposite() : player.getDirection());
+        Direction direction = (card.getMoveID() == -1 ? player.getDirection().opposite() : player.getDirection());
 
-        for (int i = 0; i < roof; i ++) {
-            if (legalStep(player, direction)) { stepOne(player, direction); } else { break; }
+        for (int i = 0; i < roof; i++) {
+            if (legalStep(player, direction)) {
+                stepOne(player, direction);
+            } else {
+                break;
+            }
         }
     }
 
@@ -223,7 +226,7 @@ public class Board {
     public void firePlayerLasers() {
         LinkedList<Player> damagedPlayers = new LinkedList<>();
         for (Player player : players) {
-            if (!player.isDestroyed()) {
+            if (!(player.isDestroyed() || wallCollision(getTile(player), player.getDirection()))) {
                 Tile targetTile = getLaserTarget(getAdjacentTile(getTile(player), player.getDirection()), player.getDirection());
                 if (targetTile.isOccupied()) {
                     damagedPlayers.add(targetTile.getPlayer());
@@ -244,9 +247,8 @@ public class Board {
                     Gear gear = (Gear) tile;
                     Player player = gear.getPlayer();
                     if (gear.rotatesClockwise()) {
-                       player.rotateClockwise();
-                    }
-                    else {
+                        player.rotateClockwise();
+                    } else {
                         player.rotateCounterClockwise();
                     }
                 }
@@ -265,8 +267,7 @@ public class Board {
     private Tile getLaserTarget(Tile tile, Direction direction) {
         if (isOccupied(tile) || wallCollision(tile, direction) || outOfBounds(tile, direction)) {
             return tile;
-        }
-        else {
+        } else {
             return getLaserTarget(getAdjacentTile(tile, direction), direction);
         }
     }
@@ -286,8 +287,7 @@ public class Board {
                             if (targetTiles.contains(targetTile)) {
                                 queuedConveyorBelts.remove(index);
                                 players.remove(index);
-                            }
-                            else {
+                            } else {
                                 queuedConveyorBelts.add(belt);
                                 players.add(belt.getPlayer());
                                 targetTiles.add(targetTile);
@@ -308,7 +308,7 @@ public class Board {
             ConveyorBelt belt = queuedConveyorBelts.poll();
             Player beltPlayer = rollingPlayers.get(indexOfPlayer);
             roll(belt, beltPlayer);
-            indexOfPlayer ++;
+            indexOfPlayer++;
         }
     }
 
@@ -322,9 +322,7 @@ public class Board {
         //Queue respawn for rolling player if player has rolled into a hole
         if (toTile instanceof Hole) {
             player.destroy();
-        }
-
-        else {
+        } else {
             //Rotate player if the conveyor belt swings either left or right
             //Assumes that there are no two conveyor belts pointing into each other
             if (getTile(player) instanceof ConveyorBelt) {
@@ -332,8 +330,7 @@ public class Board {
                 if (!direction.equals(nextBelt.getDirection())) {
                     if (direction.turnClockwise().equals(nextBelt.getDirection())) {
                         player.rotateClockwise();
-                    }
-                    else if (direction.turnCounterClockwise().equals(nextBelt.getDirection())) {
+                    } else if (direction.turnCounterClockwise().equals(nextBelt.getDirection())) {
                         player.rotateCounterClockwise();
                     }
                 }
@@ -363,9 +360,7 @@ public class Board {
 
         if (toTile instanceof Hole) {
             player.destroy();
-        }
-
-        else {
+        } else {
             toTile.setPlayer(player);
         }
 
@@ -387,7 +382,8 @@ public class Board {
         // Else check recursively if player on target tile can
         // legally be pushed in same direction
         else {
-            return legalStep(toTile.getPlayer(), direction); }
+            return legalStep(toTile.getPlayer(), direction);
+        }
     }
 
     public boolean legalRoll(Tile tile, Direction direction, boolean expressOnly) {
@@ -399,8 +395,7 @@ public class Board {
         Tile toTile = getAdjacentTile(fromTile, direction);
         if (!toTile.isOccupied()) {
             return true;
-        }
-        else if (toTile instanceof ConveyorBelt) {
+        } else if (toTile instanceof ConveyorBelt) {
             // If target tile is an occupied conveyor belt
             // check if the player on the belt will roll at the same time,
             // thus freeing the tile
@@ -428,7 +423,7 @@ public class Board {
         return tile.getWalls().contains(direction);
     }
 
-    public Tile getTile(int row, int col){
+    public Tile getTile(int row, int col) {
         return board[row][col];
     }
 
@@ -448,8 +443,8 @@ public class Board {
         return lasers;
     }
 
-    public boolean isOccupied(Tile tile){
-            return tile.isOccupied();
-        }
+    public boolean isOccupied(Tile tile) {
+        return tile.isOccupied();
+    }
 
 }

@@ -19,7 +19,7 @@ public class PlayerGraphic extends Image {
 
     public boolean isVisible = true;
 
-    public PlayerGraphic(Player player){
+    public PlayerGraphic(Player player) {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
 
         this.player = player;

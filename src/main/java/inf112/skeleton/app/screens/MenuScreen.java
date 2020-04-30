@@ -20,7 +20,7 @@ public class MenuScreen implements Screen {
     private Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
 
-    public MenuScreen(RoboRallyApplication roboRallyApplication){
+    public MenuScreen(RoboRallyApplication roboRallyApplication) {
         parent = roboRallyApplication;
     }
 
@@ -80,7 +80,7 @@ public class MenuScreen implements Screen {
         table.add(exit).fillX().uniformX();
 
         stage.addActor(table);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
@@ -88,7 +88,7 @@ public class MenuScreen implements Screen {
     public void render(float v) {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 

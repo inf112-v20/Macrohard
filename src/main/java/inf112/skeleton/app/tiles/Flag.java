@@ -14,7 +14,7 @@ public class Flag extends Tile {
     }
 
     @Override
-    public String toString(){
-        return ("TYPE: Flag. NUMBER: " +  this.number);
+    public String toString() {
+        return ("TYPE: Flag. NUMBER: " + this.number);
     }
 }

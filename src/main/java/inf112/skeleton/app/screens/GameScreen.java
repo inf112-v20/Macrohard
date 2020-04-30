@@ -2,23 +2,16 @@ package inf112.skeleton.app.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+
 import inf112.skeleton.app.*;
-import inf112.skeleton.app.cards.*;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
@@ -31,12 +24,13 @@ import java.util.Arrays;
 
 public class GameScreen implements Screen {
 
-    private static final int CARD_GRAPHIC_HEIGHT =  150;
+    private static final int CARD_GRAPHIC_HEIGHT = 150;
     private static final int CARD_GRAPHIC_SELECTED_WIDTH = 80;
     private static final int PADDING = 5;
 
     public final RoboRallyApplication parent;
     public final int width, height;
+    public final int buttonXPosition;
 
     private final Viewport gamePort;
     private final OrthographicCamera gameCamera;
@@ -45,19 +39,17 @@ public class GameScreen implements Screen {
     public TiledMapManager mapHandler;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private GameScreenInputProcessor inputProcessor;
 
     public final static int TILE_SIZE = 60;
     private float timeInSeconds = 0f;
 
     private Board board;
-    public final RebootWindow rebootWindow;
 
     private Stage gameStage;
     private GameLoop gameLoop;
     private final ArrayList<Player> players;
 
-    public GameScreen(final RoboRallyApplication parent, int width, int height){
+    public GameScreen(final RoboRallyApplication parent, int width, int height) {
         this.parent = parent;
         this.width = width;
         this.height = height;
@@ -65,10 +57,12 @@ public class GameScreen implements Screen {
         // ---- INITIALISATION ----
 
         // Initialise players
-        Player player1 = new Player(0, 1, Direction.EAST, false);
-        Player player2 = new Player(0, 1, Direction.EAST, true);
+        Player player1 = new Player(0, 1, Direction.EAST);
+        Player player2 = new Player(0, 1, Direction.EAST);
+        Player player3 = new Player(0, 1, Direction.EAST);
+        Player player4 = new Player(0, 1, Direction.EAST);
 
-        players = new ArrayList<>(Arrays.asList(player1, player2));
+        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
 
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
@@ -98,67 +92,15 @@ public class GameScreen implements Screen {
         }
 
         // --- INPUT ----
-        inputProcessor = new GameScreenInputProcessor(parent, player1, board);
+        GameScreenInputProcessor inputProcessor = new GameScreenInputProcessor(parent, player1, board);
         gameStage.addListener(inputProcessor);
 
-        rebootWindow = new RebootWindow(this, player1);
-        rebootWindow.setVisible(false);
-        gameStage.addActor(rebootWindow);
+        // --- BUTTONS ---
+        buttonXPosition = width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING);
 
-        TextButton fireLaser = new TextButton("LASER", parent.getSkin());
-        fireLaser.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 504, 150, 50);
-        fireLaser.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                mapHandler.getLayer("LASERBEAMS").setVisible(true);
-                board.fireBoardLasers();
-                SoundEffects.FIRE_LASERS.play(parent.getPreferences().getSoundVolume());
-                mapHandler.getLayer("LASERBEAMS").setVisible(false);
-            }
-        });
-        gameStage.addActor(fireLaser);
+        gameLoop = new GameLoop(board, this);
 
-        TextButton reboot = new TextButton("REBOOT", parent.getSkin());
-        reboot.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 452, 150, 50);
-        reboot.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                for (Player player : players) {
-                    if (player.isDestroyed() && !player.isDead()) {
-                        player.reboot();
-                        player.getPlayerGraphic().animateReboot();
-                    }
-                }
-                updateGraphics();
-            }
-        });
-        gameStage.addActor(reboot);
-
-        TextButton change = new TextButton("CHANGE", parent.getSkin());
-        change.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 400, 150, 50);
-        change.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                int index = players.indexOf(inputProcessor.getPlayer());
-                int newIndex = (index + 1) % players.size();
-                inputProcessor.setPlayer(players.get(newIndex));
-            }
-        });
-        gameStage.addActor(change);
-
-        TextButton button = new TextButton("PROGRAM", parent.getSkin());
-        button.setBounds(width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING), 348, 150, 50);
-        button.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                players.get(0).lockInProgram();
-            }
-        });
-        gameStage.addActor(button);
-        int buttonX = (width - (150 + CARD_GRAPHIC_SELECTED_WIDTH + PADDING)) - 52;
-        gameLoop = new GameLoop(board, this, buttonX);
-
-        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT+5));
+        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT + 5));
     }
 
     public void updateGraphics() {
@@ -170,8 +112,7 @@ public class GameScreen implements Screen {
                 if (board.getTile(player) instanceof Hole) {
                     graphic.animateFall();
                     SoundEffects.FALLING_ROBOT.play(parent.getPreferences().getSoundVolume());
-                }
-                else if (player.isDestroyed()) {
+                } else if (player.isDestroyed()) {
                     graphic.animateDestruction();
                 }
             }
@@ -179,10 +120,13 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void runProgram(Player player, int registerIndex) {
-        Card card = player.getProgram()[registerIndex];
-        board.execute(player, card);
-        updateGraphics();
+    public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
+        for (CardGraphic cardGraphic : cardsOnScreen) {
+            if (!cardGraphic.getCard().isLocked) {
+                cardGraphic.reset();
+                cardGraphic.remove();
+            }
+        }
     }
 
     public void setAsInputProcessor() {
@@ -203,11 +147,10 @@ public class GameScreen implements Screen {
         gameStage.act();
         gameStage.draw();
 
-        // Comment this out to disable GameLoop
         timeInSeconds += Gdx.graphics.getRawDeltaTime();
         float period = 0.8f;
         if (timeInSeconds > period) {
-            timeInSeconds -= period;
+            timeInSeconds = 0;
             gameLoop.tick();
         }
     }
@@ -238,128 +181,24 @@ public class GameScreen implements Screen {
         renderer.dispose();
     }
 
-    public void addStageActor(Image actor) {
-        gameStage.addActor(actor);
-    }
-
     public Stage getGameStage() {
         return gameStage;
-    }
-
-    public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
-        for (CardGraphic cardGraphic : cardsOnScreen) {
-            if(!cardGraphic.getCard().isLocked) {
-                cardGraphic.reset();
-                cardGraphic.remove();
-            }
-        }
-    }
-
-    public TextButton[] powerDownOptions() {
-        if (players.get(0).inPowerDown) {
-            TextButton continuePowerDown = new TextButton("CONTINUE", parent.getSkin());
-            continuePowerDown.setBounds(1500, 130, 200, 50);
-            TextButton stopPowerDown = new TextButton("STOP", parent.getSkin());
-            stopPowerDown.setBounds(1500, 70, 200, 50);
-            stopPowerDown.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent changeEvent, Actor actor) {
-                    stopPowerDown.setText("STOPPING..");
-                    stopPowerDown.setColor(Color.RED);
-                    players.get(0).inPowerDown = false;
-                    players.get(0).continuePowerDown = false;
-                    gameLoop.powerDownInput = true;
-                }
-            });
-            continuePowerDown.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent changeEvent, Actor actor) {
-                    continuePowerDown.setText("CONTINUING..");
-                    continuePowerDown.setColor(Color.RED);
-                    players.get(0).continuePowerDown = true;
-                    gameLoop.powerDownInput = true;
-                }
-            });
-            gameStage.addActor(stopPowerDown);
-            gameStage.addActor(continuePowerDown);
-            return (new TextButton[]{continuePowerDown, stopPowerDown});
-        } else {
-            TextButton continueGame = new TextButton("CONTINUE", parent.getSkin());
-            continueGame.setBounds(1500, 130, 200, 50);
-            TextButton powerDown = new TextButton("POWER DOWN", parent.getSkin());
-            powerDown.setBounds(1500, 70, 200, 50);
-            continueGame.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent changeEvent, Actor actor) {
-                    continueGame.setText("CONTINUING..");
-                    continueGame.setColor(Color.RED);
-                    gameLoop.powerDownInput = true;
-                }
-            });
-            powerDown.addListener(new ChangeListener() {
-                @Override
-                public void changed(ChangeEvent changeEvent, Actor actor) {
-                    if (players.get(0).getDamageTokens() == 0) {
-                        powerDown.setBounds(1500,70,300,50);
-                        powerDown.setText("ILLEGAL, NO DAMAGE TAKEN");
-                        gameLoop.powerDownInput = true;
-                    }
-                    powerDown.setText("REPAIRING..");
-                    powerDown.setColor(Color.RED);
-                    players.get(0).inPowerDown = true;
-                    gameLoop.powerDownInput = true;
-
-                }
-            });
-            gameStage.addActor(continueGame);
-            gameStage.addActor(powerDown);
-            return (new TextButton[]{continueGame, powerDown});
-        }
-    }
-
-    public void powerDown() {
-        ImageButton.ImageButtonStyle style = new ImageButton.ImageButtonStyle();
-        if (players.get(0).inPowerDown) {
-            Texture green = new Texture("./assets/buttons/powerDownGreen.png");
-            style.checked = new TextureRegionDrawable(new TextureRegion(green));
-            ImageButton powerDown = new ImageButton(style.checked);
-            powerDown.setBounds(1500, 200, 200, 200);
-            gameStage.addActor(powerDown);
-        } else {
-            Texture red = new Texture("./assets/buttons/powerDownRed.png");
-            style.checked = new TextureRegionDrawable(new TextureRegion(red));
-            ImageButton powerDown = new ImageButton(style.checked);
-            powerDown.setBounds(1500, 200, 200, 200);
-            gameStage.addActor(powerDown);
-        }
-
-    }
-
-    public void openRebootWindow() {
-        rebootWindow.setVisible(true);
-    }
-
-    public void closeRebootWindow() {
-        rebootWindow.setVisible(false);
     }
 
     public ArrayList<Player> getPlayers() {
         return players;
     }
 
-    public Board getBoard(){
+    public Board getBoard() {
         return board;
     }
 
-    public int getHeight(){
+    public int getHeight() {
         return height;
-    }
-
-    public int getWidth(){
-        return width;
     }
 
     public MapProperties getMapProperties() {
         return this.properties;
     }
+
 }

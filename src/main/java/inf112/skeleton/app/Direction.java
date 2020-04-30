@@ -29,10 +29,14 @@ public enum Direction {
 
     public static Direction fromString(String string) throws IllegalArgumentException {
         switch (string) {
-            case "NORTH": return NORTH;
-            case "EAST": return EAST;
-            case "SOUTH": return SOUTH;
-            case "WEST": return WEST;
+            case "NORTH":
+                return NORTH;
+            case "EAST":
+                return EAST;
+            case "SOUTH":
+                return SOUTH;
+            case "WEST":
+                return WEST;
             default:
                 throw new IllegalArgumentException(string + " is no direction.");
         }
@@ -41,10 +45,14 @@ public enum Direction {
     @Override
     public String toString() {
         switch (this) {
-            case WEST: return "WEST";
-            case EAST: return "EAST";
-            case NORTH: return "NORTH";
-            case SOUTH: return "SOUTH";
+            case WEST:
+                return "WEST";
+            case EAST:
+                return "EAST";
+            case NORTH:
+                return "NORTH";
+            case SOUTH:
+                return "SOUTH";
             default:
                 return "";
         }
@@ -56,16 +64,13 @@ public enum Direction {
 
     public int[] getMoveCoordinates() {
         if (this.equals(NORTH)) {
-            return new int[] {1, 0};
-        }
-        else if (this.equals(EAST)) {
-            return new int[] {0, 1};
-        }
-        else if (this.equals(SOUTH)) {
-            return new int[] {-1, 0};
-        }
-        else {
-            return new int[] {0, -1};
+            return new int[]{1, 0};
+        } else if (this.equals(EAST)) {
+            return new int[]{0, 1};
+        } else if (this.equals(SOUTH)) {
+            return new int[]{-1, 0};
+        } else {
+            return new int[]{0, -1};
         }
     }
 
@@ -84,7 +89,9 @@ public enum Direction {
             return (float) -90.0;
         } else if (from.turnCounterClockwise().equals(to)) {
             return (float) 90.0;
-        } else { return (float) 0.0; }
+        } else {
+            return (float) 0.0;
+        }
     }
 
 }

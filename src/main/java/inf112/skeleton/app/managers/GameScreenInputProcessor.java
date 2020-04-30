@@ -7,7 +7,10 @@ import inf112.skeleton.app.Board;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
-import inf112.skeleton.app.cards.*;
+import inf112.skeleton.app.cards.MovementCard;
+import inf112.skeleton.app.cards.MovementType;
+import inf112.skeleton.app.cards.RotationCard;
+import inf112.skeleton.app.cards.RotationType;
 
 public class GameScreenInputProcessor extends InputListener {
 
@@ -15,7 +18,7 @@ public class GameScreenInputProcessor extends InputListener {
     Player player;
     Board board;
 
-    public GameScreenInputProcessor(RoboRallyApplication parent, Player player, Board board){
+    public GameScreenInputProcessor(RoboRallyApplication parent, Player player, Board board) {
         this.parent = parent;
         this.player = player;
         this.board = board;
@@ -25,7 +28,7 @@ public class GameScreenInputProcessor extends InputListener {
     public boolean keyDown(InputEvent event, int keycode) {
         super.keyDown(event, keycode);
 
-        switch (keycode){
+        switch (keycode) {
             case Input.Keys.ESCAPE:
                 parent.changeScreen(RoboRallyApplication.MAIN_MENU);
                 return super.keyDown(event, keycode);

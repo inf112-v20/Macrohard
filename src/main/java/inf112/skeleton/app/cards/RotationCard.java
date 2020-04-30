@@ -15,11 +15,9 @@ public class RotationCard extends Card {
     public Direction getNewDirection(Direction direction) {
         if (this.rotationType.equals(RotationType.CLOCKWISE)) {
             return direction.turnClockwise();
-        }
-        else if (this.rotationType.equals(RotationType.COUNTER_CLOCKWISE)) {
+        } else if (this.rotationType.equals(RotationType.COUNTER_CLOCKWISE)) {
             return direction.turnCounterClockwise();
-        }
-        else {
+        } else {
             return direction.turnClockwise().turnClockwise();
         }
     }

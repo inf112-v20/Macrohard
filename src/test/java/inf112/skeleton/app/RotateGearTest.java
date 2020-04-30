@@ -1,11 +1,5 @@
 package inf112.skeleton.app;
 
-import inf112.skeleton.app.Board;
-import inf112.skeleton.app.Direction;
-import inf112.skeleton.app.Player;
-
-import static org.junit.Assert.*;
-
 public class RotateGearTest {
 
     private final int midRow = 2;

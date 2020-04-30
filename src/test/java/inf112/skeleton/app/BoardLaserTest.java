@@ -4,7 +4,8 @@ import inf112.skeleton.app.tiles.Laser;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 
 public class BoardLaserTest {
 
@@ -21,9 +22,9 @@ public class BoardLaserTest {
     @Before
     public void setUp() {
         laser = new Laser(laserRow, col, 1, Direction.EAST);
-        doubleLaser = new Laser(laserRow, col ++, 2, Direction.EAST);
-        targetPlayer = new Player(laserRow, col ++, Direction.any());
-        shieldedPlayer = new Player(laserRow, col ++, Direction.any());
+        doubleLaser = new Laser(laserRow, col++, 2, Direction.EAST);
+        targetPlayer = new Player(laserRow, col++, Direction.any());
+        shieldedPlayer = new Player(laserRow, col++, Direction.any());
         board = new Board(10, 10, targetPlayer, shieldedPlayer);
         board.getLasers().add(laser);
     }

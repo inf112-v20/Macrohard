@@ -7,9 +7,6 @@ import inf112.skeleton.app.cards.RotationType;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import static org.junit.Assert.*;
 
 public class BoardMovementTest {
@@ -28,7 +25,7 @@ public class BoardMovementTest {
 
     @Before
     public void setUp() {
-        player = new Player(initRow, initCol, Direction.NORTH, true);
+        player = new Player(initRow, initCol, Direction.NORTH);
         board = new Board(10, 10, player);
     }
 
@@ -99,8 +96,8 @@ public class BoardMovementTest {
 
     @Test
     public void playerTileIsOccupied() {
-        assertTrue(board.isOccupied(board.getTile(3,2)));
-        assertFalse(board.isOccupied(board.getTile(2,3)));
+        assertTrue(board.isOccupied(board.getTile(3, 2)));
+        assertFalse(board.isOccupied(board.getTile(2, 3)));
     }
 
     @Test
@@ -112,7 +109,7 @@ public class BoardMovementTest {
 
     @Test
     public void rotatingClockwiseFromNorthYieldsEast() {
-        board.execute(player,clockwise);
+        board.execute(player, clockwise);
 
         assertEquals(Direction.EAST, player.getDirection());
     }
@@ -122,7 +119,7 @@ public class BoardMovementTest {
         board.execute(player, countClockwise);
         board.execute(player, move1);
 
-        assertEquals( initCol - 1, player.getCol());
+        assertEquals(initCol - 1, player.getCol());
     }
 
     @Test
@@ -137,7 +134,7 @@ public class BoardMovementTest {
     public void movingOutOfBoundsVerticallyDoesNotAffectPlayerRow() {
         player.setRow(9);
 
-        board.execute(player,move1);
+        board.execute(player, move1);
 
         assertEquals(9, player.getRow());
     }
@@ -147,7 +144,7 @@ public class BoardMovementTest {
         player.setCol(9);
         player.setDirection(Direction.EAST);
 
-        board.execute(player,move1);
+        board.execute(player, move1);
 
         assertEquals(9, player.getCol());
     }

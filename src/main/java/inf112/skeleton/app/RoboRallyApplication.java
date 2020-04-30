@@ -8,8 +8,8 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.preferences.AppPreferences;
-import inf112.skeleton.app.screens.LoadingScreen;
 import inf112.skeleton.app.screens.GameScreen;
+import inf112.skeleton.app.screens.LoadingScreen;
 import inf112.skeleton.app.screens.MenuScreen;
 import inf112.skeleton.app.screens.PreferenceScreen;
 
@@ -31,7 +31,7 @@ public class RoboRallyApplication extends Game {
     public static Music music;
 
     private boolean hasGame = false;
-    public int screenWidth, screenHeight;
+    public static int screenWidth, screenHeight;
 
     @Override
     public void create() {
@@ -44,7 +44,7 @@ public class RoboRallyApplication extends Game {
         appPreferences = new AppPreferences();
     }
 
-    public Skin getSkin() {
+    public static Skin getSkin() {
         return new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
     }
 
@@ -54,34 +54,34 @@ public class RoboRallyApplication extends Game {
         //music.play();
     }
 
-    public AppPreferences getPreferences(){
+    public AppPreferences getPreferences() {
         return appPreferences;
     }
 
-    public void changeScreen(int screen){
-        switch(screen){
+    public void changeScreen(int screen) {
+        switch (screen) {
             case MAIN_MENU:
                 menuScreen = new MenuScreen(this);
                 this.setScreen(menuScreen);
                 menuScreen.setAsInputProcessor();
                 break;
             case PREFERENCES:
-                if(preferenceScreen == null) {
+                if (preferenceScreen == null) {
                     preferenceScreen = new PreferenceScreen(this);
                 }
                 this.setScreen(preferenceScreen);
                 preferenceScreen.setAsInputProcessor();
                 break;
             case APPLICATION:
-                if(gameScreen == null){
+                if (gameScreen == null) {
                     gameScreen = new GameScreen(this, screenWidth, screenHeight);
                 }
                 this.setScreen(gameScreen);
                 gameScreen.setAsInputProcessor();
                 break;
 
-             default:
-                 break;
+            default:
+                break;
         }
     }
 

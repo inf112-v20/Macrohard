@@ -8,10 +8,14 @@ public enum RotationType implements CardType {
 
     public String toString() {
         switch (this) {
-            case COUNTER_CLOCKWISE: return "rotateCounterclockwise";
-            case CLOCKWISE: return "rotateClockwise";
-            case U_TURN: return "uTurn";
-            default: return "";
+            case COUNTER_CLOCKWISE:
+                return "rotateCounterclockwise";
+            case CLOCKWISE:
+                return "rotateClockwise";
+            case U_TURN:
+                return "uTurn";
+            default:
+                return "";
         }
     }
 

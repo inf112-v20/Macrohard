@@ -2,8 +2,9 @@ package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.MovementType;
-import static org.junit.Assert.*;
 import org.junit.Test;
+
+import static org.junit.Assert.assertEquals;
 
 public class MovementCardTest {
 

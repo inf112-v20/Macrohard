@@ -24,12 +24,12 @@ public class PreferenceScreen implements Screen {
     public static Boolean isCheckedMusic = true;
     private float volume;
 
-    public PreferenceScreen(RoboRallyApplication parent){
+    public PreferenceScreen(RoboRallyApplication parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
     }
 
-    public void setAsInputProcessor(){
+    public void setAsInputProcessor() {
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -44,55 +44,43 @@ public class PreferenceScreen implements Screen {
 
         final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.setValue(parent.getPreferences().getMusicVolume());
-        volumeMusicSlider.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                if (isCheckedMusic){
-                    volume = volumeMusicSlider.getValue();
-                } else {
-                    volume = 0;
-                }
-                parent.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
-                return false;
+        volumeMusicSlider.addListener(event -> {
+            if (isCheckedMusic) {
+                volume = volumeMusicSlider.getValue();
+            } else {
+                volume = 0;
             }
+            parent.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
+            return false;
         });
 
         final CheckBox musicCheckbox = new CheckBox(null, skin);
         musicCheckbox.setChecked(parent.getPreferences().isMusicEnabled());
-        musicCheckbox.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean enabled = musicCheckbox.isChecked();
-                isCheckedMusic = enabled;
-                if (!enabled){
-                    volume = 0;}
-                else {
-                    volume = volumeMusicSlider.getValue();
-                }
-                parent.getPreferences().setMusicEnabled(enabled);
-                return false;
+        musicCheckbox.addListener(event -> {
+            boolean enabled = musicCheckbox.isChecked();
+            isCheckedMusic = enabled;
+            if (!enabled) {
+                volume = 0;
+            } else {
+                volume = volumeMusicSlider.getValue();
             }
+            parent.getPreferences().setMusicEnabled(enabled);
+            return false;
         });
 
         final Slider volumeSoundSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeSoundSlider.setValue(parent.getPreferences().getSoundVolume());
-        volumeSoundSlider.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                parent.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
-                return false;
-            }
+        volumeSoundSlider.addListener(event -> {
+            parent.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
+            return false;
         });
 
         final CheckBox soundCheckbox = new CheckBox(null, skin);
         soundCheckbox.setChecked(parent.getPreferences().isSoundEffectsEnabled());
-        soundCheckbox.addListener(new EventListener() {
-            @Override
-            public boolean handle(Event event) {
-                boolean enabled = soundCheckbox.isChecked();
-                parent.getPreferences().setSoundEffectsEnabled(enabled);
-                return false;
-            }
+        soundCheckbox.addListener(event -> {
+            boolean enabled = soundCheckbox.isChecked();
+            parent.getPreferences().setSoundEffectsEnabled(enabled);
+            return false;
         });
 
         final TextButton backButton = new TextButton("Back", skin);
@@ -129,7 +117,7 @@ public class PreferenceScreen implements Screen {
 
         //add table to stage
         stage.addActor(table);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
@@ -138,7 +126,7 @@ public class PreferenceScreen implements Screen {
         RoboRallyApplication.music.setVolume(volume);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1/30f));
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
 
