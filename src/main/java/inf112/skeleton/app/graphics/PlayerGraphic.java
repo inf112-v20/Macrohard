@@ -31,8 +31,15 @@ public class PlayerGraphic extends Image {
     float stateTime;
     Direction spriteDirection;
 
+    private static float staticTimeModifier = 0;
+    private float timeModifier;
+
+
     public PlayerGraphic(Player player) {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
+
+        staticTimeModifier += 0.30f;
+        timeModifier = staticTimeModifier;
 
         idleSheet = new Texture(Gdx.files.internal("./assets/testbot_animated/testbotSpriteSheet.png"));
         TextureRegion[][] temp = TextureRegion.split(idleSheet,
@@ -60,6 +67,8 @@ public class PlayerGraphic extends Image {
     }
 
     public void updateAnimationFrame(float stateTime){
+        stateTime += timeModifier;
+
         TextureRegion currentFrame = idleAnimation.getKeyFrame(stateTime, true);
         if(player.getDirection() == Direction.EAST){
             if(currentFrame.isFlipY()){
