@@ -150,7 +150,7 @@ public class GameScreen implements Screen {
         timeInSeconds += Gdx.graphics.getRawDeltaTime();
         float period = 0.8f;
         if (timeInSeconds > period) {
-            timeInSeconds = 0;
+            timeInSeconds -= period;
             gameLoop.tick();
         }
     }
