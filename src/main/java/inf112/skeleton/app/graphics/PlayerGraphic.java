@@ -29,6 +29,7 @@ public class PlayerGraphic extends Image {
     Animation<TextureRegion> idleAnimation;
     Texture idleSheet;
     float stateTime;
+    Direction spriteDirection;
 
     public PlayerGraphic(Player player) {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
@@ -60,6 +61,21 @@ public class PlayerGraphic extends Image {
 
     public void updateAnimationFrame(float stateTime){
         TextureRegion currentFrame = idleAnimation.getKeyFrame(stateTime, true);
+        if(player.getDirection() == Direction.EAST){
+            if(currentFrame.isFlipY()){
+                currentFrame.flip(false, true);
+            }
+            if(!currentFrame.isFlipX()){
+                currentFrame.flip(true, false);
+            }
+        }else if(player.getDirection() == Direction.WEST){
+            if(!currentFrame.isFlipY()) {
+                currentFrame.flip(false, true);
+            }
+            if(!currentFrame.isFlipX()){
+                currentFrame.flip(true, false);
+            }
+        }
         setDrawable(new SpriteDrawable(new Sprite(currentFrame)));
     }
 
