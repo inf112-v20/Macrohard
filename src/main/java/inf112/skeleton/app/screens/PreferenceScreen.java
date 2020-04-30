@@ -57,12 +57,6 @@ public class PreferenceScreen implements Screen {
                     }
                     changeSong(song, "data/Music/ShortCircuit.wav");
                     break;
-                case "Factory Swing":
-                    if (RoboRallyApplication.currentSong == song){
-                        break;
-                    }
-                    changeSong(song, "data/Music/FactorySwing.wav");
-                    break;
 
                 case "Nullpointer Exception":
                     if (RoboRallyApplication.currentSong == song){
