@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.Player;
 
@@ -23,6 +24,7 @@ public class WinScreen implements Screen {
     public void show() {
         Label winLabel = new Label("Player " + winner.name() + " won!", skin);
         winLabel.setFontScale(2f);
+        winLabel.setAlignment(Align.center);
         winLabel.setBounds(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0, 0);
         stage.addActor(winLabel);
     }

@@ -8,10 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.preferences.AppPreferences;
-import inf112.skeleton.app.screens.GameScreen;
-import inf112.skeleton.app.screens.LoadingScreen;
-import inf112.skeleton.app.screens.MenuScreen;
-import inf112.skeleton.app.screens.PreferenceScreen;
+import inf112.skeleton.app.screens.*;
 
 import java.awt.*;
 
@@ -22,12 +19,14 @@ public class RoboRallyApplication extends Game {
     private MenuScreen menuScreen;
     private GameScreen gameScreen;
     private PreferenceScreen preferenceScreen;
+    private CreateGameScreen createGameScreen;
 
     private AppPreferences appPreferences;
 
     public final static int MAIN_MENU = 0;
     public final static int PREFERENCES = 1;
     public final static int APPLICATION = 2;
+    public final static int CREATE = 3;
     public static Music music;
     public static String currentSong;
 
@@ -81,6 +80,10 @@ public class RoboRallyApplication extends Game {
                 this.setScreen(gameScreen);
                 gameScreen.setAsInputProcessor();
                 break;
+            case CREATE:
+                createGameScreen = new CreateGameScreen(this);
+                this.setScreen(createGameScreen);
+                createGameScreen.setAsInputProcessor();
 
             default:
                 break;
