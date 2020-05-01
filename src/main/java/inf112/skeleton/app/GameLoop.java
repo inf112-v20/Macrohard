@@ -27,7 +27,6 @@ public class GameLoop {
 
     private ArrayList<Player> players;
     public Player client;
-    private ArrayList<CardGraphic> cardGraphics;
     private PriorityQueue<Player> movementPriority;
     private Deck deck;
     public int phase = 0;
@@ -44,10 +43,10 @@ public class GameLoop {
         this.players = board.getPlayers();
         this.client = players.get(0);
         this.movementPriority = new PriorityQueue<>();
-        this.cardGraphics = new ArrayList<>(9);
         this.deck = new Deck(true);
-
         programButton = new ProgramButton(this, gameScreen);
+
+        client.applyDamage(4);
 
         rebootWindow = new RebootWindow(this, client);
         continuePowerDown = new ContinuePowerDownWindow(this, client);
@@ -72,9 +71,7 @@ public class GameLoop {
                 for (Player player : players) {
                     if (player.announcedPowerDown) {
                         //Player starts this round in Power Down, discarding all damage tokens
-                        player.announcedPowerDown = false;
-                        player.inPowerDown = true;
-                        player.setDamageTokens(0);
+                        player.powerDown();
                     } else if (player.inPowerDown) {
                         //Player is finished powering down, CPUs decide if they want to continue
                         player.inPowerDown = !player.equals(client) && player.getDamageTokens() > 4;
@@ -106,10 +103,10 @@ public class GameLoop {
                 }
                 // Else draw cards on screen and wait for client to lock program
                 else {
-                    for (Card card : client.getHand()) {
-                        CardGraphic cardGraphic = new CardGraphic(client, card);
-                        cardGraphics.add(cardGraphic);
-                        gameScreen.getGameStage().addActor(cardGraphic);
+                    for (Card card : client.getCards()) {
+                        if (!card.isLocked()) {
+                            gameScreen.getGameStage().addActor(new CardGraphic(client, card));
+                        }
                     }
                     powerDownButton = new PowerDownButton(client, gameScreen);
                     programButton.setVisible(true);
@@ -128,13 +125,18 @@ public class GameLoop {
                 programButton.setVisible(false);
                 powerDownButton.setVisible(false);
 
+                gameScreen.discardUnselectedCards(client);
+
                 // Lock in programs and announce Power Down for computer players
-                for (Player player : players.subList(1, players.size())) {
+                for (Player player : players) {
                     if (!player.inPowerDown) {
-                        player.lockInRandomProgram();
-                        if (player.getDamageTokens() > 4) {
-                            player.announcedPowerDown = true;
+                        if (!player.equals(client)) {
+                            player.lockInRandomProgram();
+                            if (player.getDamageTokens() > 4) {
+                                player.announcedPowerDown = true;
+                            }
                         }
+                        player.discardUnselectedCards();
                     }
                 }
                 phase++;
@@ -156,7 +158,6 @@ public class GameLoop {
                     Player player = movementPriority.poll();
                     if (player != null) {
                         board.execute(player, player.getProgram()[currentProgramRegister]);
-                        gameScreen.updateGraphics();
                         removeDeadAndDestructedPlayers();
                     }
                 } else {
@@ -167,19 +168,16 @@ public class GameLoop {
             case 5:
                 // Board elements move, starting with all conveyor belts
                 board.rollConveyorBelts(false);
-                gameScreen.updateGraphics();
                 phase++;
                 break;
             case 6:
                 // Then express belts move
                 board.rollConveyorBelts(true);
-                gameScreen.updateGraphics();
                 phase++;
                 break;
             case 7:
                 // And gears rotate
                 board.rotateGears();
-                gameScreen.updateGraphics();
                 SoundEffects.ROTATE_GEARS.play(gameScreen.parent.getPreferences().getSoundVolume());
                 phase++;
                 break;
@@ -189,7 +187,6 @@ public class GameLoop {
                 board.fireBoardLasers();
                 gameScreen.drawPlayerLasers(board.firePlayerLasers());
                 SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
-                gameScreen.updateGraphics();
                 phase++;
                 break;
             case 9:
@@ -245,8 +242,9 @@ public class GameLoop {
                 break;
             case 13:
                 cancelPowerDownWindow.setVisible(false);
-                for (Player player : players) {
-                    player.discardHandAndWipeProgram();
+
+                for (Player player : players.subList(1, players.size())) {
+                    player.wipeProgram();
 
                     // Reboot destroyed players if they still have more life tokens
                     // Cancel Power Down if announced this turn
@@ -259,7 +257,10 @@ public class GameLoop {
                         }
                     }
                 }
-                gameScreen.clearCards(cardGraphics);
+                gameScreen.wipeProgram(client);
+                client.wipeProgram();
+                CardGraphic.reset(client);
+
                 currentProgramRegister = 0;
                 phase = -2;
                 break;

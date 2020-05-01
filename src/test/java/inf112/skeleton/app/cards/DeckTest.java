@@ -20,26 +20,25 @@ public class DeckTest {
 
     @Test
     public void dealHand() {
-        player.setDamageTokens(0);
         int deckSize = deck.getDeckSize();
         deck.dealHand(player);
-        assertEquals(player.getHand().length, (9 - player.getDamageTokens()));
+        assertEquals(player.getCards().size(), (9 - player.getDamageTokens()));
         assertEquals(deck.getDeckSize(), deckSize - (9 - player.getDamageTokens()));
     }
 
     @Test
     public void dealNonValidHand() {
-        player.setDamageTokens(-1);
+        player.applyDamage(1);
         int deckSize = deck.getDeckSize();
         deck.dealHand(player);
-        assertEquals(player.getHand().length, (9 - player.getDamageTokens()));
+        assertEquals(player.getCards().size(), (9 - player.getDamageTokens()));
         assertEquals(deck.getDeckSize(), deckSize - (9 - player.getDamageTokens()));
     }
 
     @Test
     public void cardDealtEqualsCardRemoved() {
         deck.dealHand(player);
-        for (Card card : player.getHand()) {
+        for (Card card : player.getCards()) {
             for (Card dcard : deck.getDeck()) {
                 assertNotEquals(card, dcard);
             }

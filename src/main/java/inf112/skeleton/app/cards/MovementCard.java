@@ -7,7 +7,6 @@ public class MovementCard extends Card {
     public MovementCard(int priority, MovementType movementType) {
         super(priority, movementType);
         this.movementType = movementType;
-        this.isLocked = false;
     }
 
     public int getMoveID() {
@@ -17,7 +16,6 @@ public class MovementCard extends Card {
     @Override
     public String toString() {
         return "MovementCard{" + "priority=" + priority +
-                ", numberOfMoves=" + getMoveID() +
-                ", registerIndex=" + registerIndex + '}';
+                ", numberOfMoves=" + getMoveID() + '}';
     }
 }

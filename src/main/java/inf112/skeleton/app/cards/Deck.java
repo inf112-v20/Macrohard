@@ -50,11 +50,10 @@ public class Deck {
 
     public void dealHand(Player player) {
         int handSize = player.getHandSize();
-        Card[] playerHand = new Card[handSize];
         for (int i = 0; i < handSize; i++) {
-            playerHand[i] = deck.remove(deck.size() - 1);
+            Card card = deck.remove(deck.size() - 1);
+            player.receive(card);
         }
-        player.setHand(playerHand);
     }
 
     public int getDeckSize() {

@@ -4,19 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapTile;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import inf112.skeleton.app.*;
-import inf112.skeleton.app.graphics.CardGraphic;
+import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
@@ -68,9 +64,8 @@ public class GameScreen implements Screen {
         Player player1 = new Player(0, 1, Direction.EAST);
         Player player2 = new Player(0, 1, Direction.EAST);
         Player player3 = new Player(0, 1, Direction.EAST);
-        Player player4 = new Player(0, 1, Direction.EAST);
 
-        players = new ArrayList<>(Arrays.asList(player1, player2, player3, player4));
+        players = new ArrayList<>(Arrays.asList(player1, player2, player3));
 
         // Initialise board
         TiledMapManager handler = new TiledMapManager("assets/riskyExchange.tmx");
@@ -112,7 +107,7 @@ public class GameScreen implements Screen {
         stateTime = 0f;
     }
 
-    public void updateGraphics() {
+    private void updateGraphics() {
         for (Player player : players) {
             PlayerGraphic graphic = player.getPlayerGraphic();
             if (graphic.isVisible) {
@@ -129,11 +124,18 @@ public class GameScreen implements Screen {
         }
     }
 
-    public void clearCards(ArrayList<CardGraphic> cardsOnScreen) {
-        for (CardGraphic cardGraphic : cardsOnScreen) {
-            if (!cardGraphic.getCard().isLocked) {
-                cardGraphic.reset();
-                cardGraphic.remove();
+    public void discardUnselectedCards(Player client) {
+        for (Card card : client.getCards()) {
+            if (!card.isSelected()) {
+                card.getCardGraphic().remove();
+            }
+        }
+    }
+
+    public void wipeProgram(Player client) {
+        for (Card card : client.getProgram()) {
+            if (card != null && !card.isLocked()) {
+                card.getCardGraphic().remove();
             }
         }
     }
@@ -167,6 +169,7 @@ public class GameScreen implements Screen {
         if (timeInSeconds > period) {
             timeInSeconds -= period;
             gameLoop.tick();
+            updateGraphics();
         }
     }
 
@@ -229,4 +232,5 @@ public class GameScreen implements Screen {
     public void erasePlayerLasers() {
         mapHandler.cleanPlayerLaserLayer();
     }
+
 }

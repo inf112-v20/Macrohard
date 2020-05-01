@@ -7,7 +7,6 @@ import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 
 public class Player implements Comparable<Player> {
@@ -17,8 +16,8 @@ public class Player implements Comparable<Player> {
     private Direction direction;
 
     private Tile archiveMarker;
+    public ArrayList<Card> cards;
     public Card[] program;
-    public Card[] hand;
 
     public boolean inPowerDown = false;
     public boolean announcedPowerDown = false;
@@ -39,6 +38,7 @@ public class Player implements Comparable<Player> {
         this.direction = direction;
         this.damageTokens = 0;
         this.lifeTokens = 3;
+        this.cards = new ArrayList<>();
         this.program = new Card[5];
         this.name = ++RoboRallyApplication.NUMBER_OF_PLAYERS;
     }
@@ -119,12 +119,12 @@ public class Player implements Comparable<Player> {
         setDirection(getDirection().turnCounterClockwise());
     }
 
-    public void setHand(Card[] hand) {
-        this.hand = hand;
+    public void receive(Card card) {
+        cards.add(card);
     }
 
-    public Card[] getHand() {
-        return hand;
+    public ArrayList<Card> getCards() {
+        return cards;
     }
 
     public Card[] getProgram() {
@@ -132,19 +132,32 @@ public class Player implements Comparable<Player> {
     }
 
     public void lockInRandomProgram() {
-        ArrayList<Card> shuffledHand = new ArrayList<>(Arrays.asList(hand));
-        Collections.shuffle(shuffledHand);
-        int bound = Math.min(program.length, shuffledHand.size());
+        Collections.shuffle(cards);
+        int bound = Math.min(program.length, cards.size());
         for (int i = 0; i < bound; i++) {
-            program[i] = shuffledHand.get(i);
+            program[i] = cards.get(i);
         }
     }
 
-    public void discardHandAndWipeProgram() {
-        hand = null;
-        int lockedCards = Math.max(getDamageTokens() - 4, 0);
-        for (int i = 0; i < program.length - lockedCards; i++) {
-            program[i] = null;
+    public void discardUnselectedCards() {
+        int i = 0;
+        while (i < cards.size()) {
+            Card card = cards.get(i);
+            if (!card.isSelected()) {
+                cards.remove(card);
+                i --;
+            }
+            i ++;
+        }
+    }
+
+    public void wipeProgram() {
+        for (int i = 0; i < program.length; i++) {
+            Card card = program[i];
+            if (!card.isLocked()) {
+                program[i] = null;
+                cards.remove(card);
+            }
         }
     }
 
@@ -153,15 +166,28 @@ public class Player implements Comparable<Player> {
         if (damageTokens > 9) {
             destroy();
         }
+        for (int i = 1; i <= getNrOfLockedProgramRegisters(); i ++) {
+            Card card = program[program.length - i];
+            if (card != null && !card.isLocked()) {
+                card.lock();
+            }
+
+        }
     }
 
-    public void setDamageTokens(int newDamageTokens) {
-        damageTokens = newDamageTokens;
+    private void setDamageTokens(int damageTokens) {
+        this.damageTokens = damageTokens;
+        for (int i = 0; i < program.length - getNrOfLockedProgramRegisters(); i ++) {
+            Card card = program[i];
+            if (card != null && card.isLocked()) {
+                card.unlock();
+            }
+        }
     }
 
     public void destroy() {
         lifeTokens--;
-        damageTokens = 0;
+        setDamageTokens(0);
         destroyed = true;
     }
 
@@ -179,13 +205,13 @@ public class Player implements Comparable<Player> {
         archiveMarker.setPlayer(this);
 
         destroyed = false;
-        damageTokens = 2;
+        setDamageTokens(2);
     }
 
     public void repair() {
         // Discard one damage token if there exist at least one damage token
         if (damageTokens > 0) {
-            damageTokens--;
+            setDamageTokens(damageTokens - 1);
         }
     }
 
@@ -217,5 +243,13 @@ public class Player implements Comparable<Player> {
 
     public int getPreviousFlag() {
         return previousFlag;
+    }
+
+    public int getNrOfLockedProgramRegisters() { return Math.max(0, damageTokens - 4); }
+
+    public void powerDown() {
+        announcedPowerDown = false;
+        inPowerDown = true;
+        setDamageTokens(0);
     }
 }

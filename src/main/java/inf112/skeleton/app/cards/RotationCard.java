@@ -9,7 +9,6 @@ public class RotationCard extends Card {
     public RotationCard(int priority, RotationType rotationType) {
         super(priority, rotationType);
         this.rotationType = rotationType;
-        this.isLocked = false;
     }
 
     public Direction getNewDirection(Direction direction) {
@@ -20,15 +19,6 @@ public class RotationCard extends Card {
         } else {
             return direction.turnClockwise().turnClockwise();
         }
-    }
-
-    @Override
-    public String toString() {
-        return "RotationCard{" +
-                "rotationType=" + rotationType +
-                ", priority=" + priority +
-                ", registerIndex=" + registerIndex +
-                '}';
     }
 
 }

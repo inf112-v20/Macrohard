@@ -1,17 +1,42 @@
 package inf112.skeleton.app.cards;
 
+import inf112.skeleton.app.graphics.CardGraphic;
+
 public abstract class Card implements Comparable<Card> {
 
     protected final int priority;
-    public boolean selected = false;
-    public int registerIndex = -1;
     protected final CardType cardType;
-    public boolean isLocked;
+
+    private CardGraphic cardGraphic;
+    public boolean isSelected = false;
+    public boolean isLocked = false;
 
     public Card(int priority, CardType cardType) {
         this.priority = priority;
         this.cardType = cardType;
     }
+
+    public void lock() {
+        isLocked = true;
+        if (cardGraphic != null) {
+            cardGraphic.lock();
+        }
+    }
+
+    public void unlock() {
+        isLocked = false;
+        if (cardGraphic != null) {
+            cardGraphic.unlock();
+        }
+    }
+
+    public boolean isLocked() { return isLocked; }
+
+    public void select() { isSelected = true; }
+
+    public void deselect() { isSelected = false; }
+
+    public boolean isSelected() { return isSelected; }
 
     public String getName() {
         return cardType.toString();
@@ -21,12 +46,12 @@ public abstract class Card implements Comparable<Card> {
         return this.priority;
     }
 
-    public void setRegisterIndex(int registerIndex) {
-        this.registerIndex = registerIndex;
+    public CardGraphic getCardGraphic() {
+        return cardGraphic;
     }
 
-    public boolean isInProgramRegister() {
-        return registerIndex != -1;
+    public void setCardGraphic(CardGraphic cardGraphic) {
+        this.cardGraphic = cardGraphic;
     }
 
     //Sorts cards by priority, so that the highest priority-cards place first
@@ -39,5 +64,6 @@ public abstract class Card implements Comparable<Card> {
     public String toString() {
         return ("TYPE: " + this.cardType + "PRIORITY: " + this.priority);
     }
+
 
 }
