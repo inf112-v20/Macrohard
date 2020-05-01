@@ -46,8 +46,6 @@ public class GameLoop {
         this.deck = new Deck(true);
         programButton = new ProgramButton(this, gameScreen);
 
-        client.applyDamage(4);
-
         rebootWindow = new RebootWindow(this, client);
         continuePowerDown = new ContinuePowerDownWindow(this, client);
         cancelPowerDownWindow = new CancelPowerDownWindow(this, client);
