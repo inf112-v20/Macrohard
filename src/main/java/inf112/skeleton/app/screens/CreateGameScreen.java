@@ -19,7 +19,6 @@ public class CreateGameScreen implements Screen {
     private Label mapLabel;
     private Label playersLabel;
     private Label difficultyLabel;
-    //private Label
 
 
     public CreateGameScreen (RoboRallyApplication parent) {
@@ -42,13 +41,13 @@ public class CreateGameScreen implements Screen {
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
 
-        final SelectBox<String> mapSelectBox=new SelectBox<String>(skin);
-        mapSelectBox.setItems("Risky Exchange", "MAP_0", "MAP_1", "MAP_2");
+        final SelectBox<String> mapSelectBox = new SelectBox<>(skin);
+        mapSelectBox.setItems("Risky Exchange", "Dizzy Dash", "Island Hop", "Whirlwind Tour");
 
-        final SelectBox<String> playersSelectBox=new SelectBox<String>(skin);
-        playersSelectBox.setItems("2","3","4","5","6","7","8");
+        final SelectBox<Integer> playersSelectBox=new SelectBox<>(skin);
+        playersSelectBox.setItems(2, 3, 4, 5, 6, 7, 8);
 
-        final SelectBox<String> difficultySelectBox=new SelectBox<String>(skin);
+        final SelectBox<String> difficultySelectBox=new SelectBox<>(skin);
         difficultySelectBox.setItems("Easy","Medium","Hard");
 
         final TextButton backButton = new TextButton("Back", skin);
@@ -63,13 +62,11 @@ public class CreateGameScreen implements Screen {
         createButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.setGameScreen(null);
-                parent.changeScreen(RoboRallyApplication.APPLICATION);
-                parent.hasGame(true);
+                parent.createGame(mapSelectBox.getSelected(), playersSelectBox.getSelected());
             }
         });
 
-        titleLabel = new Label("Create a Game", skin);
+        titleLabel = new Label("Create new game", skin);
         titleLabel.setFontScale(2f);
 
         mapLabel = new Label("Map", skin);

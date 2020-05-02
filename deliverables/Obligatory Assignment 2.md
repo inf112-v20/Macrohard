@@ -74,10 +74,10 @@ an ideal day) \* Spread commits evenly throughout team members \*
 Commenting and documenting code Task 2
 
 User stories 
-1. The game mechanics require two types of programming
+1. The roboRallyGame mechanics require two types of programming
 cards, move cards and rotate cards, so that a robot can move across
 fields, and change the direction the robot points. Given that the turns
-and phases of the game are to be played out according to the rules, two
+and phases of the roboRallyGame are to be played out according to the rules, two
 types of programming cards are required. 
 
 2. The programming cards need
@@ -88,12 +88,12 @@ how many fields it is allowed to move across.
 3. The programming cards
 (with move values) need to indicate if the robot is moving in a forward
 or backward direction. Given that the programming cards (with move
-values) are to behave according to the game mechanics, a majority of the
+values) are to behave according to the roboRallyGame mechanics, a majority of the
 cards should be moving the robot in a forwards direction, whilst some
 cards should be moving it in a backwards direction.\
-4. The game mechanics requires the programming cards to have a priority
+4. The roboRallyGame mechanics requires the programming cards to have a priority
 value, so that the turn of which robot is to move is held in order.
-Given that the players are about to move their robot, the game must
+Given that the players are about to move their robot, the roboRallyGame must
 control which robot is to move first, second, etc. 
 5. As a user, I need
 to be dealt programming cards, so that I can program my robot. Given
@@ -109,10 +109,10 @@ to be played. Given that you are about to program your robot, you need
 to be able to rearrange the programming cards in the order you want, to
 make your program run the right way. 
 8. As a user, I need to be able to
-choose to start a new game in a menu. Given that you want to choose to
-start a new game, you should be able to choose this action from a menu.
-9. As a user, I need to be able to choose my preferences for game
-effects from a menu. Given that you want to change game preferences, you
+choose to start a new roboRallyGame in a menu. Given that you want to choose to
+start a new roboRallyGame, you should be able to choose this action from a menu.
+9. As a user, I need to be able to choose my preferences for roboRallyGame
+effects from a menu. Given that you want to change roboRallyGame preferences, you
 should be able to do this from a menu. 
 10. As a user, I need to be able
 to exit the application from the menu. Given that you are in the menus
@@ -125,7 +125,7 @@ button in order to shut the application down.
     consists of an abstract card class, a deck class (with Knuth
     shuffle), a class for movement cards and a class for rotation cards.
     In the main menu there are currently three options, start a new
-    game, a ‘preferences’ tab or exit the game.
+    roboRallyGame, a ‘preferences’ tab or exit the roboRallyGame.
 
 MVPs completed since the previous version 
 - The product should have a

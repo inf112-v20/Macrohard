@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.preferences.AppPreferences;
 import inf112.skeleton.app.screens.*;
 
@@ -73,13 +74,6 @@ public class RoboRallyApplication extends Game {
                 this.setScreen(preferenceScreen);
                 preferenceScreen.setAsInputProcessor();
                 break;
-            case APPLICATION:
-                if (gameScreen == null) {
-                    gameScreen = new GameScreen(this, screenWidth, screenHeight);
-                }
-                this.setScreen(gameScreen);
-                gameScreen.setAsInputProcessor();
-                break;
             case CREATE:
                 createGameScreen = new CreateGameScreen(this);
                 this.setScreen(createGameScreen);
@@ -120,5 +114,14 @@ public class RoboRallyApplication extends Game {
         cfg.fullscreen = true;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
+    }
+
+    public void createGame(String mapName, int nrOfPlayers) {
+        String fileName = "assets/" + mapName.replaceAll("\\s+", "_") + ".tmx";
+        TiledMapManager mapManager = new TiledMapManager(fileName);
+        RoboRallyGame game = new RoboRallyGame(this, mapManager, nrOfPlayers);
+        gameScreen = game.getGameScreen();
+        setScreen(gameScreen);
+        gameScreen.setAsInputProcessor();
     }
 }

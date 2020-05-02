@@ -217,7 +217,7 @@ public class Player implements Comparable<Player> {
 
     @Override
     public int compareTo(@NotNull Player otherPlayer) {
-        return getProgram()[GameLoop.currentProgramRegister].compareTo(otherPlayer.getProgram()[GameLoop.currentProgramRegister]);
+        return getProgram()[RoboRallyGame.currentProgramRegister].compareTo(otherPlayer.getProgram()[RoboRallyGame.currentProgramRegister]);
     }
 
     @Override

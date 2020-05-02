@@ -4,36 +4,34 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import inf112.skeleton.app.GameLoop;
 import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.screens.GameScreen;
 
 public class ProgramButton extends TextButton {
 
-    public ProgramButton(GameLoop gameLoop, GameScreen gameScreen) {
+    public ProgramButton(GameScreen gameScreen) {
         super("LOCK PROGRAM", RoboRallyApplication.getSkin());
         setColor(Color.DARK_GRAY);
-        setBounds(gameScreen.width - 350 - 90, -105, 200, 60);
-        addListener(new ProgramButtonChangeListener(this, gameLoop));
-        setVisible(false);
+        addListener(new ProgramButtonChangeListener(gameScreen));
+
         gameScreen.getGameStage().addActor(this);
+        setBounds(RoboRallyApplication.screenWidth - 450, -100, 220, 60);
+        setVisible(false);
     }
 
-    private class ProgramButtonChangeListener extends ChangeListener {
+    private static class ProgramButtonChangeListener extends ChangeListener {
 
-        private ProgramButton parent;
-        private GameLoop gameLoop;
+        private GameScreen gameScreen;
 
-        public ProgramButtonChangeListener(ProgramButton parent, GameLoop gameLoop) {
-            this.parent = parent;
-            this.gameLoop = gameLoop;
+        public ProgramButtonChangeListener(GameScreen gameScreen) {
+            this.gameScreen = gameScreen;
         }
 
         @Override
         public void changed(ChangeEvent changeEvent, Actor actor) {
-            if (gameLoop.client.hasCompleteProgram()) {
-                gameLoop.phase++;
-                parent.setVisible(false);
+            if (gameScreen.getClient().hasCompleteProgram()) {
+                gameScreen.discardUnselectedCards();
+                gameScreen.incrementPhase();
             }
         }
     }

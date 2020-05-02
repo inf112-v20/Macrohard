@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
@@ -12,18 +11,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import inf112.skeleton.app.Direction;
-import inf112.skeleton.app.GameLoop;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
+import inf112.skeleton.app.screens.GameScreen;
 
 public class RebootWindow extends Window {
 
-    private Player client;
-
-
-    public RebootWindow(GameLoop gameLoop, Player client) {
+    public RebootWindow(GameScreen gameScreen) {
         super("Choose reboot-direction", new Skin(Gdx.files.internal("assets/skins/expee/expee-ui.json")));
-        this.client = client;
 
         setMovable(true);
         setResizable(true);
@@ -31,29 +26,41 @@ public class RebootWindow extends Window {
 
 
         for (String value : new String[]{"NORTH", "EAST", "SOUTH", "WEST"}) {
-            add(getImageButton(gameLoop, value));
+            add(getImageButton(gameScreen, value));
         }
 
         pack();
-        gameLoop.gameScreen.getGameStage().addActor(this);
+        gameScreen.getGameStage().addActor(this);
         setPosition(RoboRallyApplication.screenWidth / 2f, RoboRallyApplication.screenHeight / 2f);
     }
 
-    private ImageButton getImageButton(GameLoop gameLoop, String value) {
+    private ImageButton getImageButton(GameScreen gameScreen, String value) {
         Texture image = new Texture("./assets/robots/robot" + value + ".png");
         Drawable drawable = new TextureRegionDrawable(new TextureRegion(image));
         ImageButton imageButton = new ImageButton(drawable);
-        imageButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent changeEvent, Actor actor) {
-                Direction direction = Direction.fromString(value);
-                client.setDirection(direction);
-                client.reboot();
-                client.getPlayerGraphic().animateReboot();
-                gameLoop.phase ++;
-            }
-        });
+        imageButton.addListener(new RebootButton(this, gameScreen, Direction.fromString(value)));
         return imageButton;
     }
 
+    private static class RebootButton extends ChangeListener {
+
+        private Window parent;
+        private GameScreen gameScreen;
+        private Direction direction;
+
+        public RebootButton(Window parent, GameScreen gameScreen, Direction direction) {
+            this.parent = parent;
+            this.gameScreen = gameScreen;
+            this.direction = direction;
+        }
+
+        @Override
+        public void changed(ChangeListener.ChangeEvent changeEvent, Actor actor) {
+            Player client = gameScreen.getClient();
+            client.setDirection(direction);
+            client.reboot();
+            client.getPlayerGraphic().animateReboot();
+            gameScreen.closeWindow(parent);
+        }
+    }
 }

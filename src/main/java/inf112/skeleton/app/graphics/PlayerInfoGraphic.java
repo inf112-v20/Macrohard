@@ -7,9 +7,11 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.screens.GameScreen;
 
 import java.io.File;
@@ -22,14 +24,14 @@ public class PlayerInfoGraphic extends Image {
     private Pixmap pixmap;
     private BitmapFont.BitmapFontData fontData;
 
-    public PlayerInfoGraphic(Player player, GameScreen parent) {
+    public PlayerInfoGraphic(Player player, GameScreen parent, MapProperties mapProperties) {
         super(new Texture("./assets/PlayerInfoBackground.png"));
 
         this.player = player;
         player.setInfoGraphic(this);
 
-        int maxHeight = parent.getHeight();
-        int boardWidth = (int) parent.getMapProperties().get("tilewidth") * (int) parent.getMapProperties().get("width");
+        int maxHeight = RoboRallyApplication.screenHeight;
+        int boardWidth = (int) mapProperties.get("tilewidth") * (int) mapProperties.get("width");
 
         setBounds(boardWidth + 5, maxHeight - 400 - ((player.name()-1) * 170), 120, 160);
         resetPixmaps();

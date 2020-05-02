@@ -29,7 +29,6 @@ public class PlayerGraphic extends Image {
     Animation<TextureRegion> idleAnimation;
     Texture idleSheet;
     float stateTime;
-    Direction spriteDirection;
 
     private static float staticTimeModifier = 0;
     private float timeModifier;
@@ -37,6 +36,10 @@ public class PlayerGraphic extends Image {
 
     public PlayerGraphic(Player player) {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
+        this.player = player;
+        player.setPlayerGraphic(this);
+        direction = player.getDirection();
+        degrees = 0f;
 
         staticTimeModifier += 0.30f;
         timeModifier = staticTimeModifier;
@@ -53,14 +56,8 @@ public class PlayerGraphic extends Image {
             }
         }
 
-        idleAnimation = new Animation<TextureRegion>(0.25f, idleFrames);
+        idleAnimation = new Animation<>(0.25f, idleFrames);
         stateTime = 0f;
-
-        this.player = player;
-        player.setPlayerGraphic(this);
-
-        direction = player.getDirection();
-        degrees = 0f;
 
         setBounds(TILE_SIZE * player.getCol(), TILE_SIZE * player.getRow(), TILE_SIZE, TILE_SIZE);
         setOrigin(Align.center);
@@ -92,6 +89,9 @@ public class PlayerGraphic extends Image {
         int row = player.getRow();
         int col = player.getCol();
         addAction(Actions.moveTo(TILE_SIZE * col, TILE_SIZE * row, 0.3f));
+        if (player.isDestroyed()) {
+            animateDestruction();
+        }
     }
 
     public void animateRotation() {
@@ -107,7 +107,7 @@ public class PlayerGraphic extends Image {
     }
 
     public void animateDestruction() {
-        addAction(Actions.fadeOut(0.2f));
+        addAction(Actions.fadeOut(0.5f));
         isVisible = false;
     }
 

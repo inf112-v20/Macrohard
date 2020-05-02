@@ -1,71 +1,63 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.graphics.Color;
-import inf112.skeleton.app.buttons.PowerDownButton;
-import inf112.skeleton.app.buttons.ProgramButton;
-import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
-import inf112.skeleton.app.graphics.CardGraphic;
+import inf112.skeleton.app.managers.GameScreenInputProcessor;
+import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.screens.WinScreen;
 import inf112.skeleton.app.tiles.Flag;
 import inf112.skeleton.app.tiles.RepairSite;
 import inf112.skeleton.app.tiles.Tile;
-import inf112.skeleton.app.windows.CancelPowerDownWindow;
-import inf112.skeleton.app.windows.ContinuePowerDownWindow;
-import inf112.skeleton.app.windows.RebootWindow;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-public class GameLoop {
+public class RoboRallyGame {
 
     public static int currentProgramRegister = 0;
 
-    public final GameScreen gameScreen;
+    private final RoboRallyApplication parent;
+    private final GameScreen gameScreen;
     private final Board board;
 
-    private ArrayList<Player> players;
-    public Player client;
     private PriorityQueue<Player> movementPriority;
+    private ArrayList<Player> players;
+    private Player client;
     private Deck deck;
-    public int phase = 0;
-    private ProgramButton programButton;
-    private PowerDownButton powerDownButton;
 
-    private final RebootWindow rebootWindow;
-    private ContinuePowerDownWindow continuePowerDown;
-    private CancelPowerDownWindow cancelPowerDownWindow;
+    private int phase = 0;
 
-    public GameLoop(Board board, GameScreen gameScreen) {
-        this.gameScreen = gameScreen;
-        this.board = board;
-        this.players = board.getPlayers();
-        this.client = players.get(0);
-        this.movementPriority = new PriorityQueue<>();
-        this.deck = new Deck(true);
-        programButton = new ProgramButton(this, gameScreen);
+    public RoboRallyGame(RoboRallyApplication parent, TiledMapManager mapManager, int nrOfPlayers) {
+        this.parent = parent;
 
-        rebootWindow = new RebootWindow(this, client);
-        continuePowerDown = new ContinuePowerDownWindow(this, client);
-        cancelPowerDownWindow = new CancelPowerDownWindow(this, client);
+        // Initialize players
+        players = new ArrayList<>(nrOfPlayers);
+        for (int i = 0; i < nrOfPlayers; i ++) {
+            players.add(i, new Player(0, 0, Direction.EAST));
+        }
+        client = players.get(0);
+
+        board = new Board(players, mapManager);
+        gameScreen = new GameScreen(this, mapManager);
+        movementPriority = new PriorityQueue<>();
+        deck = new Deck(true);
+
+        GameScreenInputProcessor inputProcessor = new GameScreenInputProcessor(parent, client, board, gameScreen);
+        gameScreen.getGameStage().addListener(inputProcessor);
     }
 
     // Assumes the non-NPC player is always the first element of the players ArrayList
     public void tick() {
         if (players.size() == 1) {
-            gameScreen.parent.setScreen(new WinScreen(players.get(0)));
+            parent.setScreen(new WinScreen(players.get(0)));
         }
         switch (phase) {
             case -2:
-                if (client.inPowerDown) {
-                    continuePowerDown.setVisible(true);
-                } else {
-                    phase++;
+                if (!client.inPowerDown) {
+                    phase ++;
                 }
                 break;
             case -1:
-                continuePowerDown.setVisible(false);
                 for (Player player : players) {
                     if (player.announcedPowerDown) {
                         //Player starts this round in Power Down, discarding all damage tokens
@@ -75,7 +67,7 @@ public class GameLoop {
                         player.inPowerDown = !player.equals(client) && player.getDamageTokens() > 4;
                     }
                 }
-                phase++;
+                phase ++;
                 break;
             case 0:
                 // Check if new deck is needed
@@ -99,32 +91,15 @@ public class GameLoop {
                 if (client.inPowerDown) {
                     phase += 2;
                 }
-                // Else draw cards on screen and wait for client to lock program
+                // Else wait for client to lock program
                 else {
-                    for (Card card : client.getCards()) {
-                        if (!card.isLocked()) {
-                            gameScreen.getGameStage().addActor(new CardGraphic(client, card));
-                        }
-                    }
-                    powerDownButton = new PowerDownButton(client, gameScreen);
-                    programButton.setVisible(true);
                     phase++;
                 }
                 break;
             case 1:
-                // Runs this phase until program is locked by client
-                if (!client.hasCompleteProgram()) {
-                    programButton.setColor(Color.DARK_GRAY);
-                } else {
-                    programButton.setColor(Color.GREEN);
-                }
+                // Run this phase until program is locked by client
                 break;
             case 2:
-                programButton.setVisible(false);
-                powerDownButton.setVisible(false);
-
-                gameScreen.discardUnselectedCards(client);
-
                 // Lock in programs and announce Power Down for computer players
                 for (Player player : players) {
                     if (!player.inPowerDown) {
@@ -176,15 +151,14 @@ public class GameLoop {
             case 7:
                 // And gears rotate
                 board.rotateGears();
-                SoundEffects.ROTATE_GEARS.play(gameScreen.parent.getPreferences().getSoundVolume());
+                SoundEffects.rotateGears();
                 phase++;
                 break;
             case 8:
                 // Board- and player-lasers fire
-                gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(true);
                 board.fireBoardLasers();
-                gameScreen.drawPlayerLasers(board.firePlayerLasers());
-                SoundEffects.FIRE_LASERS.play(gameScreen.parent.getPreferences().getSoundVolume());
+                gameScreen.drawLasers(board.firePlayerLasers());
+                SoundEffects.fireLasers();
                 phase++;
                 break;
             case 9:
@@ -198,9 +172,6 @@ public class GameLoop {
                             if (player.getNextFlag() == flag.getNumber()) {
                                 player.touchFlag();
                                 player.getInfoGraphic().updateValues();
-                                if (player.getPreviousFlag() == board.getNumberOfFlags()) {
-                                    gameScreen.parent.setScreen(new WinScreen(player));
-                                }
                             }
                         } else if (tile instanceof RepairSite) {
                             player.setArchiveMarker(tile);
@@ -220,50 +191,29 @@ public class GameLoop {
                     currentProgramRegister++;
                     phase = 3;
                 }
-                gameScreen.mapHandler.getLayer("LASERBEAMS").setVisible(false);
-                gameScreen.erasePlayerLasers();
-                break;
-            case 11:
-                if (client.isDestroyed() && !client.isDead()) {
-                    rebootWindow.setVisible(true);
-                } else {
-                    phase += 2;
-                }
-                break;
-            case 12:
-                rebootWindow.setVisible(false);
-                if (client.announcedPowerDown) {
-                    cancelPowerDownWindow.setVisible(true);
-                } else {
-                    phase ++;
-                }
                 break;
             case 13:
-                cancelPowerDownWindow.setVisible(false);
+                for (Player player : players) {
+                    if (!player.equals(client)) {
+                        player.wipeProgram();
 
-                for (Player player : players.subList(1, players.size())) {
-                    player.wipeProgram();
-
-                    // Reboot destroyed players if they still have more life tokens
-                    // Cancel Power Down if announced this turn
-                    if (player.isDestroyed() && !player.isDead()) {
-                        player.setDirection(Direction.any());
-                        player.reboot();
-                        player.getPlayerGraphic().animateReboot();
-                        if (player.announcedPowerDown) {
-                            player.announcedPowerDown = false;
+                        // Reboot destroyed players if they still have more life tokens
+                        // Cancel Power Down if announced this turn
+                        if (!player.equals(client) && player.isDestroyed() && !player.isDead()) {
+                            player.setDirection(Direction.any());
+                            player.reboot();
+                            player.getPlayerGraphic().animateReboot();
+                            if (player.announcedPowerDown) {
+                                player.announcedPowerDown = false;
+                            }
                         }
                     }
                 }
-                gameScreen.wipeProgram(client);
-                client.wipeProgram();
-                CardGraphic.reset(client);
 
                 currentProgramRegister = 0;
                 phase = -2;
                 break;
             default:
-                System.out.println("phase index did an oopsie :)");
         }
     }
 
@@ -283,4 +233,23 @@ public class GameLoop {
         }
     }
 
+    public ArrayList<Player> getPlayers() {
+        return players;
+    }
+
+    public Player getClient() {
+        return client;
+    }
+
+    public void incrementPhase() {
+        phase ++;
+    }
+
+    public GameScreen getGameScreen() {
+        return gameScreen;
+    }
+
+    public int getPhase() {
+        return phase;
+    }
 }

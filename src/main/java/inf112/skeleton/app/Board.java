@@ -51,7 +51,6 @@ public class Board {
         this.height = mapManager.getHeight();
         this.width = mapManager.getWidth();
 
-
         layTiles(mapManager);
         erectWalls(mapManager);
         dockPlayers(players);

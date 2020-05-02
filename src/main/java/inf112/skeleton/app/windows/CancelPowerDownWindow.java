@@ -6,14 +6,15 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import inf112.skeleton.app.GameLoop;
+import inf112.skeleton.app.RoboRallyGame;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
+import inf112.skeleton.app.screens.GameScreen;
 
 public class CancelPowerDownWindow extends Window {
 
 
-    public CancelPowerDownWindow(GameLoop gameLoop, Player client) {
+    public CancelPowerDownWindow(GameScreen gameScreen) {
         super("Cancel powerdown?", new Skin(Gdx.files.internal("assets/skins/expee/expee-ui.json")));
 
         setMovable(true);
@@ -22,38 +23,38 @@ public class CancelPowerDownWindow extends Window {
 
 
         TextButton yes = new TextButton("Yes", getSkin());
-        yes.addListener(new ButtonListener(gameLoop, client, true));
+        yes.addListener(new ButtonListener(this, gameScreen, true));
 
         TextButton no = new TextButton("No", getSkin());
-        no.addListener(new ButtonListener(gameLoop, client, false));
+        no.addListener(new ButtonListener(this, gameScreen, false));
 
         add(yes);
         add(no);
 
         pack();
 
-        gameLoop.gameScreen.getGameStage().addActor(this);
+        gameScreen.getGameStage().addActor(this);
         setPosition(RoboRallyApplication.screenWidth / 2f, RoboRallyApplication.screenHeight / 2f);
     }
 
-    private class ButtonListener extends ChangeListener {
+    private static class ButtonListener extends ChangeListener {
 
-        private GameLoop gameLoop;
-        private Player client;
+        private Window parent;
+        private GameScreen gameScreen;
         private boolean affirmative;
 
-        public ButtonListener(GameLoop gameLoop, Player client, boolean affirmative) {
-            this.gameLoop = gameLoop;
-            this.client = client;
+        public ButtonListener(Window parent, GameScreen gameScreen, boolean affirmative) {
+            this.parent = parent;
+            this.gameScreen = gameScreen;
             this.affirmative = affirmative;
         }
 
         @Override
         public void changed(ChangeEvent changeEvent, Actor actor) {
             if (affirmative) {
-                client.announcedPowerDown = false;
+                gameScreen.getClient().announcedPowerDown = false;
             }
-            gameLoop.phase++;
+            gameScreen.closeWindow(parent);
         }
     }
 }

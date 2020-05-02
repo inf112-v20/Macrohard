@@ -10,4 +10,11 @@ public class SoundEffects {
     public final static Sound ROTATE_GEARS = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Gear.wav"));
     public final static Sound CHECKPOINT = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Checkpoint.wav"));
 
+    public static void rotateGears() {
+        ROTATE_GEARS.play();
+    }
+
+    public static void fireLasers() {
+        FIRE_LASERS.play();
+    }
 }

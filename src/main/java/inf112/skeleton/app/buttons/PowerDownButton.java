@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ImageButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.screens.GameScreen;
 
 public class PowerDownButton extends ImageButton {
@@ -14,23 +15,25 @@ public class PowerDownButton extends ImageButton {
     private final static TextureRegionDrawable UNCHECKED = new TextureRegionDrawable(new TextureRegion(new Texture("./assets/buttons/powerDownRed.png")));
     private final static TextureRegionDrawable CHECKED = new TextureRegionDrawable(new TextureRegion(new Texture("./assets/buttons/powerDownGreen.png")));
 
-    public PowerDownButton(Player client, GameScreen gameScreen) {
+    public PowerDownButton(GameScreen gameScreen) {
         super(UNCHECKED, UNCHECKED, CHECKED);
-        setBounds(gameScreen.width - 120 - 90, -130, 120, 120);
-        addListener(new PowerDownButtonListener(client));
+        addListener(new PowerDownButtonListener(gameScreen));
         gameScreen.getGameStage().addActor(this);
+        setBounds(RoboRallyApplication.screenWidth - 175, -120, 100, 100);
+        setVisible(false);
     }
 
     private class PowerDownButtonListener extends ChangeListener {
 
-        private Player client;
+        private GameScreen gameScreen;
 
-        public PowerDownButtonListener(Player client) {
-            this.client = client;
+        public PowerDownButtonListener(GameScreen gameScreen) {
+            this.gameScreen = gameScreen;
         }
 
         @Override
         public void changed(ChangeEvent changeEvent, Actor actor) {
+            Player client = gameScreen.getClient();
             client.announcedPowerDown = !client.announcedPowerDown;
         }
     }
