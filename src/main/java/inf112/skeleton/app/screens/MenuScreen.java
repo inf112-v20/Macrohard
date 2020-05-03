@@ -38,16 +38,14 @@ public class MenuScreen implements Screen {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                //parent.setGameScreen(null);
-                parent.changeScreen(RoboRallyApplication.CREATE);
-                //parent.hasGame(true);
+                parent.setScreen(RoboRallyApplication.CREATE_GAME_SCREEN);
             }
         });
         TextButton preferences = new TextButton("Preferences", skin);
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(RoboRallyApplication.PREFERENCES);
+                parent.setScreen(RoboRallyApplication.PREFERENCE_SCREEN);
             }
         });
         TextButton exit = new TextButton("Exit", skin);
@@ -67,7 +65,7 @@ public class MenuScreen implements Screen {
             resumeGame.addListener(new ChangeListener() {
                 @Override
                 public void changed(ChangeEvent changeEvent, Actor actor) {
-                    parent.changeScreen(RoboRallyApplication.APPLICATION);
+                    parent.setScreen(RoboRallyApplication.GAME_SCREEN);
                 }
             });
             table.add(resumeGame).fillX().uniformX();

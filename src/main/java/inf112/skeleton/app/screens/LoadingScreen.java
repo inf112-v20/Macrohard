@@ -18,7 +18,7 @@ public class LoadingScreen implements Screen {
 
     @Override
     public void render(float v) {
-        parent.changeScreen(RoboRallyApplication.MAIN_MENU);
+        parent.setScreen(RoboRallyApplication.MAIN_MENU_SCREEN);
     }
 
     @Override

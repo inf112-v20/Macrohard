@@ -2,6 +2,7 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Sound;
+import inf112.skeleton.app.preferences.AppPreferences;
 
 public class SoundEffects {
 
@@ -11,15 +12,22 @@ public class SoundEffects {
     public final static Sound ROTATE_GEARS = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Gear.wav"));
     public final static Sound CHECKPOINT = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Checkpoint.wav"));
 
+
     public static void rotateGears() {
-        ROTATE_GEARS.play();
+        if (RoboRallyApplication.appPreferences.isSoundEffectsEnabled()) {
+            ROTATE_GEARS.play(RoboRallyApplication.appPreferences.getSoundVolume());
+        }
     }
 
     public static void fireLasers() {
-        FIRE_LASERS.play();
+        if (RoboRallyApplication.appPreferences.isSoundEffectsEnabled()) {
+            FIRE_LASERS.play(RoboRallyApplication.appPreferences.getSoundVolume());
+        }
     }
 
     public static void rollConveyorBelts() {
-        CONVEYOR_BELT.play();
+        if (RoboRallyApplication.appPreferences.isSoundEffectsEnabled()) {
+            CONVEYOR_BELT.play(RoboRallyApplication.appPreferences.getSoundVolume());
+        }
     }
 }

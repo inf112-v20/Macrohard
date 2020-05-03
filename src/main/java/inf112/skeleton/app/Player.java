@@ -40,7 +40,7 @@ public class Player implements Comparable<Player> {
         this.lifeTokens = 3;
         this.cards = new ArrayList<>();
         this.program = new Card[5];
-        this.name = ++RoboRallyApplication.NUMBER_OF_PLAYERS;
+        this.name = ++RoboRallyApplication.numberOfPlayers;
     }
 
     public int getRow() {

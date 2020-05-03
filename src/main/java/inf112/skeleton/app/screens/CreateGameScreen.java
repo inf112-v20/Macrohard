@@ -24,6 +24,7 @@ public class CreateGameScreen implements Screen {
     public CreateGameScreen (RoboRallyApplication parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
+
     }
 
     public void setAsInputProcessor() {
@@ -53,7 +54,7 @@ public class CreateGameScreen implements Screen {
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
-                parent.changeScreen(RoboRallyApplication.MAIN_MENU);
+                parent.setScreen(RoboRallyApplication.MAIN_MENU_SCREEN);
             }
         });
 

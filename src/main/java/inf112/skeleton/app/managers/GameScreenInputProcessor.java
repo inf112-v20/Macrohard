@@ -31,7 +31,7 @@ public class GameScreenInputProcessor extends InputListener {
         super.keyDown(event, keycode);
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                parent.changeScreen(RoboRallyApplication.MAIN_MENU);
+                parent.setScreen(RoboRallyApplication.MAIN_MENU_SCREEN);
                 return super.keyDown(event, keycode);
             case Input.Keys.UP:
                 MovementCard movementCardUp = new MovementCard(0, MovementType.ONE_FORWARD);
