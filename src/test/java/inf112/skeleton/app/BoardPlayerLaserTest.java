@@ -46,7 +46,6 @@ public class BoardPlayerLaserTest {
         playerLasers = board.firePlayerLasers();
         assertEquals(player1NoDamageTaken,player1.getDamageTokens());
         assertEquals(player2NoDamageTaken,player2.getDamageTokens());
-
     }
 
     @Test
