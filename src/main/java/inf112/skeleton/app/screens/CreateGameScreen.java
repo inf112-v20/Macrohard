@@ -40,7 +40,6 @@ public class CreateGameScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
-
         final SelectBox<String> mapSelectBox = new SelectBox<>(skin);
         mapSelectBox.setItems("Risky Exchange", "Dizzy Dash", "Island Hop", "Whirlwind Tour");
 
