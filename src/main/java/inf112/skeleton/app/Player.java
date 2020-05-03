@@ -72,8 +72,8 @@ public class Player implements Comparable<Player> {
     }
 
     public void stepIn(Direction direction) {
-        setRow(row + direction.getRowTrajectory());
-        setCol(col + direction.getColumnTrajectory());
+        setRow(row + direction.getRowModifier());
+        setCol(col + direction.getColumnModifier());
     }
 
     public boolean hasCompleteProgram() {

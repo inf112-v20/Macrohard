@@ -62,7 +62,7 @@ public enum Direction {
         return this.turnClockwise().turnClockwise();
     }
 
-    public int[] getMoveCoordinates() {
+    public int[] getCoordinateModifiers() {
         if (this.equals(NORTH)) {
             return new int[]{1, 0};
         } else if (this.equals(EAST)) {
@@ -74,12 +74,12 @@ public enum Direction {
         }
     }
 
-    public int getRowTrajectory() {
-        return this.getMoveCoordinates()[0];
+    public int getRowModifier() {
+        return this.getCoordinateModifiers()[0];
     }
 
-    public int getColumnTrajectory() {
-        return this.getMoveCoordinates()[1];
+    public int getColumnModifier() {
+        return this.getCoordinateModifiers()[1];
     }
 
     public static float getDegreesBetween(Direction from, Direction to) {
