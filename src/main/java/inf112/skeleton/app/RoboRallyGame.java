@@ -5,9 +5,6 @@ import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.screens.GameScreen;
 import inf112.skeleton.app.screens.WinScreen;
-import inf112.skeleton.app.tiles.Flag;
-import inf112.skeleton.app.tiles.RepairSite;
-import inf112.skeleton.app.tiles.Tile;
 
 import java.util.ArrayList;
 import java.util.PriorityQueue;

@@ -62,7 +62,7 @@ Board board;
         board.stepOne(player,Direction.EAST);
         board.stepOne(player,Direction.EAST);
         board.stepOne(player,Direction.EAST);
-        board.touchBoardElements(board.getPlayers());
+        board.touchBoardElements();
         assertEquals(flag.getNumber(), player.getPreviousFlag());
         assertEquals(board.getTile(flag.getRow(),flag.getCol()), player.archiveMarker);
     }
@@ -72,7 +72,7 @@ Board board;
         board.layTile(repairSite);
         board.stepOne(player,Direction.WEST);
         int noDamageTaken = player.getDamageTokens();
-        board.touchBoardElements(board.getPlayers());
+        board.touchBoardElements();
         assertEquals(noDamageTaken, player.getDamageTokens());
         assertEquals(board.getTile(repairSite.getRow(), repairSite.getCol()), player.archiveMarker);
 
@@ -84,7 +84,7 @@ Board board;
         board.stepOne(player,Direction.WEST);
         int tokensBeforeDamage = player.getDamageTokens();
         player.applyDamage(1);
-        board.touchBoardElements(board.getPlayers());
+        board.touchBoardElements();
         assertEquals(tokensBeforeDamage, player.getDamageTokens());
     }
 
