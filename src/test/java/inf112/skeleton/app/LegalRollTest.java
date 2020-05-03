@@ -19,8 +19,8 @@ public class LegalRollTest {
     private Direction unOccupiedTileDirection = Direction.WEST;
 
     private Tile playerTile;
-    private ConveyorBelt northwardExpressBelt = new ConveyorBelt(midRow + Direction.NORTH.getRowTrajectory(), midCol + Direction.NORTH.getColumnTrajectory(), Direction.NORTH, true);
-    private ConveyorBelt eastwardBelt = new ConveyorBelt(midRow + Direction.EAST.getRowTrajectory(), midCol + Direction.EAST.getColumnTrajectory(), Direction.EAST, false);
+    private ConveyorBelt northwardExpressBelt = new ConveyorBelt(midRow + Direction.NORTH.getRowModifier(), midCol + Direction.NORTH.getColumnModifier(), Direction.NORTH, true);
+    private ConveyorBelt eastwardBelt = new ConveyorBelt(midRow + Direction.EAST.getRowModifier(), midCol + Direction.EAST.getColumnModifier(), Direction.EAST, false);
 
     @Before
     public void setUp() {
@@ -71,7 +71,7 @@ public class LegalRollTest {
     @Test
     public void illegalRollInDirectionOfOccupiedBeltFacingOccupiedNonBeltTile() {
         Player dummy1 = board.getPlayers().get(1);
-        int[] xyCoordinate = new int[]{dummy1.getRow() + Direction.EAST.getRowTrajectory(), dummy1.getCol() + Direction.EAST.getColumnTrajectory()};
+        int[] xyCoordinate = new int[]{dummy1.getRow() + Direction.EAST.getRowModifier(), dummy1.getCol() + Direction.EAST.getColumnModifier()};
         Player dummy3 = new Player(xyCoordinate[0], xyCoordinate[1], Direction.EAST);
         board.getTile(dummy3).setPlayer(dummy3);
 

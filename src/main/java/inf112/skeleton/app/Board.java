@@ -1,7 +1,5 @@
 package inf112.skeleton.app;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import inf112.skeleton.app.cards.Card;
@@ -143,9 +141,9 @@ public class Board {
                     String[] directions = ((String) wall.getProperties().get("Directions")).split(",");
                     for (String direction : directions) {
                         Direction dir = Direction.fromString(direction);
-                        board[row][col].getWalls().add(dir);
-                        if (!outOfBounds(row + dir.getRowTrajectory(), col + dir.getColumnTrajectory())) {
-                            Tile tile = board[row + dir.getRowTrajectory()][col + dir.getColumnTrajectory()];
+                        getTile(row, col).getWalls().add(dir);
+                        if (!outOfBounds(row + dir.getRowModifier(), col + dir.getColumnModifier())) {
+                            Tile tile = board[row + dir.getRowModifier()][col + dir.getColumnModifier()];
                             if (tile != null) {
                                 ArrayList<Direction> walls = tile.getWalls();
                                 walls.add(dir.opposite());
@@ -245,10 +243,12 @@ public class Board {
         return laserBeamTiles;
     }
 
-    public void rotateGears() {
+    public boolean rotateGears() {
+        boolean used = false;
         for (Tile[] row : board) {
             for (Tile tile : row) {
                 if (tile instanceof Gear && tile.isOccupied()) {
+                    used = true;
                     Gear gear = (Gear) tile;
                     Player player = gear.getPlayer();
                     if (gear.rotatesClockwise()) {
@@ -259,14 +259,11 @@ public class Board {
                 }
             }
         }
+        return used;
     }
 
     public Tile getTile(Laser laser) {
         return getTile(laser.getRow(), laser.getCol());
-    }
-
-    public int getNumberOfFlags() {
-        return numberOfFlags;
     }
 
     private Tile getLaserTarget(Tile tile, Direction direction) {
@@ -320,7 +317,7 @@ public class Board {
         return players;
     }
 
-    public void rollConveyorBelts(boolean expressOnly) {
+    public boolean rollConveyorBelts(boolean expressOnly) {
         ArrayList<Player> rollingPlayers = queueConveyorBelts(expressOnly);
         int indexOfPlayer = 0;
         while (!queuedConveyorBelts.isEmpty()) {
@@ -329,6 +326,7 @@ public class Board {
             roll(belt, beltPlayer);
             indexOfPlayer++;
         }
+        return !rollingPlayers.isEmpty();
     }
 
     private void roll(ConveyorBelt belt, Player player) {
@@ -433,8 +431,8 @@ public class Board {
     }
 
     private boolean outOfBounds(Tile tile, Direction direction) {
-        int newRow = tile.getRow() + direction.getRowTrajectory();
-        int newCol = tile.getCol() + direction.getColumnTrajectory();
+        int newRow = tile.getRow() + direction.getRowModifier();
+        int newCol = tile.getCol() + direction.getColumnModifier();
         return outOfBounds(newRow, newCol);
     }
 
@@ -451,7 +449,7 @@ public class Board {
     }
 
     public Tile getNextTile(Tile tile, Direction direction) {
-        return board[tile.getRow() + direction.getRowTrajectory()][tile.getCol() + direction.getColumnTrajectory()];
+        return board[tile.getRow() + direction.getRowModifier()][tile.getCol() + direction.getColumnModifier()];
     }
 
     public ArrayList<Player> getPlayers() {

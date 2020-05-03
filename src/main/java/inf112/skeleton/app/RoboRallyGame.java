@@ -140,18 +140,17 @@ public class RoboRallyGame {
 
             case 5:
                 // Board elements move, starting with all conveyor belts
-                board.rollConveyorBelts(false);
+                if (board.rollConveyorBelts(false)) { SoundEffects.rollConveyorBelts(); }
                 phase++;
                 break;
             case 6:
                 // Then express belts move
-                board.rollConveyorBelts(true);
+                if (board.rollConveyorBelts(true)) { SoundEffects.rollConveyorBelts(); }
                 phase++;
                 break;
             case 7:
                 // And gears rotate
-                board.rotateGears();
-                SoundEffects.rotateGears();
+                if (board.rotateGears()) { SoundEffects.rotateGears(); }
                 phase++;
                 break;
             case 8:
