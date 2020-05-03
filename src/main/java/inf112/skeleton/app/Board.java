@@ -180,7 +180,7 @@ public class Board {
                     int number = (Integer) manager.getCell("FLAGS", row, col).getTile().getProperties().get("Number");
                     Flag flag = new Flag(number, row, col);
                     layTile(flag);
-                    numberOfFlags++;
+                    numberOfFlags ++;
                 }
             }
         }
@@ -466,4 +466,7 @@ public class Board {
         return tile.isOccupied();
     }
 
+    public int getNumberOfFlags() {
+        return numberOfFlags;
+    }
 }

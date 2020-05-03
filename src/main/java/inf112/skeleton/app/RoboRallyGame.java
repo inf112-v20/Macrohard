@@ -25,6 +25,7 @@ public class RoboRallyGame {
     private Player client;
     private Deck deck;
 
+    private final int nrOfFlags;
     private int phase = 0;
 
     public RoboRallyGame(RoboRallyApplication parent, TiledMapManager mapManager, int nrOfPlayers) {
@@ -38,6 +39,7 @@ public class RoboRallyGame {
         client = players.get(0);
 
         board = new Board(players, mapManager);
+        nrOfFlags = board.getNumberOfFlags();
         gameScreen = new GameScreen(this, mapManager);
         movementPriority = new PriorityQueue<>();
         deck = new Deck(true);
@@ -171,6 +173,9 @@ public class RoboRallyGame {
                             if (player.getNextFlag() == flag.getNumber()) {
                                 player.touchFlag();
                                 player.getInfoGraphic().updateValues();
+                                if (player.getPreviousFlag() == nrOfFlags) {
+                                    parent.setScreen(new WinScreen(player));
+                                }
                             }
                         } else if (tile instanceof RepairSite) {
                             player.setArchiveMarker(tile);
