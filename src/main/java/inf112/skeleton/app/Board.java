@@ -331,7 +331,7 @@ public class Board {
         return !rollingPlayers.isEmpty();
     }
 
-    public void touchBoardElements(ArrayList<Player> players) {
+    public void touchBoardElements() {
         for (Player player : players) {
             if (!player.isDestroyed()) {
                 Tile tile = getTile(player);

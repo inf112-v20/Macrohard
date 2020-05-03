@@ -164,7 +164,12 @@ public class RoboRallyGame {
                 break;
             case 9:
                 //Players that are not destroyed during phase touches flags and repair sites
-                board.touchBoardElements(players);
+                board.touchBoardElements();
+                for (Player player : players) {
+                    if (player.getPreviousFlag() == nrOfFlags) {
+                        parent.setScreen(new WinScreen(player));
+                    }
+                }
                 phase++;
                 break;
             case 10:
