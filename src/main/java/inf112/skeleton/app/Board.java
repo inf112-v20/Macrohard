@@ -139,23 +139,25 @@ public class Board {
                 if (manager.getCell("WALLS", row, col) != null) {
                     TiledMapTile wall = manager.getCell("WALLS", row, col).getTile();
                     String[] directions = ((String) wall.getProperties().get("Directions")).split(",");
-                    for (String direction : directions) {
-                        Direction dir = Direction.fromString(direction);
-                        getTile(row, col).getWalls().add(dir);
-                        if (!outOfBounds(row + dir.getRowModifier(), col + dir.getColumnModifier())) {
-                            Tile tile = board[row + dir.getRowModifier()][col + dir.getColumnModifier()];
-                            if (tile != null) {
-                                ArrayList<Direction> walls = tile.getWalls();
-                                walls.add(dir.opposite());
-                            }
-                        }
+                    for (String string : directions) {
+                        Direction direction = Direction.fromString(string);
+                        erectWall(direction, row, col);
                         int nrOfLasers = (Integer) wall.getProperties().get("NrOfLasers");
                         if (nrOfLasers > 0) {
-                            installLaser(nrOfLasers, dir.opposite(), row, col);
+                            installLaser(nrOfLasers, direction.opposite(), row, col);
                         }
                     }
                 }
             }
+        }
+    }
+
+    public void erectWall(Direction direction, int row, int col) {
+        Tile tile = getTile(row, col);
+        tile.getWalls().add(direction);
+        if (!outOfBounds(tile, direction)) {
+            Tile nextTile = getNextTile(tile, direction);
+            nextTile.getWalls().add(direction.opposite());
         }
     }
 

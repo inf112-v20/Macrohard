@@ -1,17 +1,12 @@
 package inf112.skeleton.app;
 
-import inf112.skeleton.app.tiles.Tile;
 import org.junit.Before;
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.LinkedList;
 
 import static org.junit.Assert.*;
 
 public class BoardPlayerLaserTest {
 
-    private ArrayList<LinkedList<Tile>> playerLasers;
     private Board board;
     private Player player1;
     private Player player2;
@@ -34,16 +29,17 @@ public class BoardPlayerLaserTest {
 
     @Test
     public void playersShootingEachOtherYieldsOneDamageTokenEach() {
-        playerLasers = board.firePlayerLasers();
+        board.firePlayerLasers();
+
         assertEquals(player1NoDamageTaken+1, player1.getDamageTokens());
         assertEquals(player2NoDamageTaken+1,player2.getDamageTokens());
     }
 
     @Test
     public void noDamageTokensDealtWhenWallBetweenPlayerLasers(){
-        board.getTile(player1).getWalls().add(player1.getDirection());
-        //board.getTile(player2).getWalls().add(player2.getDirection());
-        playerLasers = board.firePlayerLasers();
+        board.erectWall(player1.getDirection(), player1.getRow(), player1.getCol());
+        board.firePlayerLasers();
+
         assertEquals(player1NoDamageTaken,player1.getDamageTokens());
         assertEquals(player2NoDamageTaken,player2.getDamageTokens());
 
@@ -52,21 +48,23 @@ public class BoardPlayerLaserTest {
     @Test
     public void destroyedPlayersDoesNotFireLasers() {
         player1.destroy();
-        playerLasers = board.firePlayerLasers();
+        board.firePlayerLasers();
+
         assertEquals(player2NoDamageTaken,player2.getDamageTokens());
     }
 
     @Test
     public void playerLasersDoesNotFireThroughMultiplePlayers(){
-        playerLasers = board.firePlayerLasers();
+        board.firePlayerLasers();
         assertEquals(player3NoDamageTaken, player3.getDamageTokens());
     }
 
     @Test
     public void wallsBehindPlayersDoesNotStopPlayerLaser(){
-        board.getTile(player1).getWalls().add(player1.getDirection().opposite());
-        board.getTile(player2).getWalls().add(player2.getDirection().opposite());
-        playerLasers = board.firePlayerLasers();
+        board.erectWall(player1.getDirection().opposite(), player1.getRow(), player1.getCol());
+        board.erectWall(player2.getDirection().opposite(), player2.getRow(), player2.getCol());
+        board.firePlayerLasers();
+
         assertEquals(player1NoDamageTaken+1, player1.getDamageTokens());
         assertEquals(player2NoDamageTaken+1,player2.getDamageTokens());
     }
