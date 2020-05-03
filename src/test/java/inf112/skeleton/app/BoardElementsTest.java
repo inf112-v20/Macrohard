@@ -1,13 +1,9 @@
 package inf112.skeleton.app;
 
-import inf112.skeleton.app.tiles.Flag;
-import inf112.skeleton.app.tiles.Gear;
-import inf112.skeleton.app.tiles.Hole;
-import inf112.skeleton.app.tiles.RepairSite;
+import inf112.skeleton.app.tiles.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.ArrayList;
 
 import static org.junit.Assert.*;
 
@@ -28,19 +24,68 @@ Board board;
         hole = new Hole(4,5);
         gearClockWise = new Gear(5,6,true);
         gearCounterClockWise = new Gear(5,7,false);
-        repairSite = new RepairSite(5,8);
-        flag = new Flag(1,5,9);
+        repairSite = new RepairSite(5,4);
+        flag = new Flag(1,5,8);
         board = new Board(10,10,player);
-    }
-
-    @Test
-    public void dockPlayers() {
-
 
     }
 
     @Test
-    public void rotateGears() {
+    public void walkingIntoHoleDestroysRobot() {
+        board.layTile(hole);
+        board.stepOne(player,Direction.SOUTH);
+        assertTrue(player.isDestroyed());
+    }
+
+    @Test
+    public void standingOnClockWiseGearRotatesRobotAccordingly() {
+        board.layTile(gearClockWise);
+        board.stepOne(player,Direction.EAST);
+        Direction previousDirection = player.getDirection();
+        board.rotateGears();
+        assertEquals(player.getDirection(), previousDirection.turnClockwise());
+    }
+
+    @Test
+    public void standingOnCounterClockWiseGearRotatesRobotAccordingly() {
+        board.layTile(gearCounterClockWise);
+        board.stepOne(player,Direction.EAST);
+        board.stepOne(player,Direction.EAST);
+        Direction previousDirection = player.getDirection();
+        board.rotateGears();
+        assertEquals(player.getDirection(), previousDirection.turnCounterClockwise());
+    }
+
+    @Test
+    public void walkingOnFlagUpdatesPlayerParameters(){
+        board.layTile(flag);
+        board.stepOne(player,Direction.EAST);
+        board.stepOne(player,Direction.EAST);
+        board.stepOne(player,Direction.EAST);
+        board.touchBoardElements(board.getPlayers());
+        assertEquals(flag.getNumber(), player.getPreviousFlag());
+        assertEquals(board.getTile(flag.getRow(),flag.getCol()), player.archiveMarker);
+    }
+
+    @Test
+    public void walkingOnRepairSiteWithNoDamageTokensUpdatesOnlyArchiveMarker(){
+        board.layTile(repairSite);
+        board.stepOne(player,Direction.WEST);
+        int noDamageTaken = player.getDamageTokens();
+        board.touchBoardElements(board.getPlayers());
+        assertEquals(noDamageTaken, player.getDamageTokens());
+        assertEquals(board.getTile(repairSite.getRow(), repairSite.getCol()), player.archiveMarker);
 
     }
+
+    @Test
+    public void walkingOnRepairSiteWithDamageTokensRemovesOneAndUpdatesArchiveMarker() {
+        board.layTile(repairSite);
+        board.stepOne(player,Direction.WEST);
+        int tokensBeforeDamage = player.getDamageTokens();
+        player.applyDamage(1);
+        board.touchBoardElements(board.getPlayers());
+        assertEquals(tokensBeforeDamage, player.getDamageTokens());
+    }
+
 }

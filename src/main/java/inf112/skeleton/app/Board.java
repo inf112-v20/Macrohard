@@ -331,6 +331,24 @@ public class Board {
         return !rollingPlayers.isEmpty();
     }
 
+    public void touchBoardElements(ArrayList<Player> players) {
+        for (Player player : players) {
+            if (!player.isDestroyed()) {
+                Tile tile = getTile(player);
+                if (tile instanceof Flag) {
+                    Flag flag = (Flag) tile;
+                    player.setArchiveMarker(flag);
+                    if (player.getNextFlag() == flag.getNumber()) {
+                        player.touchFlag();
+                    }
+                } else if (tile instanceof RepairSite) {
+                    player.setArchiveMarker(tile);
+                    player.repair();
+                }
+            }
+        }
+    }
+
     private void roll(ConveyorBelt belt, Player player) {
         Direction direction = belt.getDirection();
         Tile toTile = getNextTile(belt, direction);
