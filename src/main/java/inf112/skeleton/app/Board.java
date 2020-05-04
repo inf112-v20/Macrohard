@@ -397,6 +397,7 @@ public class Board {
 
         if (toTile instanceof Hole) {
             player.destroy();
+            player.destroyInFall();
         } else {
             toTile.setPlayer(player);
         }

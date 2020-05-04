@@ -22,6 +22,7 @@ public class Player implements Comparable<Player> {
     public boolean inPowerDown = false;
     public boolean announcedPowerDown = false;
     private boolean destroyed;
+    private boolean destroyedInFall;
 
     private int damageTokens;
     private int lifeTokens;
@@ -194,6 +195,17 @@ public class Player implements Comparable<Player> {
         setDamageTokens(0);
         destroyed = true;
     }
+
+    public void destroyInFall() {
+        destroyedInFall = true;
+    }
+
+    public void clearDestroyInFall() {
+        destroyedInFall = false;
+    }
+
+    public boolean isDestroyedInFall() {return destroyedInFall;}
+
 
     public boolean isDestroyed() {
         return destroyed;
