@@ -68,8 +68,6 @@ public class GameScreen implements Screen {
         int boardHeight = (Integer) properties.get("height");
         int boardWidth = (Integer) properties.get("width");
 
-        System.out.println(boardWidth);
-
         // Initialise board-view
         renderer = new OrthogonalTiledMapRenderer(map);
         gameCamera = new OrthographicCamera(boardWidth, boardHeight);
