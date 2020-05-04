@@ -159,14 +159,22 @@ public class RoboRallyGame {
                 break;
             case 8:
                 // Board- and player-lasers fire
+                int damageTokens = client.getDamageTokens();
                 board.fireBoardLasers();
                 gameScreen.drawLasers(board.firePlayerLasers());
                 SoundEffects.fireLasers();
+                if (client.getDamageTokens() > damageTokens) {
+                    SoundEffects.damage();
+                }
                 phase++;
                 break;
             case 9:
                 //Players that are not destroyed during phase touches flags and repair sites
+                int flag = client.getPreviousFlag();
                 board.touchBoardElements();
+                if (client.getPreviousFlag() > flag) {
+                    SoundEffects.checkpoint();
+                }
                 for (Player player : players) {
                     if (player.getPreviousFlag() == nrOfFlags) {
                         parent.setScreen(new WinScreen(player));
@@ -188,8 +196,9 @@ public class RoboRallyGame {
             case 13:
                 for (Player player : players) {
                     if (!player.equals(client)) {
-                        player.wipeProgram();
-
+                        if (!player.inPowerDown) {
+                            player.wipeProgram();
+                        }
                         // Reboot destroyed players if they still have more life tokens
                         // Cancel Power Down if announced this turn
                         if (!player.equals(client) && player.isDestroyed() && !player.isDead()) {
