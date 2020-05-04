@@ -8,9 +8,6 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.preferences.AppPreferences;
@@ -42,7 +39,7 @@ public class RoboRallyApplication extends Game {
     public void create() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenWidth = Math.max(screenSize.width, 1920);
-        screenHeight = Math.min(screenSize.height, 1080);
+        screenHeight = Math.max(screenSize.height, 1080);
         appPreferences = new AppPreferences();
         manager = new AssetManager();
         loadAssets();
@@ -138,17 +135,13 @@ public class RoboRallyApplication extends Game {
         cfg.title = "RoboRallyApplication";
         cfg.width = Math.max(screenSize.width, 1920);
         cfg.height = Math.min(screenSize.height, 1080);
-        cfg.fullscreen = true;
+        cfg.fullscreen = false;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }
 
     public int getScreenWidth() {
         return screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
     }
 
 

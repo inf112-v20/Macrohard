@@ -1,5 +1,6 @@
 package inf112.skeleton.app;
 
+import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.cards.Deck;
 import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
@@ -129,8 +130,9 @@ public class RoboRallyGame {
                 if (!movementPriority.isEmpty() && players.stream().anyMatch(player -> !(player.inPowerDown || player.isDestroyed()))) {
                     Player player = movementPriority.poll();
                     if (player != null) {
-                        board.execute(player, player.getProgram()[currentProgramRegister]);
-                        SoundEffects.move();
+                        Card card = player.getProgram()[currentProgramRegister];
+                        board.execute(player, card);
+                        SoundEffects.move(card);
                         if (player.isDestroyedInFall()) {
                             SoundEffects.fallingRobot();
                             player.clearDestroyInFall();
