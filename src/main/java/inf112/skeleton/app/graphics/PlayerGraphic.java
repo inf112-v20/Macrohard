@@ -1,6 +1,7 @@
 package inf112.skeleton.app.graphics;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,6 +13,8 @@ import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.screens.GameScreen;
+
+import java.awt.*;
 
 public class PlayerGraphic extends Image {
 
@@ -153,6 +156,12 @@ public class PlayerGraphic extends Image {
     public void animateFall() {
         addAction(Actions.delay(0.5f, Actions.fadeOut(0.5f)));
         isVisible = false;
+    }
+
+    public void animateTakeDamage() {
+        Color color = getColor();
+        addAction(Actions.color(new Color(Color.RED), 0.3f));
+        addAction(Actions.delay(0.5f, Actions.color(color, 0.2f)));
     }
 
     public void animateDestruction() {

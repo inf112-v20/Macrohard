@@ -97,11 +97,10 @@ public class GameScreen implements Screen {
 
     private void updateScreenGraphics(int phase) {
         // --- BUTTONS ---
-        boolean inputPhase = phase < 2;
+        boolean inputPhase = phase < 2 && !client.inPowerDown;
         Color color = client.hasCompleteProgram() ? Color.GREEN : Color.DARK_GRAY;
         programButton.setColor(color);
         programButton.setVisible(inputPhase);
-        powerDownButton.setChecked(client.announcedPowerDown);
         powerDownButton.setVisible(inputPhase);
 
         // --- PLAYER MOVEMENT AND INFO-GRAPHICS ---
@@ -151,6 +150,9 @@ public class GameScreen implements Screen {
                 wipeProgram();
                 CardGraphic.reset(client);
                 client.wipeProgram();
+                if (!client.announcedPowerDown) {
+                    programButton = new ProgramButton(this);
+                }
                 break;
         }
 

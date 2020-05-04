@@ -130,6 +130,11 @@ public class RoboRallyGame {
                     Player player = movementPriority.poll();
                     if (player != null) {
                         board.execute(player, player.getProgram()[currentProgramRegister]);
+                        SoundEffects.move();
+                        if (player.isDestroyedInFall()) {
+                            SoundEffects.fallingRobot();
+                            player.clearDestroyInFall();
+                        }
                         removeDeadAndDestructedPlayers();
                     }
                 } else {
