@@ -137,7 +137,7 @@ public class RoboRallyApplication extends Game {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         cfg.title = "RoboRallyApplication";
-        cfg.width = screenSize.width;
+        cfg.width = Math.min(screenSize.width, 1200);
         cfg.height = Math.min(screenSize.height, 1080);
         cfg.fullscreen = true;
 
