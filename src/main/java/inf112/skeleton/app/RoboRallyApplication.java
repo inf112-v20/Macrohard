@@ -8,6 +8,9 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.preferences.AppPreferences;
@@ -38,8 +41,8 @@ public class RoboRallyApplication extends Game {
     @Override
     public void create() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = Math.max(screenSize.width, 1920);
-        screenHeight = Math.max(screenSize.height, 1080);
+        screenWidth = screenSize.width;
+        screenHeight = screenSize.height;
         appPreferences = new AppPreferences();
         manager = new AssetManager();
         loadAssets();
@@ -61,6 +64,7 @@ public class RoboRallyApplication extends Game {
         manager.load("assets/robots/robotWEST.png", Texture.class);
         manager.load("assets/robots/robotNORTH.png", Texture.class);
         manager.load("assets/robots/robotSOUTH.png", Texture.class);
+        manager.load("assets/testbot_animated/testbotSpriteSheet.png", Texture.class);
     }
 
     public static Skin getSkin() {
@@ -122,7 +126,7 @@ public class RoboRallyApplication extends Game {
     }
 
     public void createGame(String mapName, int nrOfPlayers) {
-        String fileName = "assets/tiled/" + mapName.replaceAll("\\s+", "_") + ".tmx";
+        String fileName = "assets/" + mapName.replaceAll("\\s+", "_") + ".tmx";
         TiledMapManager mapManager = new TiledMapManager(fileName);
         game = new RoboRallyGame(this, mapManager, nrOfPlayers);
         gameScreen = game.getGameScreen();
@@ -133,15 +137,19 @@ public class RoboRallyApplication extends Game {
         LwjglApplicationConfiguration cfg = new LwjglApplicationConfiguration();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         cfg.title = "RoboRallyApplication";
-        cfg.width = Math.max(screenSize.width, 1920);
-        cfg.height = Math.min(screenSize.height, 1080);
-        cfg.fullscreen = false;
+        cfg.width = screenSize.width;
+        cfg.height = screenSize.height;
+        cfg.fullscreen = true;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }
 
     public int getScreenWidth() {
         return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
     }
 
 

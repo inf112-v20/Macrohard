@@ -11,6 +11,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import inf112.skeleton.app.*;
@@ -72,7 +73,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         gameCamera = new OrthographicCamera(boardWidth, boardHeight);
         renderer.setView(gameCamera);
-        gamePort = new ExtendViewport(screenWidth, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+        gamePort = new FitViewport(1920, 1080, gameCamera);
         gameStage = new Stage(gamePort);
 
         // ---- GRAPHICS ----
