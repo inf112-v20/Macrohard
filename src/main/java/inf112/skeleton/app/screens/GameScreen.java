@@ -57,7 +57,7 @@ public class GameScreen implements Screen {
     private float stateTime = 0f;
 
 
-    public GameScreen(RoboRallyGame game, TiledMapManager mapManager, int screenWidth, int screenHeight) {
+    public GameScreen(RoboRallyGame game, TiledMapManager mapManager) {
         this.game = game;
         this.mapManager = mapManager;
         this.players = game.getPlayers();
@@ -65,7 +65,6 @@ public class GameScreen implements Screen {
 
         TiledMap map = mapManager.getMap();
         MapProperties properties = map.getProperties();
-        int tileSize = (Integer) properties.get("tilewidth");
         int boardHeight = (Integer) properties.get("height");
         int boardWidth = (Integer) properties.get("width");
 
@@ -79,7 +78,7 @@ public class GameScreen implements Screen {
         // ---- GRAPHICS ----
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
-            PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(player, this, properties);
+            PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(player, properties);
             gameStage.addActor(playerGraphic);
             gameStage.addActor(playerInfoGraphic);
         }
@@ -110,7 +109,6 @@ public class GameScreen implements Screen {
                 PlayerGraphic graphic = player.getPlayerGraphic();
                 if (phase < 8 && graphic.isVisible) {
                     graphic.animateMove();
-                    graphic.animateRotation();
                 }
                 player.getInfoGraphic().updateValues();
             }
@@ -281,7 +279,6 @@ public class GameScreen implements Screen {
             PlayerGraphic graphic = player.getPlayerGraphic();
             if (graphic.isVisible) {
                 graphic.animateMove();
-                graphic.animateRotation();
             }
             player.getInfoGraphic().updateValues();
         }

@@ -15,11 +15,6 @@ public class CreateGameScreen implements Screen {
     private RoboRallyApplication parent;
     private Stage stage;
 
-    private Label titleLabel;
-    private Label mapLabel;
-    private Label playersLabel;
-    private Label difficultyLabel;
-
 
     public CreateGameScreen(RoboRallyApplication parent) {
         this.parent = parent;
@@ -66,14 +61,14 @@ public class CreateGameScreen implements Screen {
             }
         });
 
-        titleLabel = new Label("Create new game", skin);
+        Label titleLabel = new Label("Create new game", skin);
         titleLabel.setFontScale(2f);
 
-        mapLabel = new Label("Map", skin);
+        Label mapLabel = new Label("Map", skin);
 
-        playersLabel = new Label("Players", skin);
+        Label playersLabel = new Label("Players", skin);
 
-        difficultyLabel = new Label("Difficulty", skin);
+        Label difficultyLabel = new Label("Difficulty", skin);
 
         //Add elements to table
         table.add(titleLabel).colspan(2);

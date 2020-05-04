@@ -12,13 +12,13 @@ import static org.junit.Assert.assertTrue;
 
 public class BoardElementsTest {
 
-    Player player;
-    Hole hole;
-    Gear gearClockWise;
-    Gear gearCounterClockWise;
-    RepairSite repairSite;
-    Flag flag;
-    Board board;
+    private Player player;
+    private Hole hole;
+    private Gear gearClockWise;
+    private Gear gearCounterClockWise;
+    private RepairSite repairSite;
+    private Flag flag;
+    private Board board;
 
 
     @Before

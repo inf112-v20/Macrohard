@@ -7,11 +7,12 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
+
 public class PlayerTest {
 
-    Player player;
-    Deck deck;
-    Board board;
+    private Player player;
+    private Deck deck;
+    private Board board;
 
     @Before
     public void setUp() {

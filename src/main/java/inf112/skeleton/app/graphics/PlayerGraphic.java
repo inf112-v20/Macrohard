@@ -20,23 +20,19 @@ public class PlayerGraphic extends Image {
 
     private final Player player;
 
-    private Direction direction;
-    private float degrees;
-
     public boolean isVisible = true;
 
     // ANIMATION
-    private static final int HORIZONTAL_FRAME_COLS = 8, HORIZONTAL_FRAME_ROWS = 1;
-    private static final int BACK_FRAME_COLS = 8, BACK_FRAME_ROWS = 1;
-    private static final int FRONT_FRAME_COLS = 8, FRONT_FRAME_ROWS = 1;
-    Animation<TextureRegion> idleHorizontalAnimation;
-    Texture idleHorizontalSheet;
+    private static final int HORIZONTAL_FRAME_COLS = 8;
+    private static final  int HORIZONTAL_FRAME_ROWS = 1;
+    private static final int BACK_FRAME_COLS = 8;
+    private static final int BACK_FRAME_ROWS = 1;
+    private static final int FRONT_FRAME_COLS = 8;
+    private static final int FRONT_FRAME_ROWS = 1;
 
-    Animation<TextureRegion> idleBackAnimation;
-    Texture idleBackSheet;
-
-    Animation<TextureRegion> idleFrontAnimation;
-    Texture idleFrontSheet;
+    private Animation<TextureRegion> idleHorizontalAnimation;
+    private Animation<TextureRegion> idleBackAnimation;
+    private Animation<TextureRegion> idleFrontAnimation;
 
     float stateTime;
 
@@ -48,8 +44,6 @@ public class PlayerGraphic extends Image {
         super(new Texture("./assets/robots/robot" + player.getDirection().toString() + ".png"));
         this.player = player;
         player.setPlayerGraphic(this);
-        direction = player.getDirection();
-        degrees = 0f;
 
         staticTimeModifier += 0.30f;
         timeModifier = staticTimeModifier;
@@ -57,7 +51,7 @@ public class PlayerGraphic extends Image {
         String[] colors = {"", "_BLACK", "_GREEN", "_PURPLE", "_WHITE", "_YELLOW", "_BLUE2", "", "", "", ""};
         String colorModifier = colors[player.name()];
 
-        idleHorizontalSheet = new Texture(Gdx.files.internal("./assets/sprites/robotSide" + colorModifier + ".png"));
+        Texture idleHorizontalSheet = new Texture(Gdx.files.internal("./assets/sprites/robotSide" + colorModifier + ".png"));
         TextureRegion[][] idleHorizontalTR = TextureRegion.split(idleHorizontalSheet,
                 idleHorizontalSheet.getWidth() / HORIZONTAL_FRAME_COLS,
                 idleHorizontalSheet.getHeight() / HORIZONTAL_FRAME_ROWS);
@@ -69,7 +63,7 @@ public class PlayerGraphic extends Image {
             }
         }
 
-        idleBackSheet = new Texture(Gdx.files.internal("./assets/sprites/robotBack" + colorModifier + ".png"));
+        Texture idleBackSheet = new Texture(Gdx.files.internal("./assets/sprites/robotBack" + colorModifier + ".png"));
         TextureRegion[][] idleBackTR = TextureRegion.split(idleBackSheet,
                 idleBackSheet.getWidth() / BACK_FRAME_COLS,
                 idleBackSheet.getHeight() / BACK_FRAME_ROWS);
@@ -81,7 +75,7 @@ public class PlayerGraphic extends Image {
             }
         }
 
-        idleFrontSheet = new Texture(Gdx.files.internal("./assets/sprites/robotFront" + colorModifier + ".png"));
+        Texture idleFrontSheet = new Texture(Gdx.files.internal("./assets/sprites/robotFront" + colorModifier + ".png"));
         TextureRegion[][] idleFrontTR = TextureRegion.split(idleFrontSheet,
                 idleFrontSheet.getWidth() / FRONT_FRAME_COLS,
                 idleFrontSheet.getHeight() / FRONT_FRAME_ROWS);
@@ -142,13 +136,6 @@ public class PlayerGraphic extends Image {
         }
     }
 
-    public void animateRotation() {
-        Direction newDir = player.getDirection();
-        degrees += Direction.getDegreesBetween(direction, newDir);
-        //addAction(Actions.rotateTo(degrees, 0.5f));
-        this.direction = newDir;
-    }
-
     public void animateTakeDamage() {
         Color color = getColor();
         addAction(Actions.color(new Color(Color.RED), 0.3f));
@@ -162,7 +149,6 @@ public class PlayerGraphic extends Image {
 
     public void animateReboot() {
         animateMove();
-        animateRotation();
         addAction(Actions.delay(0.5f, Actions.fadeIn(0.5f)));
         isVisible = true;
     }

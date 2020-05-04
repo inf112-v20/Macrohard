@@ -74,10 +74,8 @@ public class Board {
 
     public void layTile(Tile tile) {
         Tile temp = board[tile.getRow()][tile.getCol()];
-        if (temp != null) {
-            if (temp.isOccupied()) {
-                tile.setPlayer(temp.getPlayer());
-            }
+        if (temp != null && temp.isOccupied()) {
+            tile.setPlayer(temp.getPlayer());
         }
         board[tile.getRow()][tile.getCol()] = tile;
     }
@@ -298,19 +296,16 @@ public class Board {
             for (Tile tile : row) {
                 if (tile instanceof ConveyorBelt && tile.isOccupied()) {
                     ConveyorBelt belt = (ConveyorBelt) tile;
-                    if (!expressOnly || belt.isExpress()) {
-                        if (legalRoll(belt, belt.getDirection(), expressOnly)) {
-                            Tile targetTile = getNextTile(belt, belt.getDirection());
-                            int index = targetTiles.indexOf(targetTile);
-                            if (targetTiles.contains(targetTile)) {
-                                queuedConveyorBelts.remove(index);
-                                players.remove(index);
-                            } else {
-                                queuedConveyorBelts.add(belt);
-                                players.add(belt.getPlayer());
-                                targetTiles.add(targetTile);
-                            }
-
+                    if ((!expressOnly || belt.isExpress()) && legalRoll(belt, belt.getDirection(), expressOnly)) {
+                        Tile targetTile = getNextTile(belt, belt.getDirection());
+                        int index = targetTiles.indexOf(targetTile);
+                        if (targetTiles.contains(targetTile)) {
+                            queuedConveyorBelts.remove(index);
+                            players.remove(index);
+                        } else {
+                            queuedConveyorBelts.add(belt);
+                            players.add(belt.getPlayer());
+                            targetTiles.add(targetTile);
                         }
                     }
                 }
@@ -376,12 +371,10 @@ public class Board {
         }
 
         //Update the Tile->Player-relation now that player is moved
-        if (belt.isOccupied()) {
+        if (belt.isOccupied() && belt.getPlayer().equals(player)) {
             //Since all conveyor belts roll simultaneously,
             //be sure not to overwrite any other players potentially occupying the belt
-            if (belt.getPlayer().equals(player)) {
-                belt.setPlayer(null);
-            }
+            belt.setPlayer(null);
         }
     }
 

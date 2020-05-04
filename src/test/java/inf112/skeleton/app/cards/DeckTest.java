@@ -9,8 +9,9 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 
 public class DeckTest {
-    Deck deck;
-    Player player;
+
+    private Deck deck;
+    private Player player;
 
     @Before
     public void setUp() {

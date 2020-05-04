@@ -1,6 +1,5 @@
 package inf112.skeleton.app;
 
-
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
@@ -18,7 +17,9 @@ import java.awt.*;
 
 public class RoboRallyApplication extends Game {
 
-    public static int screenWidth, screenHeight, numberOfPlayers;
+    public static int screenWidth;
+    public static int screenHeight;
+    public static int numberOfPlayers;
     public static AppPreferences appPreferences;
     public static Music music;
     public static String currentSong;
@@ -37,7 +38,6 @@ public class RoboRallyApplication extends Game {
 
     @Override
     public void create() {
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenWidth = 1920;
         screenHeight = 1080;
         appPreferences = new AppPreferences();
@@ -101,12 +101,14 @@ public class RoboRallyApplication extends Game {
                 }
                 setScreen(createGameScreen);
                 createGameScreen.setAsInputProcessor();
+                break;
             case GAME_SCREEN:
                 if (hasGame()) {
                     gameScreen = game.getGameScreen();
                     setScreen(gameScreen);
                     gameScreen.setAsInputProcessor();
                 }
+                break;
             default:
                 break;
         }
