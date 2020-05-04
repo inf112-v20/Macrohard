@@ -41,8 +41,8 @@ public class RoboRallyApplication extends Game {
     @Override
     public void create() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        screenWidth = screenSize.width;
-        screenHeight = screenSize.height;
+        screenWidth = 1920;
+        screenHeight = 1080;
         appPreferences = new AppPreferences();
         manager = new AssetManager();
         loadAssets();
