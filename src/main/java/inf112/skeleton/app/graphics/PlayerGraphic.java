@@ -29,8 +29,8 @@ public class PlayerGraphic extends Image {
 
     // ANIMATION
     private static final int HORIZONTAL_FRAME_COLS = 8, HORIZONTAL_FRAME_ROWS = 1;
-    private static final int BACK_FRAME_COLS = 3, BACK_FRAME_ROWS = 2;
-    private static final int FRONT_FRAME_COLS = 3, FRONT_FRAME_ROWS = 3;
+    private static final int BACK_FRAME_COLS = 8, BACK_FRAME_ROWS = 1;
+    private static final int FRONT_FRAME_COLS = 8, FRONT_FRAME_ROWS = 1;
     Animation<TextureRegion> idleHorizontalAnimation;
     Texture idleHorizontalSheet;
 
@@ -56,7 +56,10 @@ public class PlayerGraphic extends Image {
         staticTimeModifier += 0.30f;
         timeModifier = staticTimeModifier;
 
-        idleHorizontalSheet = new Texture(Gdx.files.internal("./assets/testbot_animated/testbotSpriteSheet.png"));
+        String[] colors = {"", "_BLACK", "_GREEN", "_PURPLE", "_WHITE", "_YELLOW", "_BLUE2", "", "", "", ""};
+        String colorModifier = colors[player.name()];
+
+        idleHorizontalSheet = new Texture(Gdx.files.internal("./assets/sprites/robotSide" + colorModifier + ".png"));
         TextureRegion[][] idleHorizontalTR = TextureRegion.split(idleHorizontalSheet,
                 idleHorizontalSheet.getWidth() / HORIZONTAL_FRAME_COLS,
                 idleHorizontalSheet.getHeight() / HORIZONTAL_FRAME_ROWS);
@@ -68,7 +71,7 @@ public class PlayerGraphic extends Image {
             }
         }
 
-        idleBackSheet = new Texture(Gdx.files.internal("./assets/testbot_animated/testbotBack.png"));
+        idleBackSheet = new Texture(Gdx.files.internal("./assets/sprites/robotBack" + colorModifier + ".png"));
         TextureRegion[][] idleBackTR = TextureRegion.split(idleBackSheet,
                 idleBackSheet.getWidth() / BACK_FRAME_COLS,
                 idleBackSheet.getHeight() / BACK_FRAME_ROWS);
@@ -80,7 +83,7 @@ public class PlayerGraphic extends Image {
             }
         }
 
-        idleFrontSheet = new Texture(Gdx.files.internal("./assets/testbot_animated/testbotFront.png"));
+        idleFrontSheet = new Texture(Gdx.files.internal("./assets/sprites/robotFront" + colorModifier + ".png"));
         TextureRegion[][] idleFrontTR = TextureRegion.split(idleFrontSheet,
                 idleFrontSheet.getWidth() / FRONT_FRAME_COLS,
                 idleFrontSheet.getHeight() / FRONT_FRAME_ROWS);
