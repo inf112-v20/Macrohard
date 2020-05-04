@@ -12,6 +12,7 @@ public class SoundEffects {
     public final static Sound ROTATE_GEARS = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Gear.wav"));
     public final static Sound CHECKPOINT = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Checkpoint.wav"));
     public final static Sound MOVE = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Move.wav"));
+    public final static Sound MOVE1 = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/move1.wav"));
     public final static Sound DAMAGE = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/Damage.wav"));
 
 
@@ -24,6 +25,12 @@ public class SoundEffects {
     public static void move() {
         if (RoboRallyApplication.appPreferences.isSoundEffectsEnabled()) {
             MOVE.play(RoboRallyApplication.appPreferences.getSoundVolume());
+        }
+    }
+
+    public static void move1() {
+        if (RoboRallyApplication.appPreferences.isSoundEffectsEnabled()) {
+            MOVE1.play(RoboRallyApplication.appPreferences.getSoundVolume());
         }
     }
 
