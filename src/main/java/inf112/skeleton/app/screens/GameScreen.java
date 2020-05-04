@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         gameCamera = new OrthographicCamera(boardWidth, boardHeight);
         renderer.setView(gameCamera);
-        gamePort = new ExtendViewport(Math.min(screenWidth, 600), boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+        gamePort = new ExtendViewport(Math.min(screenWidth, 1200), boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
         gameStage = new Stage(gamePort);
 
         // ---- GRAPHICS ----
@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
         continuePowerDownWindow = new ContinuePowerDownWindow(this);
         cancelPowerDownWindow = new CancelPowerDownWindow(this);
 
-        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT + 5));
+        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT));
     }
 
     private void updateScreenGraphics(int phase) {
