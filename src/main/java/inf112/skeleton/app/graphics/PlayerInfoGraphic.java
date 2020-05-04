@@ -33,7 +33,7 @@ public class PlayerInfoGraphic extends Image {
         int maxHeight = RoboRallyApplication.screenHeight;
         int boardWidth = (int) mapProperties.get("tilewidth") * (int) mapProperties.get("width");
 
-        setBounds(boardWidth + 5, maxHeight - 340 - ((player.name()-1) * 110), 100, 100);
+        setBounds(boardWidth + 5, maxHeight - 280 - ((player.name()-1) * 110), 100, 100);
         resetPixmaps();
         updateValues();
     }
