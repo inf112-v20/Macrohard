@@ -64,7 +64,6 @@ public class RoboRallyApplication extends Game {
         manager.load("assets/robots/robotWEST.png", Texture.class);
         manager.load("assets/robots/robotNORTH.png", Texture.class);
         manager.load("assets/robots/robotSOUTH.png", Texture.class);
-        manager.load("assets/testbot_animated/testbotSpriteSheet.png", Texture.class);
     }
 
     public static Skin getSkin() {
@@ -126,7 +125,7 @@ public class RoboRallyApplication extends Game {
     }
 
     public void createGame(String mapName, int nrOfPlayers) {
-        String fileName = "assets/" + mapName.replaceAll("\\s+", "_") + ".tmx";
+        String fileName = "assets/tiled/" + mapName.replaceAll("\\s+", "_") + ".tmx";
         TiledMapManager mapManager = new TiledMapManager(fileName);
         game = new RoboRallyGame(this, mapManager, nrOfPlayers);
         gameScreen = game.getGameScreen();
@@ -139,7 +138,7 @@ public class RoboRallyApplication extends Game {
         cfg.title = "RoboRallyApplication";
         cfg.width = screenSize.width;
         cfg.height = screenSize.height;
-        cfg.fullscreen = true;
+        cfg.fullscreen = false;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }
