@@ -167,6 +167,8 @@ public class Player implements Comparable<Player> {
         damageTokens += damage;
         if (damageTokens > 9) {
             destroy();
+        } else if (playerGraphic != null) {
+            playerGraphic.animateTakeDamage();
         }
         for (int i = 1; i <= getNrOfLockedProgramRegisters(); i ++) {
             Card card = program[program.length - i];
