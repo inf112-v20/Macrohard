@@ -53,7 +53,7 @@ public class PlayerGraphic extends Image {
         staticTimeModifier += 0.30f;
         timeModifier = staticTimeModifier;
 
-        String[] colors = {"", "_BLACK", "_GREEN", "_PINK", "_PURPLE", "_WHITE", "_YELLOW", "_BLUE2", "_GREEN2"};
+        String[] colors = {"", "_BLACK", "_GREEN", "_PURPLE", "_WHITE", "_YELLOW", "_BLUE2", "", "", "", ""};
         String colorModifier = colors[player.name()];
 
         idleHorizontalSheet = new Texture(Gdx.files.internal("./assets/sprites/robotSide" + colorModifier + ".png"));
