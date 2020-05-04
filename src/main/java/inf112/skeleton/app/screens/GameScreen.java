@@ -72,7 +72,7 @@ public class GameScreen implements Screen {
         renderer = new OrthogonalTiledMapRenderer(map);
         gameCamera = new OrthographicCamera(boardWidth, boardHeight);
         renderer.setView(gameCamera);
-        gamePort = new ExtendViewport(Math.max(screenWidth, 600), boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+        gamePort = new ExtendViewport(Math.min(screenWidth, 600), boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
         gameStage = new Stage(gamePort);
 
         // ---- GRAPHICS ----
