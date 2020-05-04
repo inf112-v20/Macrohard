@@ -92,7 +92,7 @@ public class GameScreen implements Screen {
         continuePowerDownWindow = new ContinuePowerDownWindow(this);
         cancelPowerDownWindow = new CancelPowerDownWindow(this);
 
-        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT + 5));
+        gameCamera.translate(-85, -(CARD_GRAPHIC_HEIGHT));
     }
 
     private void updateScreenGraphics(int phase) {

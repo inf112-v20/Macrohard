@@ -42,7 +42,7 @@ public class RoboRallyApplication extends Game {
     public void create() {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         screenWidth = screenSize.width;
-        screenHeight = screenSize.height;
+        screenHeight = Math.min(screenSize.height, 1080);
         appPreferences = new AppPreferences();
         manager = new AssetManager();
         loadAssets();
@@ -138,7 +138,7 @@ public class RoboRallyApplication extends Game {
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         cfg.title = "RoboRallyApplication";
         cfg.width = screenSize.width;
-        cfg.height = screenSize.height;
+        cfg.height = Math.min(screenSize.height, 1080);
         cfg.fullscreen = true;
 
         new LwjglApplication(new RoboRallyApplication(), cfg);
