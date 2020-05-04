@@ -135,7 +135,9 @@ public class Player implements Comparable<Player> {
         Collections.shuffle(cards);
         int bound = Math.min(program.length, cards.size());
         for (int i = 0; i < bound; i++) {
+            if(program[i] != null && program[i].isLocked) continue;
             program[i] = cards.get(i);
+            program[i].select();
         }
     }
 
