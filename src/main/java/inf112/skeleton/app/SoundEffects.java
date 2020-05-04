@@ -7,8 +7,6 @@ import inf112.skeleton.app.cards.MovementCard;
 import inf112.skeleton.app.cards.MovementType;
 import inf112.skeleton.app.cards.RotationCard;
 
-import java.applet.Applet;
-
 public class SoundEffects {
 
     public final static Sound FIRE_LASERS = Gdx.audio.newSound(Gdx.files.internal("data/Sounds/laserbeam.wav"));
@@ -44,7 +42,9 @@ public class SoundEffects {
                 if (mCard.getMoveID() == MovementType.ONE_BACKWARD.getMoveID()
                         || mCard.getMoveID() == MovementType.ONE_FORWARD.getMoveID()) {
                     MOVE1.play(RoboRallyApplication.appPreferences.getSoundVolume() - 0.4f);
-                } else { MOVE2.play(RoboRallyApplication.appPreferences.getSoundVolume()); }
+                } else {
+                    MOVE2.play(RoboRallyApplication.appPreferences.getSoundVolume());
+                }
             }
         }
     }

@@ -79,7 +79,9 @@ public class Player implements Comparable<Player> {
 
     public boolean hasCompleteProgram() {
         for (Card card : getProgram()) {
-            if (card == null) { return false; }
+            if (card == null) {
+                return false;
+            }
         }
         return true;
     }
@@ -136,7 +138,7 @@ public class Player implements Comparable<Player> {
         Collections.shuffle(cards);
         int bound = Math.min(program.length, cards.size());
         for (int i = 0; i < bound; i++) {
-            if(program[i] != null && program[i].isLocked) continue;
+            if (program[i] != null && program[i].isLocked) continue;
             program[i] = cards.get(i);
             program[i].select();
         }
@@ -148,9 +150,9 @@ public class Player implements Comparable<Player> {
             Card card = cards.get(i);
             if (!card.isSelected()) {
                 cards.remove(card);
-                i --;
+                i--;
             }
-            i ++;
+            i++;
         }
     }
 
@@ -171,7 +173,7 @@ public class Player implements Comparable<Player> {
         } else if (playerGraphic != null) {
             playerGraphic.animateTakeDamage();
         }
-        for (int i = 1; i <= getNrOfLockedProgramRegisters(); i ++) {
+        for (int i = 1; i <= getNrOfLockedProgramRegisters(); i++) {
             Card card = program[program.length - i];
             if (card != null && !card.isLocked()) {
                 card.lock();
@@ -182,7 +184,7 @@ public class Player implements Comparable<Player> {
 
     private void setDamageTokens(int damageTokens) {
         this.damageTokens = damageTokens;
-        for (int i = 0; i < program.length - getNrOfLockedProgramRegisters(); i ++) {
+        for (int i = 0; i < program.length - getNrOfLockedProgramRegisters(); i++) {
             Card card = program[i];
             if (card != null && card.isLocked()) {
                 card.unlock();
@@ -204,7 +206,9 @@ public class Player implements Comparable<Player> {
         destroyedInFall = false;
     }
 
-    public boolean isDestroyedInFall() {return destroyedInFall;}
+    public boolean isDestroyedInFall() {
+        return destroyedInFall;
+    }
 
 
     public boolean isDestroyed() {
@@ -264,7 +268,9 @@ public class Player implements Comparable<Player> {
         return previousFlag;
     }
 
-    public int getNrOfLockedProgramRegisters() { return Math.max(0, damageTokens - 4); }
+    public int getNrOfLockedProgramRegisters() {
+        return Math.max(0, damageTokens - 4);
+    }
 
     public void powerDown() {
         announcedPowerDown = false;

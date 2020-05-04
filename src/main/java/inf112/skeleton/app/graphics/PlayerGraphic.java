@@ -14,8 +14,6 @@ import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.screens.GameScreen;
 
-import java.awt.*;
-
 public class PlayerGraphic extends Image {
 
     private final float TILE_SIZE = GameScreen.TILE_SIZE;
@@ -65,8 +63,8 @@ public class PlayerGraphic extends Image {
                 idleHorizontalSheet.getHeight() / HORIZONTAL_FRAME_ROWS);
         TextureRegion[] idleHorizontalFrames = new TextureRegion[HORIZONTAL_FRAME_COLS * HORIZONTAL_FRAME_ROWS];
         int index = 0;
-        for(int i = 0; i < HORIZONTAL_FRAME_ROWS; i++){
-            for(int j = 0; j < HORIZONTAL_FRAME_COLS; j++){
+        for (int i = 0; i < HORIZONTAL_FRAME_ROWS; i++) {
+            for (int j = 0; j < HORIZONTAL_FRAME_COLS; j++) {
                 idleHorizontalFrames[index++] = idleHorizontalTR[i][j];
             }
         }
@@ -77,8 +75,8 @@ public class PlayerGraphic extends Image {
                 idleBackSheet.getHeight() / BACK_FRAME_ROWS);
         TextureRegion[] idleBackFrames = new TextureRegion[BACK_FRAME_COLS * BACK_FRAME_ROWS];
         index = 0;
-        for(int i = 0; i < BACK_FRAME_ROWS; i++){
-            for(int j = 0; j < BACK_FRAME_COLS; j++){
+        for (int i = 0; i < BACK_FRAME_ROWS; i++) {
+            for (int j = 0; j < BACK_FRAME_COLS; j++) {
                 idleBackFrames[index++] = idleBackTR[i][j];
             }
         }
@@ -89,8 +87,8 @@ public class PlayerGraphic extends Image {
                 idleFrontSheet.getHeight() / FRONT_FRAME_ROWS);
         TextureRegion[] idleFrontFrames = new TextureRegion[FRONT_FRAME_COLS * FRONT_FRAME_ROWS];
         index = 0;
-        for(int i = 0; i < FRONT_FRAME_ROWS; i++){
-            for(int j = 0; j < FRONT_FRAME_COLS; j++){
+        for (int i = 0; i < FRONT_FRAME_ROWS; i++) {
+            for (int j = 0; j < FRONT_FRAME_COLS; j++) {
                 idleFrontFrames[index++] = idleFrontTR[i][j];
             }
         }
@@ -105,33 +103,31 @@ public class PlayerGraphic extends Image {
         setOrigin(Align.center);
     }
 
-    public void updateAnimationFrame(float stateTime){
+    public void updateAnimationFrame(float stateTime) {
         stateTime += timeModifier;
 
         TextureRegion currentHorizontalFrame = idleHorizontalAnimation.getKeyFrame(stateTime, true);
         TextureRegion currentBackFrame = idleBackAnimation.getKeyFrame(stateTime, true);
         TextureRegion currentFrontFrame = idleFrontAnimation.getKeyFrame(stateTime, true);
-        if(player.getDirection() == Direction.EAST){
-            if(currentHorizontalFrame.isFlipY()){
+        if (player.getDirection() == Direction.EAST) {
+            if (currentHorizontalFrame.isFlipY()) {
                 currentHorizontalFrame.flip(false, true);
             }
-            if(!currentHorizontalFrame.isFlipX()){
+            if (!currentHorizontalFrame.isFlipX()) {
                 currentHorizontalFrame.flip(true, false);
             }
             setDrawable(new SpriteDrawable(new Sprite(currentHorizontalFrame)));
-        }else if(player.getDirection() == Direction.WEST){
-            if(currentHorizontalFrame.isFlipY()) {
+        } else if (player.getDirection() == Direction.WEST) {
+            if (currentHorizontalFrame.isFlipY()) {
                 currentHorizontalFrame.flip(false, true);
             }
-            if(currentHorizontalFrame.isFlipX()){
+            if (currentHorizontalFrame.isFlipX()) {
                 currentHorizontalFrame.flip(true, false);
             }
             setDrawable(new SpriteDrawable(new Sprite(currentHorizontalFrame)));
-        }
-        else if(player.getDirection() == Direction.NORTH){
+        } else if (player.getDirection() == Direction.NORTH) {
             setDrawable(new SpriteDrawable(new Sprite(currentBackFrame)));
-        }
-        else if(player.getDirection() == Direction.SOUTH){
+        } else if (player.getDirection() == Direction.SOUTH) {
             setDrawable(new SpriteDrawable(new Sprite(currentFrontFrame)));
         }
 
@@ -151,11 +147,6 @@ public class PlayerGraphic extends Image {
         degrees += Direction.getDegreesBetween(direction, newDir);
         //addAction(Actions.rotateTo(degrees, 0.5f));
         this.direction = newDir;
-    }
-
-    public void animateFall() {
-        addAction(Actions.delay(0.5f, Actions.fadeOut(0.5f)));
-        isVisible = false;
     }
 
     public void animateTakeDamage() {

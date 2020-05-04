@@ -37,41 +37,41 @@ public class PreferenceScreen implements Screen {
 
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
-        final SelectBox<String> selectBox=new SelectBox<>(skin);
-        selectBox.setItems("Factory Swing","Short Circuit","Nullpointer Exception","Norwegian Steel", "Robot Boogaloo");
+        final SelectBox<String> selectBox = new SelectBox<>(skin);
+        selectBox.setItems("Factory Swing", "Short Circuit", "Nullpointer Exception", "Norwegian Steel", "Robot Boogaloo");
         selectBox.addListener(event -> {
             String song = selectBox.getSelected();
-            switch (song){
+            switch (song) {
                 case "Factory Swing":
-                    if (RoboRallyApplication.currentSong.equals(song)){
+                    if (RoboRallyApplication.currentSong.equals(song)) {
                         break;
                     }
                     changeSong(song, "data/Music/FactorySwing.wav");
                     break;
 
                 case "Short Circuit":
-                    if (RoboRallyApplication.currentSong.equals(song)){
+                    if (RoboRallyApplication.currentSong.equals(song)) {
                         break;
                     }
                     changeSong(song, "data/Music/ShortCircuit.wav");
                     break;
 
                 case "Nullpointer Exception":
-                    if (RoboRallyApplication.currentSong.equals(song)){
+                    if (RoboRallyApplication.currentSong.equals(song)) {
                         break;
                     }
                     changeSong(song, "data/Music/NullpointerException.wav");
                     break;
 
                 case "Norwegian Steel":
-                    if (RoboRallyApplication.currentSong.equals(song)){
+                    if (RoboRallyApplication.currentSong.equals(song)) {
                         break;
                     }
                     changeSong(song, "data/Music/NorwegianSteel.wav");
                     break;
 
                 case "Robot Boogaloo":
-                    if (RoboRallyApplication.currentSong.equals(song)){
+                    if (RoboRallyApplication.currentSong.equals(song)) {
                         break;
                     }
                     changeSong(song, "data/Music/RobotBoogaloo.wav");
@@ -165,7 +165,7 @@ public class PreferenceScreen implements Screen {
 
     @Override
     public void render(float v) {
-       // = music;
+        // = music;
         RoboRallyApplication.music.setVolume(volume);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -198,7 +198,7 @@ public class PreferenceScreen implements Screen {
         //Nothing yet
     }
 
-    private void changeSong (String song, String filepath){
+    private void changeSong(String song, String filepath) {
         RoboRallyApplication.currentSong = song;
         RoboRallyApplication.music.stop();
         RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal(filepath));

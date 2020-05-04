@@ -10,11 +10,11 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-
-import inf112.skeleton.app.*;
+import inf112.skeleton.app.Direction;
+import inf112.skeleton.app.Player;
+import inf112.skeleton.app.RoboRallyGame;
 import inf112.skeleton.app.buttons.PowerDownButton;
 import inf112.skeleton.app.buttons.ProgramButton;
 import inf112.skeleton.app.cards.Card;
@@ -145,7 +145,9 @@ public class GameScreen implements Screen {
             case 12:
                 if (client.announcedPowerDown) {
                     cancelPowerDownWindow.setVisible(true);
-                } else { incrementPhase(); }
+                } else {
+                    incrementPhase();
+                }
                 break;
             case 13:
                 wipeProgram();
@@ -219,7 +221,7 @@ public class GameScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         stateTime += Gdx.graphics.getDeltaTime();
-        for(Player player : players){
+        for (Player player : players) {
             player.getPlayerGraphic().updateAnimationFrame(stateTime);
         }
 

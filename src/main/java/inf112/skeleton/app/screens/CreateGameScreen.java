@@ -21,7 +21,7 @@ public class CreateGameScreen implements Screen {
     private Label difficultyLabel;
 
 
-    public CreateGameScreen (RoboRallyApplication parent) {
+    public CreateGameScreen(RoboRallyApplication parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
 
@@ -44,11 +44,11 @@ public class CreateGameScreen implements Screen {
         final SelectBox<String> mapSelectBox = new SelectBox<>(skin);
         mapSelectBox.setItems("Risky Exchange", "Dizzy Dash", "Island Hop", "Whirlwind Tour");
 
-        final SelectBox<Integer> playersSelectBox=new SelectBox<>(skin);
+        final SelectBox<Integer> playersSelectBox = new SelectBox<>(skin);
         playersSelectBox.setItems(2, 3, 4, 5, 6, 7, 8);
 
-        final SelectBox<String> difficultySelectBox=new SelectBox<>(skin);
-        difficultySelectBox.setItems("Easy","Medium","Hard");
+        final SelectBox<String> difficultySelectBox = new SelectBox<>(skin);
+        difficultySelectBox.setItems("Easy", "Medium", "Hard");
 
         final TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
@@ -73,7 +73,7 @@ public class CreateGameScreen implements Screen {
 
         playersLabel = new Label("Players", skin);
 
-        difficultyLabel = new Label("Difficulty" ,skin);
+        difficultyLabel = new Label("Difficulty", skin);
 
         //Add elements to table
         table.add(titleLabel).colspan(2);

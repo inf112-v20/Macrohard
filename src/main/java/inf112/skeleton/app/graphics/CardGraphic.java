@@ -38,8 +38,8 @@ public class CardGraphic extends Image {
     private static BitmapFont.BitmapFontData fontData = new BitmapFont(Gdx.files.getFileHandle("./assets/fonts/arial.fnt",
             Files.FileType.Internal)).getData();
     private static Pixmap fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
-    private final static Color BLUE = new Color(0.1f,0.7f, 0.9f, 0.3f);
-    private final static Color RED = new Color(1f,0f, 0f, 0.3f);
+    private final static Color BLUE = new Color(0.1f, 0.7f, 0.9f, 0.3f);
+    private final static Color RED = new Color(1f, 0f, 0f, 0.3f);
 
     private final Card[] clientProgram;
     private final Card card;
@@ -154,7 +154,7 @@ public class CardGraphic extends Image {
         xStartPosition = VERTICAL_HAND_MARGIN;
         int lockedCards = client.getNrOfLockedProgramRegisters();
         Integer[] indices = new Integer[5 - lockedCards];
-        for (int i = 0; i < indices.length; i ++) {
+        for (int i = 0; i < indices.length; i++) {
             indices[i] = i + 1;
         }
         registerIndices = new PriorityQueue<>(Arrays.asList(indices));
@@ -193,7 +193,7 @@ public class CardGraphic extends Image {
             if (!parent.isSelected()) {
                 parent.addAction(Actions.moveTo(parent.getInitialX(), Y_PADDING, 0.1f));
                 parent.addAction(Actions.scaleTo(1f, 1f, 0.1f));
-            } else if (parent.notLocked()){
+            } else if (parent.notLocked()) {
                 float yPlacement = (HORIZONTAL_PROGRAM_ALIGNMENT - Y_PADDING) - ((parent.registerIndex - 1f) * (CARD_HEIGHT * 1.2f));
                 parent.addAction(Actions.moveTo(VERTICAL_PROGRAM_ALIGNMENT, yPlacement, 0.1f));
                 parent.addAction(Actions.scaleTo(0.8f, 0.8f, 0.1f));
