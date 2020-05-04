@@ -228,6 +228,9 @@ public class Player implements Comparable<Player> {
         // Discard one damage token if there exist at least one damage token
         if (damageTokens > 0) {
             setDamageTokens(damageTokens - 1);
+            if (playerGraphic != null) {
+                SoundEffects.repair();
+            }
         }
     }
 
