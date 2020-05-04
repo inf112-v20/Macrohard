@@ -56,7 +56,7 @@ public class GameScreen implements Screen {
     private float stateTime = 0f;
 
 
-    public GameScreen(RoboRallyGame game, TiledMapManager mapManager) {
+    public GameScreen(RoboRallyGame game, TiledMapManager mapManager, int screenWidth, int screenHeight) {
         this.game = game;
         this.mapManager = mapManager;
         this.players = game.getPlayers();
@@ -68,11 +68,13 @@ public class GameScreen implements Screen {
         int boardHeight = (Integer) properties.get("height");
         int boardWidth = (Integer) properties.get("width");
 
+        System.out.println(boardWidth);
+
         // Initialise board-view
         renderer = new OrthogonalTiledMapRenderer(map);
         gameCamera = new OrthographicCamera(boardWidth, boardHeight);
         renderer.setView(gameCamera);
-        gamePort = new ExtendViewport(boardWidth, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
+        gamePort = new ExtendViewport(screenWidth, boardHeight * tileSize + CARD_GRAPHIC_HEIGHT, gameCamera);
         gameStage = new Stage(gamePort);
 
         // ---- GRAPHICS ----

@@ -37,7 +37,7 @@ public class RoboRallyGame {
 
         board = new Board(players, mapManager);
         nrOfFlags = board.getNumberOfFlags();
-        gameScreen = new GameScreen(this, mapManager);
+        gameScreen = new GameScreen(this, mapManager, parent.getScreenWidth(), parent.getScreenWidth());
         movementPriority = new PriorityQueue<>();
         deck = new Deck(true);
 

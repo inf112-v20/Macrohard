@@ -144,5 +144,13 @@ public class RoboRallyApplication extends Game {
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }
 
+    public int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public int getScreenHeight() {
+        return screenHeight;
+    }
+
 
 }
