@@ -8,7 +8,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.stream.Collectors;
 
 public class Player implements Comparable<Player> {
 
@@ -133,10 +132,12 @@ public class Player implements Comparable<Player> {
     }
 
     public void lockInRandomProgram() {
-        ArrayList<Card> hand = cards.stream().filter(card -> !card.isLocked()).collect(Collectors.toCollection(ArrayList::new));
-        Collections.shuffle(hand);
-        for (int i = 0; i < hand.size(); i++) {
-            program[i] = hand.get(i);
+        Collections.shuffle(cards);
+        int bound = Math.min(program.length, cards.size());
+        for (int i = 0; i < bound; i++) {
+            if(program[i] != null && program[i].isLocked) continue;
+            program[i] = cards.get(i);
+            program[i].select();
         }
     }
 

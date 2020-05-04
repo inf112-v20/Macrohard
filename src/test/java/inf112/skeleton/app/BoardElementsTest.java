@@ -33,8 +33,10 @@ Board board;
     @Test
     public void walkingIntoHoleDestroysRobot() {
         board.layTile(hole);
+        int maxLifeTokens = player.getLifeTokens();
         board.stepOne(player,Direction.SOUTH);
         assertTrue(player.isDestroyed());
+        assertEquals(maxLifeTokens-1, player.getLifeTokens());
     }
 
     @Test
@@ -86,6 +88,7 @@ Board board;
         player.applyDamage(1);
         board.touchBoardElements();
         assertEquals(tokensBeforeDamage, player.getDamageTokens());
+        assertEquals(board.getTile(repairSite.getRow(), repairSite.getCol()), player.archiveMarker);
     }
 
 }
