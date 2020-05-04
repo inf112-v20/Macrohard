@@ -157,7 +157,7 @@ public class Player implements Comparable<Player> {
     public void wipeProgram() {
         for (int i = 0; i < program.length; i++) {
             Card card = program[i];
-            if (!card.isLocked()) {
+            if (card != null && !card.isLocked()) {
                 program[i] = null;
                 cards.remove(card);
             }
