@@ -3,9 +3,14 @@ package inf112.skeleton.app;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.preferences.AppPreferences;
@@ -26,8 +31,9 @@ public class RoboRallyApplication extends Game {
     public final static int GAME_SCREEN = 2;
     public final static int CREATE_GAME_SCREEN = 3;
 
-    private RoboRallyGame game;
+    public AssetManager manager;
 
+    private RoboRallyGame game;
     private GameScreen gameScreen;
     private PreferenceScreen preferenceScreen;
     private CreateGameScreen createGameScreen;
@@ -38,8 +44,27 @@ public class RoboRallyApplication extends Game {
         screenWidth = screenSize.width;
         screenHeight = screenSize.height;
         appPreferences = new AppPreferences();
+        manager = new AssetManager();
+        loadAssets();
         initializeSound();
         setScreen(new LoadingScreen(this));
+    }
+
+    private void loadAssets() {
+        manager.load("assets/buttons/powerDownGreen.png", Texture.class);
+        manager.load("assets/buttons/powerDownRed.png", Texture.class);
+        manager.load("assets/cards/exampleCard.png", Texture.class);
+        manager.load("assets/cards/move1.png", Texture.class);
+        manager.load("assets/cards/move2.png", Texture.class);
+        manager.load("assets/cards/move3.png", Texture.class);
+        manager.load("assets/cards/moveBack.png", Texture.class);
+        manager.load("assets/cards/rotateClockwise.png", Texture.class);
+        manager.load("assets/cards/rotateCounterclockwise.png", Texture.class);
+        manager.load("assets/robots/robotEAST.png", Texture.class);
+        manager.load("assets/robots/robotWEST.png", Texture.class);
+        manager.load("assets/robots/robotNORTH.png", Texture.class);
+        manager.load("assets/robots/robotSOUTH.png", Texture.class);
+        manager.load("assets/testbot_animated/testbotSpriteSheet.png", Texture.class);
     }
 
     public static Skin getSkin() {
