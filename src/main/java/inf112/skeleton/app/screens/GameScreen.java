@@ -110,7 +110,6 @@ public class GameScreen implements Screen {
                 if (phase < 8 && graphic.isVisible) {
                     graphic.animateMove();
                 }
-                player.getInfoGraphic().updateValues();
             }
         }
 
@@ -280,7 +279,6 @@ public class GameScreen implements Screen {
             if (graphic.isVisible) {
                 graphic.animateMove();
             }
-            player.getInfoGraphic().updateValues();
         }
     }
 }

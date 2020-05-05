@@ -138,7 +138,6 @@ public class RoboRallyApplication extends Game {
         cfg.width = screenSize.width;
         cfg.height = screenSize.height;
         cfg.fullscreen = false;
-
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }
 
