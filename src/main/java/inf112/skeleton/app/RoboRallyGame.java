@@ -31,14 +31,14 @@ public class RoboRallyGame {
 
         // Initialize players
         players = new ArrayList<>(nrOfPlayers);
-        for (int i = 0; i < nrOfPlayers; i ++) {
+        for (int i = 0; i < nrOfPlayers; i++) {
             players.add(i, new Player(0, 0, Direction.EAST));
         }
         client = players.get(0);
 
         board = new Board(players, mapManager);
         nrOfFlags = board.getNumberOfFlags();
-        gameScreen = new GameScreen(this, mapManager, parent.getScreenWidth(), parent.getScreenWidth());
+        gameScreen = new GameScreen(this, mapManager);
         movementPriority = new PriorityQueue<>();
         deck = new Deck(true);
 
@@ -54,7 +54,7 @@ public class RoboRallyGame {
         switch (phase) {
             case -2:
                 if (!client.inPowerDown) {
-                    phase ++;
+                    phase++;
                 }
                 break;
             case -1:
@@ -67,7 +67,7 @@ public class RoboRallyGame {
                         player.inPowerDown = !player.equals(client) && player.getDamageTokens() > 4;
                     }
                 }
-                phase ++;
+                phase++;
                 break;
             case 0:
                 // Check if new deck is needed
@@ -146,17 +146,23 @@ public class RoboRallyGame {
 
             case 5:
                 // Board elements move, starting with all conveyor belts
-                if (board.rollConveyorBelts(false)) { SoundEffects.rollConveyorBelts(); }
+                if (board.rollConveyorBelts(false)) {
+                    SoundEffects.rollConveyorBelts();
+                }
                 phase++;
                 break;
             case 6:
                 // Then express belts move
-                if (board.rollConveyorBelts(true)) { SoundEffects.rollConveyorBelts(); }
+                if (board.rollConveyorBelts(true)) {
+                    SoundEffects.rollConveyorBelts();
+                }
                 phase++;
                 break;
             case 7:
                 // And gears rotate
-                if (board.rotateGears()) { SoundEffects.rotateGears(); }
+                if (board.rotateGears()) {
+                    SoundEffects.rotateGears();
+                }
                 phase++;
                 break;
             case 8:
@@ -246,7 +252,7 @@ public class RoboRallyGame {
     }
 
     public void incrementPhase() {
-        phase ++;
+        phase++;
     }
 
     public GameScreen getGameScreen() {

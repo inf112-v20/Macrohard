@@ -3,100 +3,88 @@ package inf112.skeleton.app.graphics;
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
+import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
-import inf112.skeleton.app.screens.GameScreen;
 
 import java.io.File;
 
-public class PlayerInfoGraphic extends Image {
+public class PlayerInfoGraphic extends Table {
 
     private final Player player;
+    private final Label lives;
+    private final Label damage;
+    private final Label powerDown;
+    private final Label flag;
 
-    private Pixmap fontPixmap;
-    private Pixmap pixmap;
-    private BitmapFont.BitmapFontData fontData;
+    private float timeInSeconds;
 
-    public PlayerInfoGraphic(Player player, GameScreen parent, MapProperties mapProperties) {
-        super(new Texture("./assets/PlayerInfoBackground.png"));
-
+    public PlayerInfoGraphic(Player player, MapProperties mapProperties) {
         this.player = player;
         player.setInfoGraphic(this);
 
         int maxHeight = RoboRallyApplication.screenHeight;
         int boardWidth = (int) mapProperties.get("tilewidth") * (int) mapProperties.get("width");
 
-        setBounds(boardWidth + 5, maxHeight - 341 - ((player.name()-1) * 110), 100, 100);
-        resetPixmaps();
-        updateValues();
+        setBounds(boardWidth + 5, maxHeight - 341 - ((player.name() - 1) * 100), 400, 90);
+        setBackground(new SpriteDrawable(new Sprite(new Texture("./assets/PlayerInfoBackground.png"))));
+        setDebug(false);
+
+        Skin skin = RoboRallyApplication.getSkin();
+        Label name = new Label("Player " + player.name(), skin);
+        name.setColor(Color.WHITE);
+        add(name).colspan(2);
+        row().padTop(15);
+        add(new Label("Lives: ", skin));
+        lives = new Label(Integer.toString(player.getLifeTokens()), skin);
+        add(lives);
+        add(new Label("Powerdown: ", skin)).padLeft(60);
+        row();
+        add(new Label("Damage: ", skin)).padLeft(5);
+        damage = new Label(Integer.toString(player.getDamageTokens()), skin);
+        add(damage);
+        powerDown = new Label("No", skin);
+        add(powerDown).uniformY();
+        row();
+        add(new Label("Flag: ", skin));
+        flag = new Label(Integer.toString(player.getPreviousFlag()), skin);
+        add(flag);
+        align(Align.topLeft).pad(2, 5, 0, 0);
     }
 
-    public void resetPixmaps() {
-        File file = new File("./assets/PlayerInfoBackground.png");
-        this.pixmap = new Pixmap(new FileHandle(file));
-
-        //FONT INIT
-        FileHandle handle = Gdx.files.getFileHandle("./assets/fonts/ArialFull.fnt",
-                Files.FileType.Internal);
-        BitmapFont font = new BitmapFont(handle);
-        this.fontData = font.getData();
-        this.fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
-    }
-
-    private void drawName() {
-        String playerName = "PLAYER " + (player.name());
-        for (int i = 0; i < playerName.length(); i++) {
-            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(playerName.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 10,
-                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
+    @Override
+    public void act(float dt) {
+        timeInSeconds += Gdx.graphics.getRawDeltaTime();
+        float period = 0.8f;
+        if (timeInSeconds > period) {
+            if (player.isDestroyed()) {
+                lives.setText(player.getLifeTokens());
+            }
+            if (!("" + player.getDamageTokens()).equals(damage.toString())) {
+                damage.setText(player.getDamageTokens());
+            }
+            if (!("" + player.getPreviousFlag()).equals(flag.toString())) {
+                flag.setText(player.getPreviousFlag());
+            }
+            if (player.announcedPowerDown && !powerDown.toString().equals("Announced")) {
+                powerDown.setText("Announced");
+            } else if (player.inPowerDown && !powerDown.toString().equals("Yes")) {
+                powerDown.setText("Yes");
+            } else if (!powerDown.toString().equals("No")) {
+                powerDown.setText("No");
+            }
         }
     }
 
-    private void drawLifeTokens() {
-        String life = "LIFE  " + player.getLifeTokens();
-        for (int i = 0; i < life.length(); i++) {
-            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 200,
-                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
-        }
-    }
-
-    private void drawDamage() {
-        String health = "DMG   " + player.getDamageTokens();
-        for (int i = 0; i < health.length(); i++) {
-            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(health.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 270,
-                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
-        }
-    }
-
-    private void drawFlag() {
-        String life = "FLAG  " + player.getPreviousFlag();
-        for (int i = 0; i < life.length(); i++) {
-            BitmapFont.Glyph partialStringGlyph = fontData.getGlyph(life.charAt(i));
-            pixmap.drawPixmap(fontPixmap, 10 + 35 * i, 340,
-                    partialStringGlyph.srcX, partialStringGlyph.srcY, partialStringGlyph.width, partialStringGlyph.height);
-        }
-    }
-
-    public void draw() {
-        Texture texture = new Texture(pixmap);
-        setDrawable(new SpriteDrawable(new Sprite(texture)));
-    }
-
-    public void updateValues() {
-        resetPixmaps();
-        drawName();
-        drawLifeTokens();
-        drawDamage();
-        drawFlag();
-        draw();
-    }
 }

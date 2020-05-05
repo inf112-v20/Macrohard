@@ -8,10 +8,10 @@ import static org.junit.Assert.assertEquals;
 
 public class MovementCardTest {
 
-    MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
-    MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
-    MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
-    MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
+    private MovementCard move1 = new MovementCard(1, MovementType.ONE_FORWARD);
+    private MovementCard move2 = new MovementCard(1, MovementType.TWO_FORWARD);
+    private MovementCard move3 = new MovementCard(1, MovementType.THREE_FORWARD);
+    private MovementCard moveBack = new MovementCard(1, MovementType.ONE_BACKWARD);
 
     @Test
     public void numberOfMovesIsEqualToOneForOneForwardMovementCard() {

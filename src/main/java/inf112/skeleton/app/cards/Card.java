@@ -30,13 +30,21 @@ public abstract class Card implements Comparable<Card> {
         }
     }
 
-    public boolean isLocked() { return isLocked; }
+    public boolean isLocked() {
+        return isLocked;
+    }
 
-    public void select() { isSelected = true; }
+    public void select() {
+        isSelected = true;
+    }
 
-    public void deselect() { isSelected = false; }
+    public void deselect() {
+        isSelected = false;
+    }
 
-    public boolean isSelected() { return isSelected; }
+    public boolean isSelected() {
+        return isSelected;
+    }
 
     public String getName() {
         return cardType.toString();

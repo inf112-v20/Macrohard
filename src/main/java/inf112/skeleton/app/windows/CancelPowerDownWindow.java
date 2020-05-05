@@ -6,8 +6,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.Window;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import inf112.skeleton.app.RoboRallyGame;
-import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.screens.GameScreen;
 

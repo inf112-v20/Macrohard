@@ -14,10 +14,10 @@ import inf112.skeleton.app.screens.GameScreen;
 
 public class GameScreenInputProcessor extends InputListener {
 
-    RoboRallyApplication parent;
-    Player player;
-    Board board;
-    GameScreen gameScreen;
+    private RoboRallyApplication parent;
+    private Player player;
+    private Board board;
+    private GameScreen gameScreen;
 
     public GameScreenInputProcessor(RoboRallyApplication parent, Player client, Board board, GameScreen gameScreen) {
         this.parent = parent;
