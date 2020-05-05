@@ -15,7 +15,7 @@ public class ProgramButton extends TextButton {
         addListener(new ProgramButtonChangeListener(gameScreen));
 
         gameScreen.getGameStage().addActor(this);
-        setBounds(RoboRallyApplication.screenWidth - 650, -100, 220, 60);
+        setBounds(RoboRallyApplication.screenWidth - 660, -100, 220, 60);
         setVisible(false);
     }
 
