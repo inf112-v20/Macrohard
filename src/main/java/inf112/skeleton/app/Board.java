@@ -330,15 +330,12 @@ public class Board {
         for (Player player : players) {
             if (!player.isDestroyed()) {
                 Tile tile = getTile(player);
-                if (tile instanceof Flag) {
-                    Flag flag = (Flag) tile;
-                    player.setArchiveMarker(flag);
-                    if (player.getNextFlag() == flag.getNumber()) {
+                if (tile instanceof Flag || tile instanceof RepairSite) {
+                    player.repair();
+                    player.setArchiveMarker(tile);
+                    if (tile instanceof Flag && ((Flag) tile).getNumber() == player.getNextFlag()) {
                         player.touchFlag();
                     }
-                } else if (tile instanceof RepairSite) {
-                    player.setArchiveMarker(tile);
-                    player.repair();
                 }
             }
         }
