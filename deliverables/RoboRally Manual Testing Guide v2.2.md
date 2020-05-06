@@ -83,8 +83,12 @@ Testing repair sites
 - Use any of the methods specified above to take damage
 - Move robot to tile marked with tool or hammer.
 - Press "F" and observe that one damage token is removed from the robot.
+- Destroy robot in any way you like.
+- Press "M" to reboot robot and observe that archive marker was updated.
 
 Testing flags.
 - Move robot to any flag visible on the board
 - Press "F" to interact with flag
 - Observe that any other sequence of flag visits other than 1-2-3 is not registered in the player graphic.
+- Destroy robot in any way you like.
+- Press "M" to reboot robot and observe that archive marker was updated.

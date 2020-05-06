@@ -12,8 +12,6 @@ import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.cards.RotationType;
 import inf112.skeleton.app.screens.GameScreen;
 
-import java.util.TimerTask;
-import java.util.concurrent.TimeUnit;
 
 public class GameScreenInputProcessor extends InputListener {
 
@@ -72,6 +70,11 @@ public class GameScreenInputProcessor extends InputListener {
                 break;
             case Input.Keys.F:
                 board.touchBoardElements();
+                break;
+
+            case Input.Keys.M:
+                player.reboot();
+                player.getPlayerGraphic().animateReboot();
                 break;
 
         }
