@@ -49,7 +49,7 @@ public class GameScreen implements Screen {
     public ContinuePowerDownWindow continuePowerDownWindow;
     public CancelPowerDownWindow cancelPowerDownWindow;
 
-    private final TiledMapManager mapManager;
+    public final TiledMapManager mapManager;
     private final ArrayList<Player> players;
     private Player client;
 

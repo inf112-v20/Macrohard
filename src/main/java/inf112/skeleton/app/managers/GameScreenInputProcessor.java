@@ -12,6 +12,9 @@ import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.cards.RotationType;
 import inf112.skeleton.app.screens.GameScreen;
 
+import java.util.TimerTask;
+import java.util.concurrent.TimeUnit;
+
 public class GameScreenInputProcessor extends InputListener {
 
     private RoboRallyApplication parent;
@@ -49,6 +52,28 @@ public class GameScreenInputProcessor extends InputListener {
                 RotationCard rotationCardLeft = new RotationCard(0, RotationType.COUNTER_CLOCKWISE);
                 board.execute(player, rotationCardLeft);
                 break;
+            case Input.Keys.G:
+                board.rotateGears();
+                break;
+            case Input.Keys.E:
+                board.rollConveyorBelts(true);
+                board.rollConveyorBelts(true);
+                break;
+            case Input.Keys.B:
+                board.fireBoardLasers();
+                gameScreen.mapManager.getLayer("LASERBEAMS").setVisible(true);
+                break;
+            case Input.Keys.L:
+                gameScreen.eraseLasers();
+                gameScreen.drawLasers(board.firePlayerLasers());
+                break;
+            case Input.Keys.R:
+                board.rollConveyorBelts(false);
+                break;
+            case Input.Keys.F:
+                board.touchBoardElements();
+                break;
+
         }
         gameScreen.updateGraphics();
 
