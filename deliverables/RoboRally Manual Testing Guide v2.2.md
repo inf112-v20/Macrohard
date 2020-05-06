@@ -1,6 +1,6 @@
 Manual testing guide for v2.2
 
-##testing GameLoop:
+## testing GameLoop:
 
 -   Run Program.
 -   click on "New Game"-tab in main menu.
@@ -37,7 +37,7 @@ D. Touch Checkpoints.
     session is now finished.
 
 
-##testing preferences:
+## testing preferences:
 
 -   Run program.
 -   click on the dropdown menu to the right of Song to choose between a
