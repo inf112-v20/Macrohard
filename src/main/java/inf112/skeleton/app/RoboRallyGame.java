@@ -46,7 +46,12 @@ public class RoboRallyGame {
         gameScreen.getGameStage().addListener(inputProcessor);
     }
 
-    // Assumes the non-NPC player is always the first element of the players ArrayList
+    // Assumes the non-NPC player is always the first element of the players
+
+    /**
+     * Logical representation of gameLoop.
+     * Gets called in render and updates the state of the game accordingly.
+     */
     public void tick() {
         if (players.size() == 1) {
             parent.setScreen(new WinScreen(players.get(0)));
@@ -114,7 +119,6 @@ public class RoboRallyGame {
                 }
                 phase++;
                 break;
-
             case 3:
                 // Decide the order in which program cards will be played
                 for (Player player : players) {
@@ -124,7 +128,6 @@ public class RoboRallyGame {
                 }
                 phase++;
                 break;
-
             case 4:
                 // Execute program cards in order. If last player played his card on current programRegister, continue.
                 if (!movementPriority.isEmpty() && players.stream().anyMatch(player -> !(player.inPowerDown || player.isDestroyed()))) {
@@ -143,7 +146,6 @@ public class RoboRallyGame {
                     phase++;
                 }
                 break;
-
             case 5:
                 // Board elements move, starting with all conveyor belts
                 if (board.rollConveyorBelts(false)) {
@@ -219,7 +221,6 @@ public class RoboRallyGame {
                         }
                     }
                 }
-
                 currentProgramRegister = 0;
                 phase = -2;
                 break;

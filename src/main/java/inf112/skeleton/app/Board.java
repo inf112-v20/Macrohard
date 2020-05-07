@@ -114,10 +114,6 @@ public class Board {
                     case "CONVEYOR_BELT":
                         currentTile = installConveyorBelt(mapManager, row, col);
                         break;
-                    case "FLAG":
-                        int numberFlag = (Integer) tile.getProperties().get("Number");
-                        currentTile = new Flag(numberFlag, row, col);
-                        break;
                     case "REPAIR_SITE":
                         currentTile = new RepairSite(row, col);
                         break;
@@ -288,6 +284,13 @@ public class Board {
         return beam;
     }
 
+    /**
+     * This method finds occupied conveyor belts and queues them for movement
+     * to ensure that no two players occupies the same tile after conveyors are moved.
+     *
+     * @param expressOnly true if only express conveyor belts are to be queued up for movement
+     * @return players queued for movement
+     */
     private ArrayList<Player> queueConveyorBelts(boolean expressOnly) {
         queuedConveyorBelts = new LinkedList<>();
         ArrayList<Tile> targetTiles = new ArrayList<>();
@@ -314,6 +317,13 @@ public class Board {
         return players;
     }
 
+    /**
+     * Move players queued for movement.
+     * If there are no players waiting to move, we return false to avoid playing the sound effect.
+     *
+     * @param expressOnly true if only express conveyor belts are to be queued up for movement
+     * @return False if no players are queued for movement
+     */
     public boolean rollConveyorBelts(boolean expressOnly) {
         ArrayList<Player> rollingPlayers = queueConveyorBelts(expressOnly);
         int indexOfPlayer = 0;

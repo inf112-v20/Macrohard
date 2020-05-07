@@ -94,6 +94,11 @@ public class GameScreen implements Screen {
         gameCamera.translate(-(boardWidth * TILE_SIZE) / 3f, -(CARD_GRAPHIC_HEIGHT));
     }
 
+    /**
+     * Update the graphical elements of the board, depending on where we are in the gameLoop.
+     *
+     * @param phase the current state of gameLoop
+     */
     private void updateScreenGraphics(int phase) {
         // --- BUTTONS ---
         boolean inputPhase = phase < 2 && !client.inPowerDown;
@@ -157,9 +162,15 @@ public class GameScreen implements Screen {
 
     }
 
-    public void drawLasers(ArrayList<LinkedList<Tile>> firePlayerLasers) {
+    /**
+     * Draws player lasers from the logical representation in Board
+     * Also draws the static board lasers.
+     *
+     * @param playerLaserBeams List containing lists of tiles, where every list of tiles represent a player laser beam
+     */
+    public void drawLasers(ArrayList<LinkedList<Tile>> playerLaserBeams) {
         mapManager.getLayer("LASERBEAMS").setVisible(true);
-        for (LinkedList<Tile> laserBeam : firePlayerLasers) {
+        for (LinkedList<Tile> laserBeam : playerLaserBeams) {
             Direction direction = laserBeam.getFirst().getPlayer().getDirection();
             boolean horizontal = direction == Direction.EAST || direction == Direction.WEST;
             for (Tile tile : laserBeam) {
@@ -177,7 +188,6 @@ public class GameScreen implements Screen {
         for (Card card : client.getCards()) {
             if (!card.isSelected()) {
                 card.getCardGraphic().remove();
-
             }
         }
     }
