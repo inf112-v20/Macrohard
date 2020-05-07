@@ -5,34 +5,18 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 
-/*
-    Not very useful right now, but might be nice later.
- */
 public class TiledMapManager {
 
     private final TiledMap map;
-    private final MapProperties properties;
     private final int height;
     private final int width;
 
     public TiledMapManager(String fileName) {
         map = new TmxMapLoader().load(fileName);
         map.getLayers().get("LASERBEAMS").setVisible(false);
-        properties = map.getProperties();
+        MapProperties properties = map.getProperties();
         height = properties.get("height", Integer.class);
         width = properties.get("width", Integer.class);
-    }
-
-    public TiledMap getMap() {
-        return map;
-    }
-
-    public TiledMapTileLayer getLayer(String layerName) {
-        return (TiledMapTileLayer) map.getLayers().get(layerName);
-    }
-
-    public TiledMapTileLayer.Cell getCell(String layerName, int row, int col) {
-        return getLayer(layerName).getCell(col, row);
     }
 
     public void setLaserCell(boolean horizontal, int row, int col) {
@@ -40,10 +24,11 @@ public class TiledMapManager {
         TiledMapTileLayer.Cell cell = new TiledMapTileLayer.Cell();
         if (getCell("PLAYERBEAMS", row, col) == null) {
             cell.setTile(map.getTileSets().getTile(id));
+            getLayer("PLAYERBEAMS").setCell(col, row, cell);
         } else if (getCell("PLAYERBEAMS", row, col).getTile().getId() != id) {
             cell.setTile(map.getTileSets().getTile(40));
+            getLayer("PLAYERBEAMS").setCell(col, row, cell);
         }
-        getLayer("PLAYERBEAMS").setCell(col, row, cell);
     }
 
     public void cleanPlayerLaserLayer() {
@@ -54,6 +39,18 @@ public class TiledMapManager {
                 }
             }
         }
+    }
+
+    public TiledMapTileLayer getLayer(String layerName) {
+        return (TiledMapTileLayer) map.getLayers().get(layerName);
+    }
+
+    public TiledMapTileLayer.Cell getCell(String layerName, int row, int col) {
+        return getLayer(layerName).getCell(col, row);
+    }
+
+    public TiledMap getMap() {
+        return map;
     }
 
     public int getHeight() {

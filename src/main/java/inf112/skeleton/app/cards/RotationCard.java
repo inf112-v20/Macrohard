@@ -17,7 +17,7 @@ public class RotationCard extends Card {
         } else if (this.rotationType.equals(RotationType.COUNTER_CLOCKWISE)) {
             return direction.turnCounterClockwise();
         } else {
-            return direction.turnClockwise().turnClockwise();
+            return direction.opposite();
         }
     }
 

@@ -6,8 +6,4 @@ public class RepairSite extends Tile {
         super(row, col);
     }
 
-    @Override
-    public String toString() {
-        return "TYPE: REPAIR_SITE   ROW: " + this.getRow() + "  COL: " + this.getCol();
-    }
 }

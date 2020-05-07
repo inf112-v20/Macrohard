@@ -60,17 +60,4 @@ public class Deck {
         return deck.size();
     }
 
-    @Override
-    public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (Card i : deck) {
-            result.append(i.toString()).append("\n");
-        }
-        return result.toString();
-    }
-
-    public ArrayList<Card> getDeck() {
-        return deck;
-    }
-
 }

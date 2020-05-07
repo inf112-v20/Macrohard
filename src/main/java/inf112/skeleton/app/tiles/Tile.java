@@ -1,7 +1,5 @@
 package inf112.skeleton.app.tiles;
 
-//Might be useful when implementing collisions and tile dynamics
-
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
 
@@ -42,6 +40,5 @@ public class Tile {
     public int getCol() {
         return col;
     }
-
 
 }

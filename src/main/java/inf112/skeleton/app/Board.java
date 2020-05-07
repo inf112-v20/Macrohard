@@ -26,7 +26,13 @@ public class Board {
 
     private int numberOfFlags = 0;
 
-    //Graphic-independent constructor for test-classes
+    /**
+     * This method constructs a graphic-independent Board for test purposes.
+     *
+     * @param height  of the board.
+     * @param width   of the board.
+     * @param players which are to be situated on the board.
+     */
     public Board(int height, int width, Player... players) {
         this.players = new ArrayList<>(Arrays.asList(players));
         this.docks = new ArrayList<>();
@@ -37,11 +43,16 @@ public class Board {
         layTiles();
 
         for (Player player : players) {
-            set(player);
+            getTile(player).setPlayer(player);
         }
     }
 
-    //Graphic-dependent constructor for multiple players
+    /**
+     * This method constructs a Board from a TiledMap and a list of players.
+     *
+     * @param players    which are to be docked on-board.
+     * @param mapManager holds information about the TiledMap from which the Board is built.
+     */
     public Board(ArrayList<Player> players, TiledMapManager mapManager) {
         this.players = players;
         this.docks = new ArrayList<>();
@@ -55,10 +66,11 @@ public class Board {
         placeFlags(mapManager);
     }
 
-    private void set(Player player) {
-        getTile(player).setPlayer(player);
-    }
-
+    /**
+     * This method places each player in the input-list at a separate dock on-board.
+     *
+     * @param players to be docked.
+     */
     public void dockPlayers(ArrayList<Player> players) {
         int playerIndex = 0;
         while (playerIndex < Math.min(players.size(), docks.size())) {
@@ -80,8 +92,11 @@ public class Board {
         board[tile.getRow()][tile.getCol()] = tile;
     }
 
-    //Fills the board with standard tiles
-    public void layTiles() {
+    /**
+     * This method fills the board with generic tiles.
+     * Primarily for testing purposes.
+     */
+    private void layTiles() {
         board = new Tile[height][width];
         for (int i = 0; i < height; i++) {
             for (int j = 0; j < width; j++) {
@@ -90,8 +105,12 @@ public class Board {
         }
     }
 
-    //Fills the board with tiles in accordance with the mapManager
-    public void layTiles(TiledMapManager mapManager) {
+    /**
+     * This method fills the board with tiles in accordance with the TiledMap held in mapManager.
+     *
+     * @param mapManager holds the TiledMap from which the tiles are derived.
+     */
+    private void layTiles(TiledMapManager mapManager) {
         board = new Tile[height][width];
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
@@ -138,7 +157,7 @@ public class Board {
                         erectWall(direction, row, col);
                         int nrOfLasers = (Integer) wall.getProperties().get("NrOfLasers");
                         if (nrOfLasers > 0) {
-                            installLaser(nrOfLasers, direction.opposite(), row, col);
+                            lasers.add(new Laser(row, col, nrOfLasers, direction));
                         }
                     }
                 }
@@ -153,10 +172,6 @@ public class Board {
             Tile nextTile = getNextTile(tile, direction);
             nextTile.getWalls().add(direction.opposite());
         }
-    }
-
-    private void installLaser(int nrOfLasers, Direction direction, int row, int col) {
-        lasers.add(new Laser(row, col, nrOfLasers, direction));
     }
 
     private ConveyorBelt installConveyorBelt(TiledMapManager mapManager, int row, int col) {
@@ -239,29 +254,13 @@ public class Board {
         return laserBeamTiles;
     }
 
-    public boolean rotateGears() {
-        boolean used = false;
-        for (Tile[] row : board) {
-            for (Tile tile : row) {
-                if (tile instanceof Gear && tile.isOccupied()) {
-                    used = true;
-                    Gear gear = (Gear) tile;
-                    Player player = gear.getPlayer();
-                    if (gear.rotatesClockwise()) {
-                        player.rotateClockwise();
-                    } else {
-                        player.rotateCounterClockwise();
-                    }
-                }
-            }
-        }
-        return used;
-    }
-
-    public Tile getTile(Laser laser) {
-        return getTile(laser.getRow(), laser.getCol());
-    }
-
+    /**
+     * This method finds the tile at which a laser stops through recursion.
+     *
+     * @param tile      the tile from which the laser shoots.
+     * @param direction the direction in which the laser shoots.
+     * @return the tile at which the laser stops.
+     */
     private Tile getLaserTarget(Tile tile, Direction direction) {
         if (isOccupied(tile) || wallCollision(tile, direction) || outOfBounds(tile, direction)) {
             return tile;
@@ -284,9 +283,28 @@ public class Board {
         return beam;
     }
 
+    public boolean rotateGears() {
+        boolean used = false;
+        for (Tile[] row : board) {
+            for (Tile tile : row) {
+                if (tile instanceof Gear && tile.isOccupied()) {
+                    used = true;
+                    Gear gear = (Gear) tile;
+                    Player player = gear.getPlayer();
+                    if (gear.rotatesClockwise()) {
+                        player.rotateClockwise();
+                    } else {
+                        player.rotateCounterClockwise();
+                    }
+                }
+            }
+        }
+        return used;
+    }
+
     /**
-     * This method finds occupied conveyor belts and queues them for movement
-     * to ensure that no two players occupies the same tile after conveyors are moved.
+     * This method finds occupied conveyor belts and queues them for movement,
+     * ensuring that no two players occupies the same tile after conveyors are moved.
      *
      * @param expressOnly true if only express conveyor belts are to be queued up for movement
      * @return players queued for movement
@@ -302,6 +320,9 @@ public class Board {
                     if ((!expressOnly || belt.isExpress()) && legalRoll(belt, belt.getDirection(), expressOnly)) {
                         Tile targetTile = getNextTile(belt, belt.getDirection());
                         int index = targetTiles.indexOf(targetTile);
+
+                        // Checks if another belt already is queued to roll a player to the same tile.
+                        // If so, removing the queued conveyor belt from the queue
                         if (targetTiles.contains(targetTile)) {
                             queuedConveyorBelts.remove(index);
                             players.remove(index);
@@ -318,11 +339,11 @@ public class Board {
     }
 
     /**
-     * Move players queued for movement.
-     * If there are no players waiting to move, we return false to avoid playing the sound effect.
+     * This method first queues and then rolls conveyor belts on board.
+     * It returns whether it's execution caused any player movements.
      *
-     * @param expressOnly true if only express conveyor belts are to be queued up for movement
-     * @return False if no players are queued for movement
+     * @param expressOnly true if only express conveyor belts are to be moved
+     * @return false if no players are moved
      */
     public boolean rollConveyorBelts(boolean expressOnly) {
         ArrayList<Player> rollingPlayers = queueConveyorBelts(expressOnly);
@@ -408,6 +429,13 @@ public class Board {
 
     }
 
+    /**
+     * This method checks whether or not a player is obstructed from moving in a given direction.
+     *
+     * @param player    that requests the move.
+     * @param direction that the player wants to move.
+     * @return true if and only if move is legal.
+     */
     public boolean legalStep(Player player, Direction direction) {
         Tile fromTile = getTile(player);
         if (player.isDestroyed() || outOfBounds(fromTile, direction) || wallCollision(getTile(player), direction)) {
@@ -424,6 +452,15 @@ public class Board {
         }
     }
 
+    /**
+     * This method checks whether a player can be legally rolled in a given direction.
+     * Assumes that all conveyor belts of same velocity or lower are rolled simultaneously.
+     *
+     * @param tile        from which the player is to be rolled.
+     * @param direction   in which the roll will lead.
+     * @param expressOnly if only express belts are being moved.
+     * @return true if and only if roll is legal.
+     */
     public boolean legalRoll(Tile tile, Direction direction, boolean expressOnly) {
         Player player = tile.getPlayer();
         Tile fromTile = getTile(player);
@@ -467,6 +504,10 @@ public class Board {
 
     public Tile getTile(Player player) {
         return getTile(player.getRow(), player.getCol());
+    }
+
+    public Tile getTile(Laser laser) {
+        return getTile(laser.getRow(), laser.getCol());
     }
 
     public Tile getNextTile(Tile tile, Direction direction) {

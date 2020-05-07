@@ -19,11 +19,11 @@ public class PowerDownButton extends ImageButton {
         super(UNCHECKED, UNCHECKED, CHECKED);
         addListener(new PowerDownButtonListener(gameScreen));
         gameScreen.getGameStage().addActor(this);
-        setBounds(RoboRallyApplication.screenWidth -800, -120, 100, 100);
+        setBounds(RoboRallyApplication.screenWidth - 800, -120, 100, 100);
         setVisible(false);
     }
 
-    private class PowerDownButtonListener extends ChangeListener {
+    private static class PowerDownButtonListener extends ChangeListener {
 
         private GameScreen gameScreen;
 

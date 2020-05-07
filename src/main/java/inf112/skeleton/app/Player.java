@@ -2,7 +2,6 @@ package inf112.skeleton.app;
 
 import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.PlayerGraphic;
-import inf112.skeleton.app.graphics.PlayerInfoGraphic;
 import inf112.skeleton.app.tiles.Tile;
 import org.jetbrains.annotations.NotNull;
 
@@ -29,8 +28,6 @@ public class Player implements Comparable<Player> {
     private int previousFlag;
 
     private final int name;
-
-    private PlayerInfoGraphic infoGraphic;
     private PlayerGraphic playerGraphic;
 
     public Player(int row, int col, Direction direction) {
@@ -44,37 +41,17 @@ public class Player implements Comparable<Player> {
         this.name = ++RoboRallyApplication.numberOfPlayers;
     }
 
-    public int getRow() {
-        return row;
-    }
-
-    public int getCol() {
-        return col;
-    }
-
-    public void setRow(int row) {
-        this.row = row;
-    }
-
-    public void setCol(int col) {
-        this.col = col;
-    }
-
-    public Direction getDirection() {
-        return this.direction;
-    }
-
-    public void setDirection(Direction direction) {
-        this.direction = direction;
-    }
-
-    public void setArchiveMarker(Tile archiveMarker) {
-        this.archiveMarker = archiveMarker;
-    }
-
     public void stepIn(Direction direction) {
         setRow(row + direction.getRowModifier());
         setCol(col + direction.getColumnModifier());
+    }
+
+    public void rotateClockwise() {
+        setDirection(getDirection().turnClockwise());
+    }
+
+    public void rotateCounterClockwise() {
+        setDirection(getDirection().turnCounterClockwise());
     }
 
     public boolean hasCompleteProgram() {
@@ -84,42 +61,6 @@ public class Player implements Comparable<Player> {
             }
         }
         return true;
-    }
-
-    public int getDamageTokens() {
-        return damageTokens;
-    }
-
-    public int getLifeTokens() {
-        return lifeTokens;
-    }
-
-    public int getHandSize() {
-        return 9 - damageTokens;
-    }
-
-    public PlayerGraphic getPlayerGraphic() {
-        return playerGraphic;
-    }
-
-    public void setPlayerGraphic(PlayerGraphic playerGraphic) {
-        this.playerGraphic = playerGraphic;
-    }
-
-    public PlayerInfoGraphic getInfoGraphic() {
-        return infoGraphic;
-    }
-
-    public void setInfoGraphic(PlayerInfoGraphic infoGraphic) {
-        this.infoGraphic = infoGraphic;
-    }
-
-    public void rotateClockwise() {
-        setDirection(getDirection().turnClockwise());
-    }
-
-    public void rotateCounterClockwise() {
-        setDirection(getDirection().turnCounterClockwise());
     }
 
     public void receive(Card card) {
@@ -198,25 +139,10 @@ public class Player implements Comparable<Player> {
         destroyed = true;
     }
 
-    public void destroyInFall() {
-        destroyedInFall = true;
-    }
-
-    public void clearDestroyInFall() {
-        destroyedInFall = false;
-    }
-
-    public boolean isDestroyedInFall() {
-        return destroyedInFall;
-    }
-
-
-    public boolean isDestroyed() {
-        return destroyed;
-    }
-
-    public boolean isDead() {
-        return lifeTokens <= 0;
+    public void powerDown() {
+        announcedPowerDown = false;
+        inPowerDown = true;
+        setDamageTokens(0);
     }
 
     public void reboot() {
@@ -238,21 +164,55 @@ public class Player implements Comparable<Player> {
         }
     }
 
-    @Override
-    public int compareTo(@NotNull Player otherPlayer) {
-        return getProgram()[RoboRallyGame.currentProgramRegister].compareTo(otherPlayer.getProgram()[RoboRallyGame.currentProgramRegister]);
+    public int getRow() {
+        return row;
     }
 
-    @Override
-    public String toString() {
-        return "Player{" +
-                "row=" + row +
-                ", col=" + col +
-                ", damage=" + damageTokens +
-                '}';
+    public int getCol() {
+        return col;
     }
 
-    public int name() {
+    public void setRow(int row) {
+        this.row = row;
+    }
+
+    public void setCol(int col) {
+        this.col = col;
+    }
+
+    public Direction getDirection() {
+        return this.direction;
+    }
+
+    public void setDirection(Direction direction) {
+        this.direction = direction;
+    }
+
+    public void setArchiveMarker(Tile archiveMarker) {
+        this.archiveMarker = archiveMarker;
+    }
+
+    public void destroyInFall() {
+        destroyedInFall = true;
+    }
+
+    public void clearDestroyInFall() {
+        destroyedInFall = false;
+    }
+
+    public boolean isDestroyedInFall() {
+        return destroyedInFall;
+    }
+
+    public boolean isDestroyed() {
+        return destroyed;
+    }
+
+    public boolean isDead() {
+        return lifeTokens <= 0;
+    }
+
+    public int getName() {
         return name;
     }
 
@@ -272,9 +232,28 @@ public class Player implements Comparable<Player> {
         return Math.max(0, damageTokens - 4);
     }
 
-    public void powerDown() {
-        announcedPowerDown = false;
-        inPowerDown = true;
-        setDamageTokens(0);
+    public int getDamageTokens() {
+        return damageTokens;
+    }
+
+    public int getLifeTokens() {
+        return lifeTokens;
+    }
+
+    public int getHandSize() {
+        return 9 - damageTokens;
+    }
+
+    public PlayerGraphic getPlayerGraphic() {
+        return playerGraphic;
+    }
+
+    public void setPlayerGraphic(PlayerGraphic playerGraphic) {
+        this.playerGraphic = playerGraphic;
+    }
+
+    @Override
+    public int compareTo(@NotNull Player otherPlayer) {
+        return getProgram()[RoboRallyGame.currentProgramRegister].compareTo(otherPlayer.getProgram()[RoboRallyGame.currentProgramRegister]);
     }
 }

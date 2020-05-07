@@ -27,6 +27,10 @@ public enum Direction {
         return directions[(this.ordinal() - 1) % directions.length];
     }
 
+    public Direction opposite() {
+        return this.turnClockwise().turnClockwise();
+    }
+
     public static Direction fromString(String string) throws IllegalArgumentException {
         switch (string) {
             case "NORTH":
@@ -58,8 +62,13 @@ public enum Direction {
         }
     }
 
-    public Direction opposite() {
-        return this.turnClockwise().turnClockwise();
+
+    public int getRowModifier() {
+        return this.getCoordinateModifiers()[0];
+    }
+
+    public int getColumnModifier() {
+        return this.getCoordinateModifiers()[1];
     }
 
     public int[] getCoordinateModifiers() {
@@ -74,24 +83,5 @@ public enum Direction {
         }
     }
 
-    public int getRowModifier() {
-        return this.getCoordinateModifiers()[0];
-    }
-
-    public int getColumnModifier() {
-        return this.getCoordinateModifiers()[1];
-    }
-
-    public static float getDegreesBetween(Direction from, Direction to) {
-        if (from.opposite().equals(to)) {
-            return (float) 180.0;
-        } else if (from.turnClockwise().equals(to)) {
-            return (float) -90.0;
-        } else if (from.turnCounterClockwise().equals(to)) {
-            return (float) 90.0;
-        } else {
-            return (float) 0.0;
-        }
-    }
 
 }

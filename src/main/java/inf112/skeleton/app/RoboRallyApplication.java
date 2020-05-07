@@ -8,6 +8,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.preferences.AppPreferences;
 import inf112.skeleton.app.screens.*;
@@ -35,6 +36,12 @@ public class RoboRallyApplication extends Game {
     private GameScreen gameScreen;
     private PreferenceScreen preferenceScreen;
     private CreateGameScreen createGameScreen;
+
+    /**
+     * Enabling debug mode you can use keyboard-input to move your robot and
+     * test board elements.
+     */
+    public static boolean debugMode = false;
 
     @Override
     public void create() {
@@ -75,6 +82,15 @@ public class RoboRallyApplication extends Game {
             music.setVolume(appPreferences.getMusicVolume());
             music.play();
         }
+    }
+
+    public void changeSong(String song) {
+        String filePath = "data/Music/" + song.replaceAll(" ", "") + ".wav";
+        currentSong = song;
+        music.stop();
+        music = Gdx.audio.newMusic(Gdx.files.internal(filePath));
+        music.setLooping(true);
+        music.play();
     }
 
     public AppPreferences getPreferences() {
@@ -124,6 +140,8 @@ public class RoboRallyApplication extends Game {
     }
 
     public void createGame(String mapName, int nrOfPlayers) {
+        RoboRallyApplication.numberOfPlayers = 0;
+        CardGraphic.xStartPosition = CardGraphic.VERTICAL_HAND_MARGIN;
         String fileName = "assets/tiled/" + mapName.replaceAll("\\s+", "_") + ".tmx";
         TiledMapManager mapManager = new TiledMapManager(fileName);
         game = new RoboRallyGame(this, mapManager, nrOfPlayers);
@@ -140,14 +158,5 @@ public class RoboRallyApplication extends Game {
         cfg.fullscreen = true;
         new LwjglApplication(new RoboRallyApplication(), cfg);
     }
-
-    public int getScreenWidth() {
-        return screenWidth;
-    }
-
-    public int getScreenHeight() {
-        return screenHeight;
-    }
-
 
 }

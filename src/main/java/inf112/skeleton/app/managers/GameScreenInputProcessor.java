@@ -12,7 +12,6 @@ import inf112.skeleton.app.cards.RotationCard;
 import inf112.skeleton.app.cards.RotationType;
 import inf112.skeleton.app.screens.GameScreen;
 
-
 public class GameScreenInputProcessor extends InputListener {
 
     private RoboRallyApplication parent;
@@ -59,7 +58,6 @@ public class GameScreenInputProcessor extends InputListener {
                 break;
             case Input.Keys.B:
                 board.fireBoardLasers();
-                gameScreen.mapManager.getLayer("LASERBEAMS").setVisible(true);
                 break;
             case Input.Keys.L:
                 gameScreen.eraseLasers();
@@ -71,7 +69,6 @@ public class GameScreenInputProcessor extends InputListener {
             case Input.Keys.F:
                 board.touchBoardElements();
                 break;
-
             case Input.Keys.M:
                 player.reboot();
                 player.getPlayerGraphic().animateReboot();
@@ -79,15 +76,7 @@ public class GameScreenInputProcessor extends InputListener {
 
         }
         gameScreen.updateGraphics();
-
         return true;
     }
 
-    public Player getPlayer() {
-        return player;
-    }
-
-    public void setPlayer(Player player) {
-        this.player = player;
-    }
 }

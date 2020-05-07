@@ -9,13 +9,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.RoboRallyApplication;
-import inf112.skeleton.app.graphics.CardGraphic;
 
 public class CreateGameScreen implements Screen {
 
     private RoboRallyApplication parent;
     private Stage stage;
-
 
     public CreateGameScreen(RoboRallyApplication parent) {
         this.parent = parent;
@@ -26,28 +24,31 @@ public class CreateGameScreen implements Screen {
         Gdx.input.setInputProcessor(stage);
     }
 
-
     @Override
     public void show() {
-        RoboRallyApplication.numberOfPlayers = 0;
-        CardGraphic.xStartPosition = CardGraphic.VERTICAL_HAND_MARGIN;
         stage.clear();
+        stage.addActor(getCreateGameScreenTable());
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+    }
+
+    private Table getCreateGameScreenTable() {
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(false);
 
-        Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
+        Skin skin = RoboRallyApplication.getSkin();
 
-        final SelectBox<String> mapSelectBox = new SelectBox<>(skin);
+        SelectBox<String> mapSelectBox = new SelectBox<>(skin);
         mapSelectBox.setItems("Risky Exchange", "Dizzy Dash", "Island Hop", "Whirlwind Tour");
 
-        final SelectBox<Integer> playersSelectBox = new SelectBox<>(skin);
+        SelectBox<Integer> playersSelectBox = new SelectBox<>(skin);
         playersSelectBox.setItems(2, 3, 4, 5, 6, 7, 8);
 
-        final SelectBox<String> difficultySelectBox = new SelectBox<>(skin);
-        difficultySelectBox.setItems("Easy", "Medium", "Hard");
+        CheckBox debugMode = new CheckBox(null, skin);
+        debugMode.setChecked(RoboRallyApplication.debugMode);
+        debugMode.addListener(event -> RoboRallyApplication.debugMode = !RoboRallyApplication.debugMode);
 
-        final TextButton backButton = new TextButton("Back", skin);
+        TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -55,7 +56,7 @@ public class CreateGameScreen implements Screen {
             }
         });
 
-        final TextButton createButton = new TextButton("Create", skin);
+        TextButton createButton = new TextButton("Create", skin);
         createButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -66,31 +67,22 @@ public class CreateGameScreen implements Screen {
         Label titleLabel = new Label("Create new game", skin);
         titleLabel.setFontScale(2f);
 
-        Label mapLabel = new Label("Map", skin);
-
-        Label playersLabel = new Label("Players", skin);
-
-        Label difficultyLabel = new Label("Difficulty", skin);
-
-        //Add elements to table
+        //Adding elements to table
         table.add(titleLabel).colspan(2);
         table.row().pad(50, 10, 10, 10);
-        table.add(mapLabel).left();
-        table.add(mapSelectBox);
+        table.add(new Label("Map", skin)).left();
+        table.add(mapSelectBox).right();
         table.row().pad(10, 10, 10, 10);
-        table.add(playersLabel).left();
-        table.add(playersSelectBox);
+        table.add(new Label("Players", skin)).left();
+        table.add(playersSelectBox).right();
         table.row().pad(10, 10, 10, 10);
-        table.add(difficultyLabel).left();
-        table.add(difficultySelectBox);
+        table.add(new Label("Debug mode", skin)).left();
+        table.add(debugMode).right();
         table.row().pad(100, 10, 100, 10);
         table.add(backButton);
         table.add(createButton);
 
-        //add table to stage
-        stage.addActor(table);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        return table;
     }
 
     @Override

@@ -13,9 +13,4 @@ public class MovementCard extends Card {
         return movementType.getMoveID();
     }
 
-    @Override
-    public String toString() {
-        return "MovementCard{" + "priority=" + priority +
-                ", numberOfMoves=" + getMoveID() + '}';
-    }
 }

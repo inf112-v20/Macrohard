@@ -31,56 +31,29 @@ public class PreferenceScreen implements Screen {
     @Override
     public void show() {
         stage.clear();
+        stage.addActor(formatPreferenceScreenTable());
+        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+        stage.draw();
+    }
+
+    private Table formatPreferenceScreenTable() {
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(false);
 
         Skin skin = new Skin(Gdx.files.internal("assets/skins/commodore64/uiskin.json"));
 
-        final SelectBox<String> selectBox = new SelectBox<>(skin);
+        SelectBox<String> selectBox = new SelectBox<>(skin);
         selectBox.setItems("Factory Swing", "Short Circuit", "Nullpointer Exception", "Norwegian Steel", "Robot Boogaloo");
         selectBox.addListener(event -> {
             String song = selectBox.getSelected();
-            switch (song) {
-                case "Factory Swing":
-                    if (RoboRallyApplication.currentSong.equals(song)) {
-                        break;
-                    }
-                    changeSong(song, "data/Music/FactorySwing.wav");
-                    break;
-
-                case "Short Circuit":
-                    if (RoboRallyApplication.currentSong.equals(song)) {
-                        break;
-                    }
-                    changeSong(song, "data/Music/ShortCircuit.wav");
-                    break;
-
-                case "Nullpointer Exception":
-                    if (RoboRallyApplication.currentSong.equals(song)) {
-                        break;
-                    }
-                    changeSong(song, "data/Music/NullpointerException.wav");
-                    break;
-
-                case "Norwegian Steel":
-                    if (RoboRallyApplication.currentSong.equals(song)) {
-                        break;
-                    }
-                    changeSong(song, "data/Music/NorwegianSteel.wav");
-                    break;
-
-                case "Robot Boogaloo":
-                    if (RoboRallyApplication.currentSong.equals(song)) {
-                        break;
-                    }
-                    changeSong(song, "data/Music/RobotBoogaloo.wav");
-                    break;
+            if (!RoboRallyApplication.currentSong.equals(song)) {
+                parent.changeSong(song);
             }
             return false;
         });
 
-        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.setValue(parent.getPreferences().getMusicVolume());
         volumeMusicSlider.addListener(event -> {
             if (isCheckedMusic) {
@@ -92,7 +65,7 @@ public class PreferenceScreen implements Screen {
             return false;
         });
 
-        final CheckBox musicCheckbox = new CheckBox(null, skin);
+        CheckBox musicCheckbox = new CheckBox(null, skin);
         musicCheckbox.setChecked(parent.getPreferences().isMusicEnabled());
         musicCheckbox.addListener(event -> {
             boolean enabled = musicCheckbox.isChecked();
@@ -106,14 +79,14 @@ public class PreferenceScreen implements Screen {
             return false;
         });
 
-        final Slider volumeSoundSlider = new Slider(0f, 1f, 0.1f, false, skin);
+        Slider volumeSoundSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeSoundSlider.setValue(parent.getPreferences().getSoundVolume());
         volumeSoundSlider.addListener(event -> {
             parent.getPreferences().setSoundVolume(volumeSoundSlider.getValue());
             return false;
         });
 
-        final CheckBox soundCheckbox = new CheckBox(null, skin);
+        CheckBox soundCheckbox = new CheckBox(null, skin);
         soundCheckbox.setChecked(parent.getPreferences().isSoundEffectsEnabled());
         soundCheckbox.addListener(event -> {
             boolean enabled = soundCheckbox.isChecked();
@@ -121,7 +94,7 @@ public class PreferenceScreen implements Screen {
             return false;
         });
 
-        final TextButton backButton = new TextButton("Back", skin);
+        TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
@@ -131,41 +104,32 @@ public class PreferenceScreen implements Screen {
 
         Label titleLabel = new Label("Preferences", skin);
         titleLabel.setFontScale(2f);
-        Label songLabel = new Label("Song", skin);
-        Label volumeMusicLabel = new Label("Music Volume", skin);
-        Label musicOnOffLabel = new Label("Music", skin);
-        Label volumeSoundLabel = new Label("Sound Volume", skin);
-        Label soundOnOffLabel = new Label("Sound", skin);
 
-        //Add elements to table
+        // Add labels, sliders and buttons to table
         table.add(titleLabel).colspan(2);
         table.row().pad(50, 10, 10, 10);
-        table.add(songLabel).left();
+        table.add(new Label("Song", skin)).left();
         table.add(selectBox);
         table.row().pad(10, 10, 10, 10);
-        table.add(volumeMusicLabel).left();
+        table.add(new Label("Music Volume", skin)).left();
         table.add(volumeMusicSlider);
         table.row().pad(10, 10, 10, 10);
-        table.add(musicOnOffLabel).left();
+        table.add(new Label("Music", skin)).left();
         table.add(musicCheckbox);
         table.row().pad(10, 10, 10, 10);
-        table.add(volumeSoundLabel).left();
+        table.add(new Label("Sound Volume", skin)).left();
         table.add(volumeSoundSlider);
         table.row().pad(10, 10, 10, 10);
-        table.add(soundOnOffLabel).left();
+        table.add(new Label("Sound", skin)).left();
         table.add(soundCheckbox);
         table.row().pad(25, 10, 10, 10);
         table.add(backButton).colspan(2);
 
-        //add table to stage
-        stage.addActor(table);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
+        return table;
     }
 
     @Override
     public void render(float v) {
-        // = music;
         RoboRallyApplication.music.setVolume(volume);
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -198,11 +162,4 @@ public class PreferenceScreen implements Screen {
         //Nothing yet
     }
 
-    private void changeSong(String song, String filepath) {
-        RoboRallyApplication.currentSong = song;
-        RoboRallyApplication.music.stop();
-        RoboRallyApplication.music = Gdx.audio.newMusic(Gdx.files.internal(filepath));
-        RoboRallyApplication.music.setLooping(true);
-        RoboRallyApplication.music.play();
-    }
 }

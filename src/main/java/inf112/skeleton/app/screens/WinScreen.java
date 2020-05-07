@@ -22,7 +22,7 @@ public class WinScreen implements Screen {
 
     @Override
     public void show() {
-        Label winLabel = new Label("Player " + winner.name() + " won!", skin);
+        Label winLabel = new Label("Player " + winner.getName() + " won!", skin);
         winLabel.setFontScale(2f);
         winLabel.setAlignment(Align.center);
         winLabel.setBounds(Gdx.graphics.getWidth() / 2f, Gdx.graphics.getHeight() / 2f, 0, 0);

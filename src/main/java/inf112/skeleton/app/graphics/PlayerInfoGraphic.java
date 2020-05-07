@@ -1,15 +1,9 @@
 package inf112.skeleton.app.graphics;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapProperties;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -17,8 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.SpriteDrawable;
 import com.badlogic.gdx.utils.Align;
 import inf112.skeleton.app.Player;
 import inf112.skeleton.app.RoboRallyApplication;
-
-import java.io.File;
 
 public class PlayerInfoGraphic extends Table {
 
@@ -32,33 +24,34 @@ public class PlayerInfoGraphic extends Table {
 
     public PlayerInfoGraphic(Player player, MapProperties mapProperties) {
         this.player = player;
-        player.setInfoGraphic(this);
 
         int maxHeight = RoboRallyApplication.screenHeight;
         int boardWidth = (int) mapProperties.get("tilewidth") * (int) mapProperties.get("width");
 
-        setBounds(boardWidth + 5, maxHeight - 341 - ((player.name() - 1) * 100), 400, 90);
+        setBounds(boardWidth + 5, maxHeight - 341 - ((player.getName() - 1) * 100), 400, 90);
         setBackground(new SpriteDrawable(new Sprite(new Texture("./assets/PlayerInfoBackground.png"))));
-        setDebug(false);
 
         Skin skin = RoboRallyApplication.getSkin();
-        Label name = new Label("Player " + player.name(), skin);
-        name.setColor(Color.WHITE);
+        lives = new Label(Integer.toString(player.getLifeTokens()), skin);
+        damage = new Label(Integer.toString(player.getDamageTokens()), skin);
+        powerDown = new Label("No", skin);
+        flag = new Label(Integer.toString(player.getPreviousFlag()), skin);
+        formatTable(skin);
+    }
+
+    private void formatTable(Skin skin) {
+        Label name = new Label("Player " + player.getName(), skin);
         add(name).colspan(2);
         row().padTop(15);
         add(new Label("Lives: ", skin));
-        lives = new Label(Integer.toString(player.getLifeTokens()), skin);
         add(lives);
         add(new Label("Powerdown: ", skin)).padLeft(60);
         row();
         add(new Label("Damage: ", skin)).padLeft(5);
-        damage = new Label(Integer.toString(player.getDamageTokens()), skin);
         add(damage);
-        powerDown = new Label("No", skin);
         add(powerDown).uniformY();
         row();
         add(new Label("Flag: ", skin));
-        flag = new Label(Integer.toString(player.getPreviousFlag()), skin);
         add(flag);
         align(Align.topLeft).pad(2, 5, 0, 0);
     }

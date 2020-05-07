@@ -20,13 +20,12 @@ public class PlayerGraphic extends Image {
 
     private final Player player;
     private final String color;
-
     public boolean isVisible = true;
 
     // ANIMATION
     private static final String[] COLORS = new String[]{"", "_BLACK", "_GREEN", "_PURPLE", "_WHITE", "_YELLOW", "_BLUE2", "", "", "", ""};
     private static final int HORIZONTAL_FRAME_COLS = 8;
-    private static final  int HORIZONTAL_FRAME_ROWS = 1;
+    private static final int HORIZONTAL_FRAME_ROWS = 1;
     private static final int BACK_FRAME_COLS = 8;
     private static final int BACK_FRAME_ROWS = 1;
     private static final int FRONT_FRAME_COLS = 8;
@@ -35,8 +34,6 @@ public class PlayerGraphic extends Image {
     private Animation<TextureRegion> idleHorizontalAnimation;
     private Animation<TextureRegion> idleBackAnimation;
     private Animation<TextureRegion> idleFrontAnimation;
-
-    float stateTime;
 
     private static float staticTimeModifier = 0;
     private float timeModifier;
@@ -50,7 +47,7 @@ public class PlayerGraphic extends Image {
         staticTimeModifier += 0.30f;
         timeModifier = staticTimeModifier;
 
-        color = COLORS[player.name()];
+        color = COLORS[player.getName()];
         TextureRegion[] idleHorizontalFrames = getAnimationFrames("Side", HORIZONTAL_FRAME_ROWS, HORIZONTAL_FRAME_COLS);
         TextureRegion[] idleBackFrames = getAnimationFrames("Back", BACK_FRAME_ROWS, BACK_FRAME_COLS);
         TextureRegion[] idleFrontFrames = getAnimationFrames("Front", FRONT_FRAME_ROWS, FRONT_FRAME_COLS);
@@ -58,7 +55,6 @@ public class PlayerGraphic extends Image {
         idleHorizontalAnimation = new Animation<>(0.25f, idleHorizontalFrames);
         idleBackAnimation = new Animation<>(0.25f, idleBackFrames);
         idleFrontAnimation = new Animation<>(0.25f, idleFrontFrames);
-        stateTime = 0f;
 
         setBounds(TILE_SIZE * player.getCol(), TILE_SIZE * player.getRow(), TILE_SIZE, TILE_SIZE);
         setOrigin(Align.center);

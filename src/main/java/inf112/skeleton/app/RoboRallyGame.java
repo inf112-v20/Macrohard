@@ -42,15 +42,16 @@ public class RoboRallyGame {
         movementPriority = new PriorityQueue<>();
         deck = new Deck(true);
 
-        GameScreenInputProcessor inputProcessor = new GameScreenInputProcessor(parent, client, board, gameScreen);
-        gameScreen.getGameStage().addListener(inputProcessor);
+        if (RoboRallyApplication.debugMode) {
+            GameScreenInputProcessor inputProcessor = new GameScreenInputProcessor(parent, client, board, gameScreen);
+            gameScreen.getGameStage().addListener(inputProcessor);
+        }
     }
 
-    // Assumes the non-NPC player is always the first element of the players
-
     /**
-     * Logical representation of gameLoop.
-     * Gets called in render and updates the state of the game accordingly.
+     * Logical representation of game loop.
+     * Gets called in render and updates the state of the game
+     * according to current phase of the game.
      */
     public void tick() {
         if (players.size() == 1) {

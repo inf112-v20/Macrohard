@@ -32,14 +32,4 @@ public class Laser {
         return direction;
     }
 
-    @Override
-    public String toString() {
-        return "Laser{" +
-                "row=" + row +
-                ", col=" + col +
-                ", damage=" + damage +
-                ", direction=" + direction +
-                '}';
-    }
-
 }

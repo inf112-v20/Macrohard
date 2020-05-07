@@ -14,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import inf112.skeleton.app.Direction;
 import inf112.skeleton.app.Player;
+import inf112.skeleton.app.RoboRallyApplication;
 import inf112.skeleton.app.RoboRallyGame;
 import inf112.skeleton.app.buttons.PowerDownButton;
 import inf112.skeleton.app.buttons.ProgramButton;
@@ -21,6 +22,7 @@ import inf112.skeleton.app.cards.Card;
 import inf112.skeleton.app.graphics.CardGraphic;
 import inf112.skeleton.app.graphics.PlayerGraphic;
 import inf112.skeleton.app.graphics.PlayerInfoGraphic;
+import inf112.skeleton.app.managers.GameScreenInputProcessor;
 import inf112.skeleton.app.managers.TiledMapManager;
 import inf112.skeleton.app.tiles.Tile;
 import inf112.skeleton.app.windows.CancelPowerDownWindow;
@@ -42,14 +44,14 @@ public class GameScreen implements Screen {
     private final Stage gameStage;
     private final OrthogonalTiledMapRenderer renderer;
 
-    public ProgramButton programButton;
-    public PowerDownButton powerDownButton;
+    private ProgramButton programButton;
+    private PowerDownButton powerDownButton;
 
-    public RebootWindow rebootWindow;
-    public ContinuePowerDownWindow continuePowerDownWindow;
-    public CancelPowerDownWindow cancelPowerDownWindow;
+    private RebootWindow rebootWindow;
+    private ContinuePowerDownWindow continuePowerDownWindow;
+    private CancelPowerDownWindow cancelPowerDownWindow;
 
-    public final TiledMapManager mapManager;
+    private final TiledMapManager mapManager;
     private final ArrayList<Player> players;
     private Player client;
 
@@ -74,8 +76,9 @@ public class GameScreen implements Screen {
         renderer.setView(gameCamera);
         gamePort = new FitViewport(1920, 1080, gameCamera);
         gameStage = new Stage(gamePort);
+        gameCamera.translate(-(boardWidth * TILE_SIZE) / 3f, -(CARD_GRAPHIC_HEIGHT));
 
-        // ---- GRAPHICS ----
+        // Initialise stage actors
         for (Player player : players) {
             PlayerGraphic playerGraphic = new PlayerGraphic(player);
             PlayerInfoGraphic playerInfoGraphic = new PlayerInfoGraphic(player, properties);
@@ -83,21 +86,21 @@ public class GameScreen implements Screen {
             gameStage.addActor(playerInfoGraphic);
         }
 
-        // --- BUTTONS ---
+        // Initialise buttons
         programButton = new ProgramButton(this);
         powerDownButton = new PowerDownButton(this);
 
-        // --– WINDOWS ---
+        // Initialise pop-up windows
         rebootWindow = new RebootWindow(this);
         continuePowerDownWindow = new ContinuePowerDownWindow(this);
         cancelPowerDownWindow = new CancelPowerDownWindow(this);
-        gameCamera.translate(-(boardWidth * TILE_SIZE) / 3f, -(CARD_GRAPHIC_HEIGHT));
+
     }
 
     /**
-     * Update the graphical elements of the board, depending on where we are in the gameLoop.
+     * Update the graphical elements of the board in accordance with the current phase of the game.
      *
-     * @param phase the current state of gameLoop
+     * @param phase the current phase of the game
      */
     private void updateScreenGraphics(int phase) {
         // --- BUTTONS ---
@@ -155,7 +158,7 @@ public class GameScreen implements Screen {
                 CardGraphic.reset(client);
                 client.wipeProgram();
                 if (!client.announcedPowerDown) {
-                    programButton = new ProgramButton(this);
+                    powerDownButton = new PowerDownButton(this);
                 }
                 break;
         }
@@ -163,10 +166,12 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Draws player lasers from the logical representation in Board
-     * Also draws the static board lasers.
+     * Draws the beams of the player lasers from a ArrayList of lists of tiles,
+     * where each list of tiles represent the beam of a single laser.
+     * Also makes the static board lasers visible.
      *
-     * @param playerLaserBeams List containing lists of tiles, where every list of tiles represent a player laser beam
+     * @param playerLaserBeams is an ArrayList containing lists of tiles,
+     *                         where every list of tiles represents a laser beam
      */
     public void drawLasers(ArrayList<LinkedList<Tile>> playerLaserBeams) {
         mapManager.getLayer("LASERBEAMS").setVisible(true);
@@ -253,17 +258,17 @@ public class GameScreen implements Screen {
 
     @Override
     public void pause() {
-        //Nothing yet
+
     }
 
     @Override
     public void resume() {
-        //Nothing yet
+
     }
 
     @Override
     public void hide() {
-        //Nothing yet
+
     }
 
     @Override
@@ -281,7 +286,10 @@ public class GameScreen implements Screen {
         game.incrementPhase();
     }
 
-    // For testing purposes only
+    /**
+     * This method is used to update the player-graphics independently
+     * of the game loop.
+     */
     public void updateGraphics() {
         for (Player player : players) {
             PlayerGraphic graphic = player.getPlayerGraphic();

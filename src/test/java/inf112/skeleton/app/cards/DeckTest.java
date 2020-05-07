@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 
 public class DeckTest {
 
@@ -36,16 +35,5 @@ public class DeckTest {
         assertEquals(player.getCards().size(), (9 - player.getDamageTokens()));
         assertEquals(deck.getDeckSize(), deckSize - (9 - player.getDamageTokens()));
     }
-
-    @Test
-    public void cardDealtEqualsCardRemoved() {
-        deck.dealHand(player);
-        for (Card card : player.getCards()) {
-            for (Card dcard : deck.getDeck()) {
-                assertNotEquals(card, dcard);
-            }
-        }
-    }
-
 
 }

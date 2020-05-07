@@ -29,12 +29,13 @@ public class CardGraphic extends Image {
     public final static float CARD_MAX_SCALE = 1.2f;
     public final static int X_PADDING = 0;
     public final static int Y_PADDING = -150;
-    public final static int VERTICAL_PROGRAM_ALIGNMENT = -80;
+    public final static int VERTICAL_PROGRAM_ALIGNMENT = -100;
     public final static int HORIZONTAL_PROGRAM_ALIGNMENT = 450;
     public final static int VERTICAL_HAND_MARGIN = 75;
 
     public static PriorityQueue<Integer> registerIndices = new PriorityQueue<>(Arrays.asList(1, 2, 3, 4, 5));
     public static int xStartPosition = VERTICAL_HAND_MARGIN;
+
     private static BitmapFont.BitmapFontData fontData = new BitmapFont(Gdx.files.getFileHandle("./assets/fonts/arial.fnt",
             Files.FileType.Internal)).getData();
     private static Pixmap fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
@@ -70,6 +71,10 @@ public class CardGraphic extends Image {
         return new SpriteDrawable(new Sprite(new Texture(pixMap)));
     }
 
+    /**
+     * This method resets current pixel map before constructing and returning the pixelated map needed
+     * to draw the priority of the card in the priority-field of the CardGraphic.
+     */
     private Pixmap getInitialPixMap() {
         if (pixMap != null) {
             pixMap.dispose();
@@ -91,6 +96,14 @@ public class CardGraphic extends Image {
         return pixmap;
     }
 
+    /**
+     * This method constructs and returns the pixel map to be lain on top
+     * the CardGraphic of a selected card
+     *
+     * @param registerIndex which is going to be drawn in the right-uppermost corner of the map.
+     * @param locked        if the card is locked.
+     * @return a pixel map with priority, register index and highlight.
+     */
     private Pixmap getHighlightedPixMap(int registerIndex, boolean locked) {
         pixMap = getInitialPixMap();
 
@@ -160,6 +173,10 @@ public class CardGraphic extends Image {
         registerIndices = new PriorityQueue<>(Arrays.asList(indices));
     }
 
+    /**
+     * Private ClickListener-class tailored to handle specific mouse-events
+     * for each CardGraphic-instance.
+     */
     private static class CardGraphicListener extends ClickListener {
 
         private final CardGraphic parent;
@@ -194,7 +211,8 @@ public class CardGraphic extends Image {
                 parent.addAction(Actions.moveTo(parent.getInitialX(), Y_PADDING, 0.1f));
                 parent.addAction(Actions.scaleTo(1f, 1f, 0.1f));
             } else if (parent.notLocked()) {
-                float yPlacement = (HORIZONTAL_PROGRAM_ALIGNMENT - Y_PADDING) - ((parent.registerIndex - 1f) * (CARD_HEIGHT * 1.2f));
+                float yPlacement = (HORIZONTAL_PROGRAM_ALIGNMENT - Y_PADDING) -
+                        ((parent.registerIndex - 1f) * (CARD_HEIGHT * CARD_MAX_SCALE));
                 parent.addAction(Actions.moveTo(VERTICAL_PROGRAM_ALIGNMENT, yPlacement, 0.1f));
                 parent.addAction(Actions.scaleTo(0.8f, 0.8f, 0.1f));
             }
