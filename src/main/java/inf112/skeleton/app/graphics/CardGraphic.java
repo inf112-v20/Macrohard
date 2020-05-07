@@ -34,7 +34,7 @@ public class CardGraphic extends Image {
     public final static int VERTICAL_HAND_MARGIN = 75;
 
     public static PriorityQueue<Integer> registerIndices = new PriorityQueue<>(Arrays.asList(1, 2, 3, 4, 5));
-    private static int xStartPosition = VERTICAL_HAND_MARGIN;
+    public static int xStartPosition = VERTICAL_HAND_MARGIN;
     private static BitmapFont.BitmapFontData fontData = new BitmapFont(Gdx.files.getFileHandle("./assets/fonts/arial.fnt",
             Files.FileType.Internal)).getData();
     private static Pixmap fontPixmap = new Pixmap(Gdx.files.internal(fontData.imagePaths[0]));
