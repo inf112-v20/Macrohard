@@ -1,7 +1,11 @@
 MASTER BRANCH: [![Build Status](https://travis-ci.com/inf112-v20/Macrohard.svg?branch=master)](https://travis-ci.com/inf112-v20/Macrohard)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/57e91af805484fb6884c8b121e1843fd)](https://www.codacy.com/gh/inf112-v20/Macrohard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=inf112-v20/Macrohard&amp;utm_campaign=Badge_Grade)
 DEVBRANCH: [![Build Status](https://travis-ci.com/inf112-v20/Macrohard.svg?branch=devbranch)](https://travis-ci.com/inf112-v20/Macrohard)
-# RoboRally by MACROHARD
+
+ ![MACROLOGO_TRANSPARENT](assets/logo/MACROLOGO_TRANSPARENT.png)
+ 
+ # RoboRally 
+by MACROHARD
 
 This is a digital remake of the classic board game RoboRally.
 
