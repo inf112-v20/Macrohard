@@ -19,3 +19,5 @@ choose any of the adjacent tiles as a place for their reboot.
 
 ## Build instruction
 To run application, clone the repository as a Maven-project and run the main()-method in 'RoboRallyApplication.java'.
+
+![Splashv1.gif](data/Splash/Splashv1.gif)
