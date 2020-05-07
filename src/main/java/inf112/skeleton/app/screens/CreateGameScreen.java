@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import inf112.skeleton.app.RoboRallyApplication;
+import inf112.skeleton.app.graphics.CardGraphic;
 
 public class CreateGameScreen implements Screen {
 
@@ -29,6 +30,7 @@ public class CreateGameScreen implements Screen {
     @Override
     public void show() {
         RoboRallyApplication.numberOfPlayers = 0;
+        CardGraphic.xStartPosition = CardGraphic.VERTICAL_HAND_MARGIN;
         stage.clear();
         Table table = new Table();
         table.setFillParent(true);
