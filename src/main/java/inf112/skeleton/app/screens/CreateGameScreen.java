@@ -19,7 +19,6 @@ public class CreateGameScreen implements Screen {
     public CreateGameScreen(RoboRallyApplication parent) {
         this.parent = parent;
         stage = new Stage(new ScreenViewport());
-
     }
 
     public void setAsInputProcessor() {
@@ -29,6 +28,7 @@ public class CreateGameScreen implements Screen {
 
     @Override
     public void show() {
+        RoboRallyApplication.numberOfPlayers = 0;
         stage.clear();
         Table table = new Table();
         table.setFillParent(true);
