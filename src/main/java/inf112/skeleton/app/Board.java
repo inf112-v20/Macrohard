@@ -157,7 +157,7 @@ public class Board {
                         erectWall(direction, row, col);
                         int nrOfLasers = (Integer) wall.getProperties().get("NrOfLasers");
                         if (nrOfLasers > 0) {
-                            lasers.add(new Laser(row, col, nrOfLasers, direction));
+                            lasers.add(new Laser(row, col, nrOfLasers, direction.opposite()));
                         }
                     }
                 }

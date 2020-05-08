@@ -74,7 +74,7 @@ During the past few weeks we have needed to apply new strategies and refine our 
 Meanwhile, we have found it harder to comply with the principles of test-driven development, both as our application grows more complex and entangled and as the focus of this iteration has been directed towards the graphical user interface. Admittedly, we are not sure if and how automatic tests for graphical functionality are meant to be written. Furthermore, the attendance at our regular meetings could definitely be improved. For several meetings this iteration it has been at least one group member missing and one or two members running late. This haltens our productivity. Last but not least, we still have some trouble keeping our project board and our issues on GitHub up to date. These are three aspects of our development that the group has decided to improve during the course of the next iteration.
 
 
-![project board](/deliverables/project_board.png)
+![project board](/deliverables/project_board_oblig2.png)
 
 ([https://github.com/inf112-v20/Macrohard/projects/2/](https://github.com/inf112-v20/Macrohard/projects/2))
 
