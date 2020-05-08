@@ -45,8 +45,6 @@ public class CreateGameScreen implements Screen {
         playersSelectBox.setItems(2, 3, 4, 5, 6, 7, 8);
 
         CheckBox debugMode = new CheckBox(null, skin);
-        debugMode.setChecked(RoboRallyApplication.debugMode);
-        debugMode.addListener(event -> RoboRallyApplication.debugMode = !RoboRallyApplication.debugMode);
 
         TextButton backButton = new TextButton("Back", skin);
         backButton.addListener(new ChangeListener() {
@@ -60,6 +58,11 @@ public class CreateGameScreen implements Screen {
         createButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent changeEvent, Actor actor) {
+                if(debugMode.isChecked()) {
+                    RoboRallyApplication.debugMode = true;
+                } else {
+                    RoboRallyApplication.debugMode = false;
+                }
                 parent.createGame(mapSelectBox.getSelected(), playersSelectBox.getSelected());
             }
         });
